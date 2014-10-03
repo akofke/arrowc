@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+import re
+
+reserved = {
+    'var': 'VAR',
+    'func': 'FUNC',
+    'if': 'IF',
+    'else': 'ELSE',
+    'for': 'FOR',
+    'while': 'WHILE',
+    'continue': 'CONTINUE',
+    'break': 'BREAK',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    'return': 'RETURN'
+}
+
+tokens = [
+    # Identifier or keyword
+    'NAME',
+
+    # Int, float, and string literals
+    'INT_CONST',
+    'FLOAT_CONST',
+    'STRING_CONST',
+
+    # Assignment
+    'EQUALS',
+
+    # Operators
+    'PLUS',
+    'DASH',
+    'STAR',
+    'SLASH',
+    'PERCENT',
+    'LT',
+    'GT',
+    'AND',
+    'OR',
+    'NOT',
+
+    # Delimeters
+    'LPAREN', 'RPAREN',
+    'LBRACE', 'RBRACE',
+    'LBRACKET', 'RBRACKET',
+    'PERIOD', 'SEMIC', 'COMMA'
+
+    # Add: whitespace, line comments, nonregular tokens
+] + list(reserved.values())
+
+t_EQUALS = r'='
+
+t_PLUS = r'\+'
+t_DASH = r'-'
+t_STAR = r'\*'
+t_SLASH = r'/'
+t_PERCENT = r'%'
+t_LT = r'<'
+t_GT = r'>'
+t_AND = r'&'
+t_OR = r'\|'
+t_NOT = r'!'
+
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+
+t_PERIOD = r'\.'
+t_SEMIC = r';'
+t_COMMA = r','
+
+def t_STRING_CONST(t):
+    r'"(\\"|\\{2}|[^"])*"'
+    t.value = t.value.strip('\"')
+    t.value = re.sub(r'\\"', r'"', t.value)
+    t.value = re.sub(r'\\{2}', r'\\', t.value)
+    return t
+
+def t_NAME(t):
+    r'([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]|_)*'
+    t.type = reserved.get(t.value, 'NAME')  # Check if it's a reserved word
+    return t
+
+def t_INT_CONST(t):
+    r'[0-9]+'
+    t.value = int(t.value)
+    return t
+
+def t_FLOAT_CONST(t):
+    r'[0-9]+\.?[0-9]+((E|e)(\+|-)?[0-9]+)?'
+    t.value = float(t.value)
+    return t
+
+
+
+#Add the rest
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+#add column tracking?
+t_ignore = ' \t'
+
+
+def t_error(t):
+    print "Illegal character '%s'" % t.value[0]
+    t.lexer.skip(1)
+
