@@ -6,7 +6,7 @@ import os
 import sys
 import getopt
 
-from pr03 import tokrules
+from pr03 import arrowlang_lexer
 import ply.lex as lex
 
 usage_message = 'Usage: pr03 -A -o [output] [input...]'
@@ -91,7 +91,7 @@ def main(argv):
     #testing
 
     test_input = ''.join(sys.stdin.readlines())
-    lexer = lex.lex(module=tokrules, debug=False)
+    lexer = lex.lex(module=arrowlang_lexer, debug=False)
     lexer.input(test_input)
     for tok in lexer:
         print '(%s, %s)' % (tok.type, tok.value)
