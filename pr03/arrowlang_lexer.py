@@ -4,55 +4,59 @@ import ply.lex as lex
 
 #Reserved keywords
 reserved = {
-        'var': 'VAR',
-        'func': 'FUNC',
+    'var': 'VAR',
+    'func': 'FUNC',
 
-        'if': 'IF',
-        'else': 'ELSE',
-        'for': 'FOR',
-        'while': 'WHILE',
-        'continue': 'CONTINUE',
-        'break': 'BREAK',
+    'if': 'IF',
+    'else': 'ELSE',
+    'for': 'FOR',
+    'while': 'WHILE',
+    'continue': 'CONTINUE',
+    'break': 'BREAK',
 
-        'true': 'TRUE',
-        'false': 'FALSE',
+    'true': 'TRUE',
+    'false': 'FALSE',
 
-        'return': 'RETURN'
+    'return': 'RETURN'
 }
-
-tokens = [
-    # Identifier or keyword
-    'NAME',
-
-    # Int, float, and string literals
-    'INT_CONST',
-    'FLOAT_CONST',
-    'STRING_CONST',
-
-    # Assignment
-    'EQUALS',
-
-    # Operators
-    'PLUS',
-    'DASH',
-    'STAR',
-    'SLASH',
-    'PERCENT',
-    'LT',
-    'GT',
-    'AND',
-    'OR',
-    'NOT',
-
-    # Delimeters
-    'LPAREN', 'RPAREN',
-    'LBRACE', 'RBRACE',
-    'LBRACKET', 'RBRACKET',
-    'PERIOD', 'SEMIC', 'COMMA'
-] + list(reserved.values())
 
 
 class ArrowLexer(object):
+
+    def build(self, **kwargs):
+        """Must be called on an instance of ArrowLexer"""
+        self.lexer = lex.lex(module=self, **kwargs)
+
+    tokens = [
+        # Identifier or keyword
+        'NAME',
+
+        # Int, float, and string literals
+        'INT_CONST',
+        'FLOAT_CONST',
+        'STRING_CONST',
+
+        # Assignment
+        'EQUALS',
+
+        # Operators
+        'PLUS',
+        'DASH',
+        'STAR',
+        'SLASH',
+        'PERCENT',
+        'LT',
+        'GT',
+        'AND',
+        'OR',
+        'NOT',
+
+        # Delimeters
+        'LPAREN', 'RPAREN',
+        'LBRACE', 'RBRACE',
+        'LBRACKET', 'RBRACKET',
+        'PERIOD', 'SEMIC', 'COMMA'
+    ] + list(reserved.values())
 
     t_EQUALS = r'='
 
@@ -100,18 +104,6 @@ class ArrowLexer(object):
             t.value = float(t.value)
             t.type = 'FLOAT_CONST'
             return t
-
-    # def t_FLOAT_CONST(t):
-    #     r'[0-9]+\.?[0-9]+((E|e)(\+|-)?[0-9]+)?'
-    #     t.value = float(t.value)
-    #     return t
-    #
-    #
-    # def t_INT_CONST(t):
-    #     r'[0-9]+?'
-    #     t.value = int(t.value)
-    #     return t
-
 
     def t_newline(self, t):
         r'\n+'

@@ -91,9 +91,10 @@ def main(argv):
     #testing
 
     test_input = ''.join(sys.stdin.readlines())
-    lexer = lex.lex(module=arrowlang_lexer, debug=False)
-    lexer.input(test_input)
-    for tok in lexer:
+    al_lexer = arrowlang_lexer.ArrowLexer()
+    al_lexer.build(debug=False)
+    al_lexer.input(test_input)
+    for tok in al_lexer:
         print '(%s, %s)' % (tok.type, tok.value)
 
 
