@@ -5,6 +5,7 @@ from betterast import Node
 from ply import yacc
 from arrowlang_lexer import ArrowLexer
 
+
 class ArrowParser(object):
     def build(self, **kwargs):
         self.yacc = yacc.yacc(module=self, **kwargs)
@@ -17,13 +18,13 @@ class ArrowParser(object):
 
     def p_Stmts(self, p):
         'Stmts : Stmts TStmt'
-        p[0] = [] + p[1] + p[2]
+        p[0] = list() + p[1] + p[2]
 
     def p_Stmts2(self, p):
         'Stmts : TStmt'
         p[0] = p[1]
 
-    ###################################
+    # ##################################
 
     def p_TStmt(self, p):
         'TStmt : Stmt'
@@ -31,13 +32,13 @@ class ArrowParser(object):
 
     def p_TStmt2(self, p):
         'TStmt : FuncDefStmt'
-        p[0] = Node("FuncDef").addkid(p[1])
+        p[0] = p[1]
 
     ###################################
 
     def p_Stmt(self, p):
         'Stmt : CallStmt'
-        p[0] = Node("") #awaiting email
+        p[0] = Node("Call").addkid(p[1])
 
     def p_Stmt2(self, p):
         'Stmt : DeclStmt'
@@ -53,11 +54,11 @@ class ArrowParser(object):
 
     def p_Stmt5(self, p):
         'Stmt : WhileStmt'
-        p[0] = p[1] #awaiting email
-        
+        p[0] = p[1]
+
     def p_Stmt6(self, p):
         'Stmt : ForStmt'
-        p[0] = Node("For").addkid(p[1])
+        p[0] = p[1]
 
     ###################################
 
@@ -77,46 +78,75 @@ class ArrowParser(object):
 
     def p_BlockStmts(self, p):
         'BlockStmts : BlockStmts BlockStmt'
+        p[0] = list() + p[1] + p[2]
 
     def p_BlockStmts2(self, p):
         'BlockStmts : BlockStmt'
+        p[0] = p[1]
 
     ###################################
 
     def p_BlockStmt(self, p):
         'BlockStmt : Stmt'
+        p[0] = p[1]
 
     def p_BlockStmt2(self, p):
         'BlockStmt : LoopControlStmt'
+        p[0] = p[1]
 
     ###################################
 
     def p_Expr(self, p):
         'Expr : ArithExpr'
+        p[0] = p[1]
 
     ###################################
 
     def p_FuncDefStmt(self, p):
-        'FuncDefStmt : func NAME "(" ParamDecls ")" TypeSpec Block'
+        'FuncDefStmt : FUNC NAME "(" ParamDecls ")" TypeSpec Block'
+        p[0] = Node("FuncDef") \
+            .addkid("Name," + p[2]) \
+            .addkid(p[3]) \
+            .addkid(p[4]) \
+            .addkid(p[5])
 
     def p_FuncDefStmt2(self, p):
-        'FuncDefStmt : func NAME "(" ParamDecls ")" Block'
+        'FuncDefStmt : FUNC NAME "(" ParamDecls ")" Block'
+        p[0] = Node("FuncDef"). \
+            addkid("Name," + p[2]). \
+            addkid(p[3]). \
+            addkid(p[4])
 
     def p_FuncDefStmt3(self, p):
-        'FuncDefStmt : func NAME "(" ")" TypeSpec Block'
+        'FuncDefStmt : FUNC NAME "(" ")" TypeSpec Block'
+        p[0] = Node("FuncDef") \
+            .addkid("Name," + p[2]) \
+            .addkid("ParamDecls") \
+            .addkid(p[3]) \
+            .addkid(p[4])
 
     def p_FuncDefStmt4(self, p):
-        'FuncDefStmt : func NAME "(" ")" Block'
+        'FuncDefStmt : FUNC NAME "(" ")" Block'
+        p[0] = Node("FuncDef") \
+            .addkid("Name," + p[2]) \
+            .addkid("ParamDecls") \
+            .addkid(p[3])
 
     ###################################
 
     def p_ParamDecls(self, p):
         'ParamDecls : ParamDecls "," NAME TypeSpec'
+        p[0] = p[1].addKid(
+            Node("ParamDecl").addkid(Node("Name," + p[2])).addkid(p[3])
+        )
 
     def p_ParamDecls2(self, p):
         'ParamDecls : NAME TypeSpec'
+        p[0] = Node("ParamDecls").addkid(
+            Node("ParamDecl").addkid(Node("Name," + p[1])).addkid(p[2])
+        )
 
-    ###################################
+        ###################################
 
     def p_BooleanExpr(self, p):
         'BooleanExpr : BooleanExpr "|" "|" AndExpr'
@@ -159,30 +189,36 @@ class ArrowParser(object):
     ###################################
 
     def p_CmpOp(self, p):
-        'CmpOp : "<"'
+        'CmpOp : LT'
+        p[0] = Node("<")
 
     def p_CmpOp2(self, p):
-        'CmpOp : "<" "="'
+        'CmpOp : LT EQUALS'
+        p[0] = Node("<=")
 
     def p_CmpOp3(self, p):
-        'CmpOp : "=" "="'
+        'CmpOp : EQUALS EQUALS'
+        p[0] = Node("==")
 
     def p_CmpOp4(self, p):
-        'CmpOp : "!" "="'
+        'CmpOp : NOT EQUALS'
+        p[0] = Node("!=")
 
     def p_CmpOp5(self, p):
-        'CmpOp : ">" "="'
+        'CmpOp : GT EQUALS'
+        p[0] = Node(">=")
 
     def p_CmpOp6(self, p):
-        'CmpOp : ">"'
+        'CmpOp : GT'
+        p[0] = Node(">")
 
     ###################################
 
     def p_BooleanConstant(self, p):
-        'BooleanConstant : true'
+        'BooleanConstant : TRUE'
 
     def p_BooleanConstant2(self, p):
-        'BooleanConstant : false'
+        'BooleanConstant : FALSE'
 
     ###################################
 
@@ -288,16 +324,21 @@ class ArrowParser(object):
 
     def p_TypeName(self, p):
         'TypeName : NAME'
+        p[0] = Node("TypeName").addkid(Node("Name," + p[1]))
 
     ###################################
 
     def p_TypeSpec(self, p):
         'TypeSpec : TypeName'
+        p[0] = Node("Type").addkid(p[1])
 
     ###################################
 
     def p_AssignStmt(self, p):
         'AssignStmt : NAME "=" Expr'
+        p[0] = Node("AssignStmt")\
+            .addkid(Node("Name," + p[1]))\
+            .addkid(p[3])
 
     ###################################
 
@@ -349,15 +390,19 @@ class ArrowParser(object):
     ###################################
 
     def p_ReutrnStmt(self, p):
-        'ReturnStmt : return'
+        'ReturnStmt : RETURN'
+        p[0] = Node("Return")
 
     def p_ReturnStmt2(self, p):
-        'ReturnStmt : return Expr'
+        'ReturnStmt : RETURN Expr'
+        p[0] = Node("Return").addkid(p[2])
 
     ###################################
 
     def p_LoopControlStmt(self, p):
-        'LoopControlStmt : continue'
+        'LoopControlStmt : CONTINUE'
+        p[0] = Node("Continue")
 
     def p_LoopControlStmt2(self, p):
-        'LoopControlStmt : break'
+        'LoopControlStmt : BREAK'
+        p[0] = Node("Break")
