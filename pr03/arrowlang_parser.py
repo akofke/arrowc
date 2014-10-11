@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from betterast import Node
+from ply import yacc
+from arrowlang_lexer import ArrowLexer
+
+
+class ArrowParser(object):
     def build(self, **kwargs):
         self.yacc = yacc.yacc(module=self, **kwargs)
 
@@ -410,4 +419,4 @@
 
     def p_LoopControlStmt2(self, p):
         'LoopControlStmt : BREAK'
-        p[0] = Node("Break")˔
+        p[0] = Node("Break")
