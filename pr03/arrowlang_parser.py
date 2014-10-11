@@ -297,19 +297,22 @@ class ArrowParser(object):
     ###################################
 
     def p_Call(self, p):
-        'Call : NAME "(" CallParams ")"'
-        p[0] = Node("Call").addkid(Node("Name," + p[1])).addkid(p[2])
+        'Call : NAME LPAREN CallParams RPAREN'
+        p[0] = Node("Call").addkid(Node("Symbol," + p[1])).addkid(p[2])
 
     def p_Call2(self, p):
-        'Call : NAME "(" ")"'
+        'Call : NAME LPAREN RPAREN'
+        p[0] = Node("Call").addkid(Node("Symbol," + p[1]))
 
     ###################################
 
     def p_CallParams(self, p):
-        'CallParams : CallParams "," Expr'
+        'CallParams : CallParams COMMA Expr'
+        p[0] = p[1].addkid(p[3])
 
     def p_CallParams2(self, p):
         'CallParams : Expr'
+
 
     ###################################
 
@@ -374,22 +377,28 @@ class ArrowParser(object):
 
     def p_ForStmt2(self, p):
         'ForStmt : FOR SEMIC BooleanExpr SEMIC AssignStmt Block'
-        p[0] = Node("For").addkid(p[3])
+        p[0] = Node("For").addkid(p[3]).addkid(p[5]).addkid(p[6])
 
     def p_ForStmt3(self, p):
         'ForStmt : FOR DeclStmt SEMIC SEMIC AssignStmt Block'
+        p[0] = Node("For").addkid(p[2]).addkid(p[5]).addkid(p[6])
 
     def p_ForStmt4(self, p):
         'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC Block'
+        p[0] = Node("For").addkid(p[2]).addkid(p[4]).addkid(p[6])
 
     def p_ForStmt5(self, p):
-        'ForStmt : FOR ";" ";" AssignStmt Block'
+        'ForStmt : FOR SEMIC SEMIC AssignStmt Block'
+        p[0] = Node("For").addkid(p[4]).addkid(p[5])
 
     def p_ForStmt6(self, p):
-        'ForStmt : FOR ";" BooleanExpr ";" Block'
+        'ForStmt : FOR SEMIC BooleanExpr SEMIC Block'
+        p[0] = Node("For").addkid(p[3]).addkid(p[5])
+
 
     def p_ForStmt7(self, p):
-        'ForStmt : FOR DeclStmt ";" ";" Block'
+        'ForStmt : FOR DeclStmt SEMIC SEMIC Block'
+        p[0] = Node("For").addkid(p[2]).addkid(p[5])
 
     ###################################
 
