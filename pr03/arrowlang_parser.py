@@ -184,7 +184,7 @@ class ArrowParser(object):
     ###################################
 
     def p_CmpExpr(self, p):
-        'ArithExpr CmpOp ArithExpr'
+        'CompExpr : ArithExpr CmpOp ArithExpr'
 
     ###################################
 
@@ -216,9 +216,11 @@ class ArrowParser(object):
 
     def p_BooleanConstant(self, p):
         'BooleanConstant : TRUE'
+        p[0] = Node("True")
 
     def p_BooleanConstant2(self, p):
         'BooleanConstant : FALSE'
+        p[0] = Node("False")
 
     ###################################
 
@@ -319,12 +321,18 @@ class ArrowParser(object):
 
     def p_DeclStmt(self, p):
         'DeclStmt : VAR NAME TypeSpec EQUALS Expr'
+        p[0] = Node("Decl")\
+            .addkid(Node("Name," + p[2]))\
+            .addkid(p[3])\
+            .addkid(p[5])
 
     def p_DeclStmt2(self, p):
         'DeclStmt : VAR NAME TypeSpec'
+        p[0] = Node("Decl").addkid(Node("Name," + p[2])).addkid(p[3])
 
     def p_DeclStmt3(self, p):
         'DeclStmt : VAR NAME EQUALS Expr'
+        p[0] = Node("ShortDecl").addkid(Node("Name," + p[2])).addkid(p[3])
 
     ###################################
 
@@ -365,41 +373,79 @@ class ArrowParser(object):
     ###################################
 
     def p_WhileStmt(self, p):
-        'ElseIfStmt : WHILE BooleanExpr Block'
+        'WhileStmt : WHILE BooleanExpr Block'
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr"))\
+            .addkid(p[2])\
+            .addkid(Node("UpdateExpr"))\
+            .addkid(p[3])
 
     def p_WhileStmt2(self, p):
-        'ElseIfStmt : WHILE Block'
+        'WhileStmt : WHILE Block'
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr"))\
+            .addkid(Node("BooleanExpr"))\
+            .addkid(Node("UpdateExpr"))\
+            .addkid(p[3])
 
     ###################################
 
     def p_ForStmt(self, p):
         'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block'
-        p[0] = Node("For").addkid(p[2]).addkid(p[4]).addkid([6]).addkid(p[7])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr").addkid(p[2]))\
+            .addkid(p[4])\
+            .addkid(Node("UpdateExpr").addkid(p[6]))\
+            .addkid(p[7])
 
     def p_ForStmt2(self, p):
         'ForStmt : FOR SEMIC BooleanExpr SEMIC AssignStmt Block'
-        p[0] = Node("For").addkid(p[3]).addkid(p[5]).addkid(p[6])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr"))\
+            .addkid(p[3])\
+            .addkid(Node("UpdateExpr").addkid(p[5]))\
+            .addkid(p[6])
 
     def p_ForStmt3(self, p):
         'ForStmt : FOR DeclStmt SEMIC SEMIC AssignStmt Block'
-        p[0] = Node("For").addkid(p[2]).addkid(p[5]).addkid(p[6])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr").addkid(p[2]))\
+            .addkid(Node("BooleanExpr"))\
+            .addkid(Node("UpdateExpr").addkid(p[5]))\
+            .addkid(p[6])
 
     def p_ForStmt4(self, p):
         'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC Block'
-        p[0] = Node("For").addkid(p[2]).addkid(p[4]).addkid(p[6])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr").addkid(p[2]))\
+            .addkid(p[4])\
+            .addkid(Node("UpdateExpr"))\
+            .addkid(p[6])
 
     def p_ForStmt5(self, p):
         'ForStmt : FOR SEMIC SEMIC AssignStmt Block'
-        p[0] = Node("For").addkid(p[4]).addkid(p[5])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr"))\
+            .addkid(Node("BooleanExpr"))\
+            .addkid(p[4])\
+            .addkid(p[5])
 
     def p_ForStmt6(self, p):
         'ForStmt : FOR SEMIC BooleanExpr SEMIC Block'
-        p[0] = Node("For").addkid(p[3]).addkid(p[5])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr"))\
+            .addkid(p[3])\
+            .addkid(Node("UpdateExpr"))\
+            .addkid(p[5])
 
 
     def p_ForStmt7(self, p):
         'ForStmt : FOR DeclStmt SEMIC SEMIC Block'
-        p[0] = Node("For").addkid(p[2]).addkid(p[5])
+        p[0] = Node("For")\
+            .addkid(Node("DeclExpr").addkid(p[2]))\
+            .addkid(Node("BooleanExpr"))\
+            .addkid((Node("UpdateExpr")))\
+            .addkid(p[5])
 
     ###################################
 
