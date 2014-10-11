@@ -350,25 +350,31 @@ class ArrowParser(object):
 
     def p_IfStmt(self, p):
         'IfStmt : if BooleanExpr Block ElseIfStmt'
+        p[0] = Node("If").addkid(p[2]).addkid([3]).addkid(p[4])
 
     def p_IfStmt2(self, p):
         'IfStmt : if BooleanExpr Block'
+        p[0] = Node("If").addkid(p[2]).addkid(p[3])
 
     ###################################
 
     def p_ElseIfStmt(self, p):
         'ElseIfStmt : else Block'
+        p[0] = Node("ElseIf").addkid(p[2])
 
     def p_ElseIfStmt2(self, p):
         'ElseIfStmt : else IfStmt'
+        p[0] = Node("ElseIf").addkid(p[2])
 
     ###################################
 
     def p_WhileStmt(self, p):
-        'ElseIfStmt : while BooleanExpr Block'
+        'WhileStmt : while BooleanExpr Block'
+        p[0] =
 
     def p_WhileStmt2(self, p):
-        'ElseIfStmt : while Block'
+        'WhileStmt : while Block'
+
 
     ###################################
 
