@@ -14,15 +14,15 @@ class ArrowParser(object):
 
     def p_Start(self, p):
         'Start : Stmts'
-        p[0] = Node("Stmts").addkid(p for p in p[1])
+        p[0] = p[1]
 
     def p_Stmts(self, p):
         'Stmts : Stmts TStmt'
-        p[0] = list() + p[1] + p[2]
+        p[0] = p[1].addkid(p[2])
 
     def p_Stmts2(self, p):
         'Stmts : TStmt'
-        p[0] = p[1]
+        p[0] = Node("Stmts").addkid(p[1])
 
     # ##################################
 
@@ -38,7 +38,7 @@ class ArrowParser(object):
 
     def p_Stmt(self, p):
         'Stmt : CallStmt'
-        p[0] = Node("Call").addkid(p[1])
+        p[0] = p[1]
 
     def p_Stmt2(self, p):
         'Stmt : DeclStmt'
@@ -46,11 +46,11 @@ class ArrowParser(object):
 
     def p_Stmt3(self, p):
         'Stmt : AssignStmt'
-        p[0] = Node("AssignStmt").addkid(p[1])
+        p[0] = p[1]
 
     def p_Stmt4(self, p):
         'Stmt : IfStmt'
-        p[0] = Node("If").addkid(p[1])
+        p[0] = p[1]
 
     def p_Stmt5(self, p):
         'Stmt : WhileStmt'
@@ -64,25 +64,25 @@ class ArrowParser(object):
 
     def p_Block(self, p):
         'Block : LBRACE BlockStmts ReturnStmt RBRACE'
-        p[0] = Node("Block").addkid(p for p in p[2]).addkid(p[3])
+        p[0] = p[2].addkid(p[3])
 
     def p_Block2(self, p):
         'Block : LBRACE BlockStmts RBRACE'
-        p[0] = Node("Block").addkid(p for p in p[2])
+        p[0] = p[2]
 
     def p_Block3(self, p):
         'Block : LBRACE ReturnStmt RBRACE'
-        p[0] = Node("Block").addkid(p[2])
+        p[0] = p[2]
 
     ###################################
 
     def p_BlockStmts(self, p):
         'BlockStmts : BlockStmts BlockStmt'
-        p[0] = list() + p[1] + p[2]
+        p[0] = p[1].addkid(p[2])
 
     def p_BlockStmts2(self, p):
         'BlockStmts : BlockStmt'
-        p[0] = p[1]
+        p[0] = Node("Block").addkid(p[1])
 
     ###################################
 
@@ -292,14 +292,16 @@ class ArrowParser(object):
 
     def p_CallStmt(self, p):
         'CallStmt : Call'
+        p[0] = p[1]
 
     ###################################
 
     def p_Call(self, p):
-        'Call : "(" CallParams ")"'
+        'Call : NAME "(" CallParams ")"'
+        p[0] = Node("Call").addkid(Node("Name," + p[1])).addkid(p[2])
 
     def p_Call2(self, p):
-        'Call : "(" ")"'
+        'Call : NAME "(" ")"'
 
     ###################################
 
@@ -367,25 +369,27 @@ class ArrowParser(object):
     ###################################
 
     def p_ForStmt(self, p):
-        'ForStmt : for DeclStmt ";" BooleanExpr ";" AssignStmt Block'
+        'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block'
+        p[0] = Node("For").addkid(p[2]).addkid(p[4]).addkid([6]).addkid(p[7])
 
     def p_ForStmt2(self, p):
-        'ForStmt : for ";" BooleanExpr ";" AssignStmt Block'
+        'ForStmt : FOR SEMIC BooleanExpr SEMIC AssignStmt Block'
+        p[0] = Node("For").addkid(p[3])
 
     def p_ForStmt3(self, p):
-        'ForStmt : for DeclStmt ";" ";" AssignStmt Block'
+        'ForStmt : FOR DeclStmt SEMIC SEMIC AssignStmt Block'
 
     def p_ForStmt4(self, p):
-        'ForStmt : for DeclStmt ";" BooleanExpr ";" Block'
+        'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC Block'
 
     def p_ForStmt5(self, p):
-        'ForStmt : for ";" ";" AssignStmt Block'
+        'ForStmt : FOR ";" ";" AssignStmt Block'
 
     def p_ForStmt6(self, p):
-        'ForStmt : for ";" BooleanExpr ";" Block'
+        'ForStmt : FOR ";" BooleanExpr ";" Block'
 
     def p_ForStmt7(self, p):
-        'ForStmt : for DeclStmt ";" ";" Block'
+        'ForStmt : FOR DeclStmt ";" ";" Block'
 
     ###################################
 
