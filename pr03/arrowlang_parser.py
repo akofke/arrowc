@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-from betterast import Node
-from ply import yacc
-from arrowlang_lexer import ArrowLexer
-
-
-class ArrowParser(object):
     def build(self, **kwargs):
         self.yacc = yacc.yacc(module=self, **kwargs)
 
@@ -103,7 +94,7 @@ class ArrowParser(object):
     ###################################
 
     def p_FuncDefStmt(self, p):
-        'FuncDefStmt : FUNC NAME "(" ParamDecls ")" TypeSpec Block'
+        'FuncDefStmt : FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block'
         p[0] = Node("FuncDef") \
             .addkid("Name," + p[2]) \
             .addkid(p[3]) \
@@ -111,14 +102,14 @@ class ArrowParser(object):
             .addkid(p[5])
 
     def p_FuncDefStmt2(self, p):
-        'FuncDefStmt : FUNC NAME "(" ParamDecls ")" Block'
+        'FuncDefStmt : FUNC NAME LPAREN ParamDecls RPAREN Block'
         p[0] = Node("FuncDef"). \
             addkid("Name," + p[2]). \
             addkid(p[3]). \
             addkid(p[4])
 
     def p_FuncDefStmt3(self, p):
-        'FuncDefStmt : FUNC NAME "(" ")" TypeSpec Block'
+        'FuncDefStmt : FUNC NAME LPAREN RPAREN TypeSpec Block'
         p[0] = Node("FuncDef") \
             .addkid("Name," + p[2]) \
             .addkid("ParamDecls") \
@@ -126,7 +117,7 @@ class ArrowParser(object):
             .addkid(p[4])
 
     def p_FuncDefStmt4(self, p):
-        'FuncDefStmt : FUNC NAME "(" ")" Block'
+        'FuncDefStmt : FUNC NAME LPAREN RPAREN Block'
         p[0] = Node("FuncDef") \
             .addkid("Name," + p[2]) \
             .addkid("ParamDecls") \
@@ -135,7 +126,7 @@ class ArrowParser(object):
     ###################################
 
     def p_ParamDecls(self, p):
-        'ParamDecls : ParamDecls "," NAME TypeSpec'
+        'ParamDecls : ParamDecls COMMA NAME TypeSpec'
         p[0] = p[1].addKid(
             Node("ParamDecl").addkid(Node("Name," + p[2])).addkid(p[3])
         )
@@ -149,7 +140,7 @@ class ArrowParser(object):
         ###################################
 
     def p_BooleanExpr(self, p):
-        'BooleanExpr : BooleanExpr "|" "|" AndExpr'
+        'BooleanExpr : BooleanExpr OR OR AndExpr'
 
     def P_BooleanExpr2(self, p):
         'BooleanExpr : AndExpr'
@@ -157,7 +148,7 @@ class ArrowParser(object):
     ###################################
 
     def p_AndExpr(self, p):
-        'AndExpr : AndExpr "&" "&" NotExpr'
+        'AndExpr : AndExpr AND AND NotExpr'
 
     def AndExpr2(self, p):
         'AndExpr : NotExpr'
@@ -179,7 +170,7 @@ class ArrowParser(object):
         'BooleanTerm : BooleanConstant'
 
     def p_BooleanTerm3(self, p):
-        'BooleanTerm : "(" BooleanExpr ")"'
+        'BooleanTerm : LPAREN BooleanExpr RPAREN'
 
     ###################################
 
@@ -223,10 +214,10 @@ class ArrowParser(object):
     ###################################
 
     def p_ArithExpr(self, p):
-        'ArithExpr : ArithExpr "+" MulDiv'
+        'ArithExpr : ArithExpr PLUS MulDiv'
 
     def p_ArithExpr2(self, p):
-        'ArithExpr : ArithExpr "-" MulDiv'
+        'ArithExpr : ArithExpr DASH MulDiv'
 
     def p_ArithExpr3(self, p):
         'ArithExpr : MulDiv'
@@ -234,13 +225,13 @@ class ArrowParser(object):
     ###################################
 
     def p_MulDiv(self, p):
-        'MulDiv : MulDiv "*" Negate'
+        'MulDiv : MulDiv STAR Negate'
 
     def p_MulDiv2(self, p):
-        'MulDiv : MulDiv "/" Negate'
+        'MulDiv : MulDiv SLASH Negate'
 
     def p_MulDiv3(self, p):
-        'MulDiv : MulDiv "%" Negate'
+        'MulDiv : MulDiv PERCENT Negate'
 
     def p_MulDiv4(self, p):
         'MulDiv : Negate'
@@ -248,7 +239,7 @@ class ArrowParser(object):
     ###################################
 
     def p_Negate(self, p):
-        'Negate : "-" Atomic'
+        'Negate : DASH Atomic'
 
     def p_MulDiv2(self, p):
         'Negate : Atomic'
@@ -259,7 +250,7 @@ class ArrowParser(object):
         'Atomic : ValueExpr'
 
     def p_Atomic2(self, p):
-        'Atomic : "(" ArithExpr ")"'
+        'Atomic : LPAREN ArithExpr RPAREN'
 
     ###################################
 
@@ -318,13 +309,13 @@ class ArrowParser(object):
     ###################################
 
     def p_DeclStmt(self, p):
-        'DeclStmt : var NAME TypeSpec "=" Expr'
+        'DeclStmt : VAR NAME TypeSpec EQUALS Expr'
 
     def p_DeclStmt2(self, p):
-        'DeclStmt : var NAME TypeSpec'
+        'DeclStmt : VAR NAME TypeSpec'
 
     def p_DeclStmt3(self, p):
-        'DeclStmt : var NAME "=" Expr'
+        'DeclStmt : VAR NAME EQUALS Expr'
 
     ###################################
 
@@ -341,7 +332,7 @@ class ArrowParser(object):
     ###################################
 
     def p_AssignStmt(self, p):
-        'AssignStmt : NAME "=" Expr'
+        'AssignStmt : NAME EQUALS Expr'
         p[0] = Node("AssignStmt")\
             .addkid(Node("Name," + p[1]))\
             .addkid(p[3])
@@ -349,32 +340,26 @@ class ArrowParser(object):
     ###################################
 
     def p_IfStmt(self, p):
-        'IfStmt : if BooleanExpr Block ElseIfStmt'
-        p[0] = Node("If").addkid(p[2]).addkid([3]).addkid(p[4])
+        'IfStmt : IF BooleanExpr Block ElseIfStmt'
 
     def p_IfStmt2(self, p):
-        'IfStmt : if BooleanExpr Block'
-        p[0] = Node("If").addkid(p[2]).addkid(p[3])
+        'IfStmt : IF BooleanExpr Block'
 
     ###################################
 
     def p_ElseIfStmt(self, p):
-        'ElseIfStmt : else Block'
-        p[0] = Node("ElseIf").addkid(p[2])
+        'ElseIfStmt : ELSE Block'
 
     def p_ElseIfStmt2(self, p):
-        'ElseIfStmt : else IfStmt'
-        p[0] = Node("ElseIf").addkid(p[2])
+        'ElseIfStmt : ELSE IfStmt'
 
     ###################################
 
     def p_WhileStmt(self, p):
-        'WhileStmt : while BooleanExpr Block'
-        p[0] =
+        'ElseIfStmt : WHILE BooleanExpr Block'
 
     def p_WhileStmt2(self, p):
-        'WhileStmt : while Block'
-
+        'ElseIfStmt : WHILE Block'
 
     ###################################
 
@@ -425,4 +410,4 @@ class ArrowParser(object):
 
     def p_LoopControlStmt2(self, p):
         'LoopControlStmt : BREAK'
-        p[0] = Node("Break")
+        p[0] = Node("Break")˔
