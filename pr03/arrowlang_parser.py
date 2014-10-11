@@ -165,7 +165,7 @@ class ArrowParser(object):
     ###################################
 
     def p_NotExpr(self, p):
-        'NotExpr : "!" BooleanTerm'
+        'NotExpr : NOT BooleanTerm'
 
     def NotExpr2(self, p):
         'NotExpr : BooleanTerm'
