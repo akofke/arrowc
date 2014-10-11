@@ -312,6 +312,7 @@ class ArrowParser(object):
 
     def p_CallParams2(self, p):
         'CallParams : Expr'
+        p[0] = Node("Params").addkid(p[1])
 
 
     ###################################
