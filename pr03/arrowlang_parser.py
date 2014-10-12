@@ -152,9 +152,12 @@ class ArrowParser(object):
 
     def p_BooleanExpr(self, p):
         'BooleanExpr : BooleanExpr OR OR AndExpr'
+        p[0] = Node("Or").addkid(p[1]).addkid(p[3])
+
 
     def P_BooleanExpr2(self, p):
         'BooleanExpr : AndExpr'
+        p[0] =  p[1]
 
     ###################################
 
@@ -360,17 +363,27 @@ class ArrowParser(object):
 
     def p_IfStmt(self, p):
         'IfStmt : IF BooleanExpr Block ElseIfStmt'
+        p[0] = Node("If")\
+            .addkid(Node("BooleanExpr").addkid(p[2]))\
+            .addkid(p[3])\
+            .addkid(Node("ElseIf").addkid(p[4]))
 
     def p_IfStmt2(self, p):
         'IfStmt : IF BooleanExpr Block'
+        p[0] = Node("If")\
+            .addkid(Node("BooleanExpr").addkid(p[2]))\
+            .addkid(p[3])\
+            .addkid(Node("ElseIf"))
 
     ###################################
 
     def p_ElseIfStmt(self, p):
         'ElseIfStmt : ELSE Block'
+        p[0] = p[2]
 
     def p_ElseIfStmt2(self, p):
         'ElseIfStmt : ELSE IfStmt'
+        p[0] = p[2]
 
     ###################################
 
@@ -378,7 +391,7 @@ class ArrowParser(object):
         'WhileStmt : WHILE BooleanExpr Block'
         p[0] = Node("For")\
             .addkid(Node("DeclExpr"))\
-            .addkid(p[2])\
+            .addkid(Node("BooleanExpr").addkid(p[2]))\
             .addkid(Node("UpdateExpr"))\
             .addkid(p[3])
 
@@ -396,7 +409,7 @@ class ArrowParser(object):
         'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block'
         p[0] = Node("For")\
             .addkid(Node("DeclExpr").addkid(p[2]))\
-            .addkid(p[4])\
+            .addkid(Node("BooleanExpr").addkid(p[4]))\
             .addkid(Node("UpdateExpr").addkid(p[6]))\
             .addkid(p[7])
 
@@ -404,7 +417,7 @@ class ArrowParser(object):
         'ForStmt : FOR SEMIC BooleanExpr SEMIC AssignStmt Block'
         p[0] = Node("For")\
             .addkid(Node("DeclExpr"))\
-            .addkid(p[3])\
+            .addkid(Node("BooleanExpr").addkid(p[3]))\
             .addkid(Node("UpdateExpr").addkid(p[5]))\
             .addkid(p[6])
 
@@ -420,7 +433,7 @@ class ArrowParser(object):
         'ForStmt : FOR DeclStmt SEMIC BooleanExpr SEMIC Block'
         p[0] = Node("For")\
             .addkid(Node("DeclExpr").addkid(p[2]))\
-            .addkid(p[4])\
+            .addkid(Node("BooleanExpr").addkid(p[4]))\
             .addkid(Node("UpdateExpr"))\
             .addkid(p[6])
 
@@ -436,7 +449,7 @@ class ArrowParser(object):
         'ForStmt : FOR SEMIC BooleanExpr SEMIC Block'
         p[0] = Node("For")\
             .addkid(Node("DeclExpr"))\
-            .addkid(p[3])\
+            .addkid(Node("BooleanExpr").addkid(p[3]))\
             .addkid(Node("UpdateExpr"))\
             .addkid(p[5])
 
