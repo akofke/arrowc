@@ -80,14 +80,10 @@ def main(argv):
         log("For this version of arrowc (pr03) you can only use the -A or --ast option")
         usage(1)
 
-    # if not inputs:
-    #     log("You must supply some inputs")
-    #     usage(1)
+    if not inputs:
+         log("You must supply some inputs")
+         usage(1)
 
-
-    #print "Put your program logic here"
-
-    #testing
 
     test_input = ''.join(sys.stdin.readlines())
     al_lexer = arrowlang_lexer.ArrowLexer()
@@ -96,7 +92,6 @@ def main(argv):
     al_parser = arrowlang_parser.ArrowParser()
     al_parser.build()
     ast = al_parser.yacc.parse(test_input, lexer=al_lexer.lexer)
-    print(ast)
 
 
 

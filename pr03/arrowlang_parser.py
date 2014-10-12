@@ -115,7 +115,7 @@ class ArrowParser(object):
         p[0] = Node("FuncDef") \
             .addkid(Node("Name," + p[2])) \
             .addkid(p[4]) \
-            .addkid(Node("ReturnType")) \
+            .addkid(Node("ReturnType", [Node("Type", [Node("TypeName,unit")])])) \
             .addkid(p[6])
 
     def p_FuncDefStmt3(self, p):
@@ -131,7 +131,7 @@ class ArrowParser(object):
         p[0] = Node("FuncDef") \
             .addkid(Node("Name," + p[2])) \
             .addkid(Node("ParamDecls")) \
-            .addkid(Node("ReturnType")) \
+            .addkid(Node("ReturnType", [Node("Type", [Node("TypeName,unit")])])) \
             .addkid(p[5])
 
     ###################################
@@ -152,7 +152,7 @@ class ArrowParser(object):
 
     def p_BooleanExpr(self, p):
         'BooleanExpr : BooleanExpr OR OR AndExpr'
-        p[0] = Node("Or").addkid(p[1]).addkid(p[3])
+        p[0] = Node("Or").addkid(p[1]).addkid(p[4])
 
 
     def p_BooleanExpr2(self, p):
@@ -229,11 +229,11 @@ class ArrowParser(object):
 
     def p_BooleanConstant(self, p):
         'BooleanConstant : TRUE'
-        p[0] = Node("True")
+        p[0] = Node("Boolean,true")
 
     def p_BooleanConstant2(self, p):
         'BooleanConstant : FALSE'
-        p[0] = Node("False")
+        p[0] = Node("Boolean,false")
 
     ###################################
 
@@ -335,7 +335,7 @@ class ArrowParser(object):
 
     def p_Call2(self, p):
         'Call : NAME LPAREN RPAREN'
-        p[0] = Node("Call").addkid(Node("Symbol," + p[1]))
+        p[0] = Node("Call").addkid(Node("Symbol," + p[1])).addkid(Node("Params"))
 
     ###################################
 
