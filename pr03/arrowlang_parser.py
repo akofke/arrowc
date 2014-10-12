@@ -72,7 +72,7 @@ class ArrowParser(object):
 
     def p_Block3(self, p):
         'Block : LBRACE ReturnStmt RBRACE'
-        p[0] = p[2]
+        p[0] = Node("Block").addkid(p[2])
 
     ###################################
 
@@ -139,7 +139,7 @@ class ArrowParser(object):
     def p_ParamDecls(self, p):
         'ParamDecls : ParamDecls COMMA NAME TypeSpec'
         p[0] = p[1].addkid(
-            Node("ParamDecl").addkid(Node("Name," + p[2])).addkid(p[3])
+            Node("ParamDecl").addkid(Node("Name," + p[3])).addkid(p[4])
         )
 
     def p_ParamDecls2(self, p):
@@ -363,7 +363,7 @@ class ArrowParser(object):
 
     def p_DeclStmt3(self, p):
         'DeclStmt : VAR NAME EQUALS Expr'
-        p[0] = Node("ShortDecl").addkid(Node("Name," + p[2])).addkid(p[3])
+        p[0] = Node("ShortDecl").addkid(Node("Name," + p[2])).addkid(p[4])
 
     ###################################
 
