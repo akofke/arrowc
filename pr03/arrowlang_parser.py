@@ -105,32 +105,34 @@ class ArrowParser(object):
     def p_FuncDefStmt(self, p):
         'FuncDefStmt : FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block'
         p[0] = Node("FuncDef") \
-            .addkid("Name," + p[2]) \
-            .addkid(p[3]) \
+            .addkid(Node("Name," + p[2])) \
             .addkid(p[4]) \
-            .addkid(p[5])
+            .addkid(Node("ReturnType").addkid(p[6])) \
+            .addkid(p[7])
 
     def p_FuncDefStmt2(self, p):
         'FuncDefStmt : FUNC NAME LPAREN ParamDecls RPAREN Block'
-        p[0] = Node("FuncDef"). \
-            addkid("Name," + p[2]). \
-            addkid(p[3]). \
-            addkid(p[4])
+        p[0] = Node("FuncDef") \
+            .addkid(Node("Name," + p[2])) \
+            .addkid(p[4]) \
+            .addkid(Node("ReturnType")) \
+            .addkid(p[6])
 
     def p_FuncDefStmt3(self, p):
         'FuncDefStmt : FUNC NAME LPAREN RPAREN TypeSpec Block'
         p[0] = Node("FuncDef") \
-            .addkid("Name," + p[2]) \
-            .addkid("ParamDecls") \
-            .addkid(p[3]) \
-            .addkid(p[4])
+            .addkid(Node("Name," + p[2])) \
+            .addkid(Node("ParamDecls")) \
+            .addkid(Node("ReturnType").addkid(p[5])) \
+            .addkid(p[6])
 
     def p_FuncDefStmt4(self, p):
         'FuncDefStmt : FUNC NAME LPAREN RPAREN Block'
         p[0] = Node("FuncDef") \
-            .addkid("Name," + p[2]) \
-            .addkid("ParamDecls") \
-            .addkid(p[3])
+            .addkid(Node("Name," + p[2])) \
+            .addkid(Node("ParamDecls")) \
+            .addkid(Node("ReturnType")) \
+            .addkid(p[5])
 
     ###################################
 
@@ -146,7 +148,7 @@ class ArrowParser(object):
             Node("ParamDecl").addkid(Node("Name," + p[1])).addkid(p[2])
         )
 
-        ###################################
+    ###################################
 
     def p_BooleanExpr(self, p):
         'BooleanExpr : BooleanExpr OR OR AndExpr'
@@ -159,7 +161,7 @@ class ArrowParser(object):
     def p_AndExpr(self, p):
         'AndExpr : AndExpr AND AND NotExpr'
 
-    def AndExpr2(self, p):
+    def p_AndExpr2(self, p):
         'AndExpr : NotExpr'
 
     ###################################
@@ -167,7 +169,7 @@ class ArrowParser(object):
     def p_NotExpr(self, p):
         'NotExpr : NOT BooleanTerm'
 
-    def NotExpr2(self, p):
+    def p_NotExpr2(self, p):
         'NotExpr : BooleanTerm'
 
     ###################################
@@ -338,7 +340,7 @@ class ArrowParser(object):
 
     def p_TypeName(self, p):
         'TypeName : NAME'
-        p[0] = Node("TypeName").addkid(Node("Name," + p[1]))
+        p[0] = Node("TypeName," + p[1])
 
     ###################################
 
