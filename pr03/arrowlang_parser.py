@@ -138,7 +138,7 @@ class ArrowParser(object):
 
     def p_ParamDecls(self, p):
         'ParamDecls : ParamDecls COMMA NAME TypeSpec'
-        p[0] = p[1].addKid(
+        p[0] = p[1].addkid(
             Node("ParamDecl").addkid(Node("Name," + p[2])).addkid(p[3])
         )
 
@@ -155,7 +155,7 @@ class ArrowParser(object):
         p[0] = Node("Or").addkid(p[1]).addkid(p[3])
 
 
-    def P_BooleanExpr2(self, p):
+    def p_BooleanExpr2(self, p):
         'BooleanExpr : AndExpr'
         p[0] =  p[1]
 
@@ -196,7 +196,7 @@ class ArrowParser(object):
     ###################################
 
     def p_CmpExpr(self, p):
-        'CompExpr : ArithExpr CmpOp ArithExpr'
+        'CmpExpr : ArithExpr CmpOp ArithExpr'
         p[0] = p[2].addkid(p[1]).addkid(p[3])
 
     ###################################
@@ -273,7 +273,7 @@ class ArrowParser(object):
         'Negate : DASH Atomic'
         p[0] = Node("Negate").addkid(p[2])
 
-    def p_MulDiv2(self, p):
+    def p_Negate2(self, p):
         'Negate : Atomic'
         p[0] = p[1]
 
@@ -301,11 +301,11 @@ class ArrowParser(object):
 
     def p_Constant(self, p):
         'Constant : INT_CONST'
-        p[0] = Node("Int," + p[1])
+        p[0] = Node("Int," + str(p[1]))
 
     def p_Constant2(self, p):
         'Constant : FLOAT_CONST'
-        p[0] = Node("Float," + p[1])
+        p[0] = Node("Float," + str(p[1]))
 
     def p_Constant3(self, p):
         'Constant : STRING_CONST'
@@ -331,7 +331,7 @@ class ArrowParser(object):
 
     def p_Call(self, p):
         'Call : NAME LPAREN CallParams RPAREN'
-        p[0] = Node("Call").addkid(Node("Symbol," + p[1])).addkid(p[2])
+        p[0] = Node("Call").addkid(Node("Symbol," + p[1])).addkid(p[3])
 
     def p_Call2(self, p):
         'Call : NAME LPAREN RPAREN'

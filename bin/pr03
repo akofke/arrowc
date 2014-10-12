@@ -90,9 +90,12 @@ def main(argv):
     #testing
 
     test_input = ''.join(sys.stdin.readlines())
+    al_lexer = arrowlang_lexer.ArrowLexer()
+    al_lexer.build()
+
     al_parser = arrowlang_parser.ArrowParser()
     al_parser.build()
-    ast = al_parser.yacc.parse(test_input, lexer=arrowlang_lexer.ArrowLexer())
+    ast = al_parser.yacc.parse(test_input, lexer=al_lexer.lexer)
     print(ast)
 
 

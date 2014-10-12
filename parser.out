@@ -1,0 +1,3545 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    LBRACKET
+    PERIOD
+    RBRACKET
+
+Grammar
+
+Rule 0     S' -> Start
+Rule 1     Start -> Stmts
+Rule 2     Stmts -> Stmts TStmt
+Rule 3     Stmts -> TStmt
+Rule 4     TStmt -> Stmt
+Rule 5     TStmt -> FuncDefStmt
+Rule 6     Stmt -> CallStmt
+Rule 7     Stmt -> DeclStmt
+Rule 8     Stmt -> AssignStmt
+Rule 9     Stmt -> IfStmt
+Rule 10    Stmt -> WhileStmt
+Rule 11    Stmt -> ForStmt
+Rule 12    Block -> LBRACE BlockStmts ReturnStmt RBRACE
+Rule 13    Block -> LBRACE BlockStmts RBRACE
+Rule 14    Block -> LBRACE ReturnStmt RBRACE
+Rule 15    BlockStmts -> BlockStmts BlockStmt
+Rule 16    BlockStmts -> BlockStmt
+Rule 17    BlockStmt -> Stmt
+Rule 18    BlockStmt -> LoopControlStmt
+Rule 19    Expr -> ArithExpr
+Rule 20    FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block
+Rule 21    FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block
+Rule 22    FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block
+Rule 23    FuncDefStmt -> FUNC NAME LPAREN RPAREN Block
+Rule 24    ParamDecls -> ParamDecls COMMA NAME TypeSpec
+Rule 25    ParamDecls -> NAME TypeSpec
+Rule 26    BooleanExpr -> BooleanExpr OR OR AndExpr
+Rule 27    BooleanExpr -> AndExpr
+Rule 28    AndExpr -> AndExpr AND AND NotExpr
+Rule 29    AndExpr -> NotExpr
+Rule 30    NotExpr -> NOT BooleanTerm
+Rule 31    NotExpr -> BooleanTerm
+Rule 32    BooleanTerm -> CmpExpr
+Rule 33    BooleanTerm -> BooleanConstant
+Rule 34    BooleanTerm -> LPAREN BooleanExpr RPAREN
+Rule 35    CmpExpr -> ArithExpr CmpOp ArithExpr
+Rule 36    CmpOp -> LT
+Rule 37    CmpOp -> LT EQUALS
+Rule 38    CmpOp -> EQUALS EQUALS
+Rule 39    CmpOp -> NOT EQUALS
+Rule 40    CmpOp -> GT EQUALS
+Rule 41    CmpOp -> GT
+Rule 42    BooleanConstant -> TRUE
+Rule 43    BooleanConstant -> FALSE
+Rule 44    ArithExpr -> ArithExpr PLUS MulDiv
+Rule 45    ArithExpr -> ArithExpr DASH MulDiv
+Rule 46    ArithExpr -> MulDiv
+Rule 47    MulDiv -> MulDiv STAR Negate
+Rule 48    MulDiv -> MulDiv SLASH Negate
+Rule 49    MulDiv -> MulDiv PERCENT Negate
+Rule 50    MulDiv -> Negate
+Rule 51    Negate -> DASH Atomic
+Rule 52    Negate -> Atomic
+Rule 53    Atomic -> ValueExpr
+Rule 54    Atomic -> LPAREN ArithExpr RPAREN
+Rule 55    ValueExpr -> Constant
+Rule 56    ValueExpr -> SymbolValueExpr
+Rule 57    Constant -> INT_CONST
+Rule 58    Constant -> FLOAT_CONST
+Rule 59    Constant -> STRING_CONST
+Rule 60    SymbolValueExpr -> Call
+Rule 61    SymbolValueExpr -> NAME
+Rule 62    CallStmt -> Call
+Rule 63    Call -> NAME LPAREN CallParams RPAREN
+Rule 64    Call -> NAME LPAREN RPAREN
+Rule 65    CallParams -> CallParams COMMA Expr
+Rule 66    CallParams -> Expr
+Rule 67    DeclStmt -> VAR NAME TypeSpec EQUALS Expr
+Rule 68    DeclStmt -> VAR NAME TypeSpec
+Rule 69    DeclStmt -> VAR NAME EQUALS Expr
+Rule 70    TypeName -> NAME
+Rule 71    TypeSpec -> TypeName
+Rule 72    AssignStmt -> NAME EQUALS Expr
+Rule 73    IfStmt -> IF BooleanExpr Block ElseIfStmt
+Rule 74    IfStmt -> IF BooleanExpr Block
+Rule 75    ElseIfStmt -> ELSE Block
+Rule 76    ElseIfStmt -> ELSE IfStmt
+Rule 77    WhileStmt -> WHILE BooleanExpr Block
+Rule 78    WhileStmt -> WHILE Block
+Rule 79    ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+Rule 80    ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block
+Rule 81    ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block
+Rule 82    ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block
+Rule 83    ForStmt -> FOR SEMIC SEMIC AssignStmt Block
+Rule 84    ForStmt -> FOR SEMIC BooleanExpr SEMIC Block
+Rule 85    ForStmt -> FOR DeclStmt SEMIC SEMIC Block
+Rule 86    ReturnStmt -> RETURN
+Rule 87    ReturnStmt -> RETURN Expr
+Rule 88    LoopControlStmt -> CONTINUE
+Rule 89    LoopControlStmt -> BREAK
+
+Terminals, with rules where they appear
+
+AND                  : 28 28
+BREAK                : 89
+COMMA                : 24 65
+CONTINUE             : 88
+DASH                 : 45 51
+ELSE                 : 75 76
+EQUALS               : 37 38 38 39 40 67 69 72
+FALSE                : 43
+FLOAT_CONST          : 58
+FOR                  : 79 80 81 82 83 84 85
+FUNC                 : 20 21 22 23
+GT                   : 40 41
+IF                   : 73 74
+INT_CONST            : 57
+LBRACE               : 12 13 14
+LBRACKET             : 
+LPAREN               : 20 21 22 23 34 54 63 64
+LT                   : 36 37
+NAME                 : 20 21 22 23 24 25 61 63 64 67 68 69 70 72
+NOT                  : 30 39
+OR                   : 26 26
+PERCENT              : 49
+PERIOD               : 
+PLUS                 : 44
+RBRACE               : 12 13 14
+RBRACKET             : 
+RETURN               : 86 87
+RPAREN               : 20 21 22 23 34 54 63 64
+SEMIC                : 79 79 80 80 81 81 82 82 83 83 84 84 85 85
+SLASH                : 48
+STAR                 : 47
+STRING_CONST         : 59
+TRUE                 : 42
+VAR                  : 67 68 69
+WHILE                : 77 78
+error                : 
+
+Nonterminals, with rules where they appear
+
+AndExpr              : 26 27 28
+ArithExpr            : 19 35 35 44 45 54
+AssignStmt           : 8 79 80 81 83
+Atomic               : 51 52
+Block                : 20 21 22 23 73 74 75 77 78 79 80 81 82 83 84 85
+BlockStmt            : 15 16
+BlockStmts           : 12 13 15
+BooleanConstant      : 33
+BooleanExpr          : 26 34 73 74 77 79 80 82 84
+BooleanTerm          : 30 31
+Call                 : 60 62
+CallParams           : 63 65
+CallStmt             : 6
+CmpExpr              : 32
+CmpOp                : 35
+Constant             : 55
+DeclStmt             : 7 79 81 82 85
+ElseIfStmt           : 73
+Expr                 : 65 66 67 69 72 87
+ForStmt              : 11
+FuncDefStmt          : 5
+IfStmt               : 9 76
+LoopControlStmt      : 18
+MulDiv               : 44 45 46 47 48 49
+Negate               : 47 48 49 50
+NotExpr              : 28 29
+ParamDecls           : 20 21 24
+ReturnStmt           : 12 14
+Start                : 0
+Stmt                 : 4 17
+Stmts                : 1 2
+SymbolValueExpr      : 56
+TStmt                : 2 3
+TypeName             : 71
+TypeSpec             : 20 22 24 25 67 68
+ValueExpr            : 53
+WhileStmt            : 10
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Start
+    (1) Start -> . Stmts
+    (2) Stmts -> . Stmts TStmt
+    (3) Stmts -> . TStmt
+    (4) TStmt -> . Stmt
+    (5) TStmt -> . FuncDefStmt
+    (6) Stmt -> . CallStmt
+    (7) Stmt -> . DeclStmt
+    (8) Stmt -> . AssignStmt
+    (9) Stmt -> . IfStmt
+    (10) Stmt -> . WhileStmt
+    (11) Stmt -> . ForStmt
+    (20) FuncDefStmt -> . FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block
+    (21) FuncDefStmt -> . FUNC NAME LPAREN ParamDecls RPAREN Block
+    (22) FuncDefStmt -> . FUNC NAME LPAREN RPAREN TypeSpec Block
+    (23) FuncDefStmt -> . FUNC NAME LPAREN RPAREN Block
+    (62) CallStmt -> . Call
+    (67) DeclStmt -> . VAR NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> . VAR NAME TypeSpec
+    (69) DeclStmt -> . VAR NAME EQUALS Expr
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (73) IfStmt -> . IF BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> . IF BooleanExpr Block
+    (77) WhileStmt -> . WHILE BooleanExpr Block
+    (78) WhileStmt -> . WHILE Block
+    (79) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+    (80) ForStmt -> . FOR SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> . FOR DeclStmt SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC Block
+    (83) ForStmt -> . FOR SEMIC SEMIC AssignStmt Block
+    (84) ForStmt -> . FOR SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> . FOR DeclStmt SEMIC SEMIC Block
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    FUNC            shift and go to state 12
+    VAR             shift and go to state 13
+    NAME            shift and go to state 16
+    IF              shift and go to state 14
+    WHILE           shift and go to state 17
+    FOR             shift and go to state 10
+
+    TStmt                          shift and go to state 15
+    Stmts                          shift and go to state 1
+    Call                           shift and go to state 5
+    Stmt                           shift and go to state 9
+    AssignStmt                     shift and go to state 2
+    WhileStmt                      shift and go to state 11
+    Start                          shift and go to state 3
+    CallStmt                       shift and go to state 4
+    ForStmt                        shift and go to state 18
+    FuncDefStmt                    shift and go to state 6
+    IfStmt                         shift and go to state 7
+    DeclStmt                       shift and go to state 8
+
+state 1
+
+    (1) Start -> Stmts .
+    (2) Stmts -> Stmts . TStmt
+    (4) TStmt -> . Stmt
+    (5) TStmt -> . FuncDefStmt
+    (6) Stmt -> . CallStmt
+    (7) Stmt -> . DeclStmt
+    (8) Stmt -> . AssignStmt
+    (9) Stmt -> . IfStmt
+    (10) Stmt -> . WhileStmt
+    (11) Stmt -> . ForStmt
+    (20) FuncDefStmt -> . FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block
+    (21) FuncDefStmt -> . FUNC NAME LPAREN ParamDecls RPAREN Block
+    (22) FuncDefStmt -> . FUNC NAME LPAREN RPAREN TypeSpec Block
+    (23) FuncDefStmt -> . FUNC NAME LPAREN RPAREN Block
+    (62) CallStmt -> . Call
+    (67) DeclStmt -> . VAR NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> . VAR NAME TypeSpec
+    (69) DeclStmt -> . VAR NAME EQUALS Expr
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (73) IfStmt -> . IF BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> . IF BooleanExpr Block
+    (77) WhileStmt -> . WHILE BooleanExpr Block
+    (78) WhileStmt -> . WHILE Block
+    (79) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+    (80) ForStmt -> . FOR SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> . FOR DeclStmt SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC Block
+    (83) ForStmt -> . FOR SEMIC SEMIC AssignStmt Block
+    (84) ForStmt -> . FOR SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> . FOR DeclStmt SEMIC SEMIC Block
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    $end            reduce using rule 1 (Start -> Stmts .)
+    FUNC            shift and go to state 12
+    VAR             shift and go to state 13
+    NAME            shift and go to state 16
+    IF              shift and go to state 14
+    WHILE           shift and go to state 17
+    FOR             shift and go to state 10
+
+    TStmt                          shift and go to state 19
+    Call                           shift and go to state 5
+    Stmt                           shift and go to state 9
+    AssignStmt                     shift and go to state 2
+    WhileStmt                      shift and go to state 11
+    CallStmt                       shift and go to state 4
+    ForStmt                        shift and go to state 18
+    FuncDefStmt                    shift and go to state 6
+    IfStmt                         shift and go to state 7
+    DeclStmt                       shift and go to state 8
+
+state 2
+
+    (8) Stmt -> AssignStmt .
+
+    RBRACE          reduce using rule 8 (Stmt -> AssignStmt .)
+    RETURN          reduce using rule 8 (Stmt -> AssignStmt .)
+    CONTINUE        reduce using rule 8 (Stmt -> AssignStmt .)
+    BREAK           reduce using rule 8 (Stmt -> AssignStmt .)
+    VAR             reduce using rule 8 (Stmt -> AssignStmt .)
+    NAME            reduce using rule 8 (Stmt -> AssignStmt .)
+    IF              reduce using rule 8 (Stmt -> AssignStmt .)
+    WHILE           reduce using rule 8 (Stmt -> AssignStmt .)
+    FOR             reduce using rule 8 (Stmt -> AssignStmt .)
+    FUNC            reduce using rule 8 (Stmt -> AssignStmt .)
+    $end            reduce using rule 8 (Stmt -> AssignStmt .)
+
+
+state 3
+
+    (0) S' -> Start .
+
+
+
+state 4
+
+    (6) Stmt -> CallStmt .
+
+    RBRACE          reduce using rule 6 (Stmt -> CallStmt .)
+    RETURN          reduce using rule 6 (Stmt -> CallStmt .)
+    CONTINUE        reduce using rule 6 (Stmt -> CallStmt .)
+    BREAK           reduce using rule 6 (Stmt -> CallStmt .)
+    VAR             reduce using rule 6 (Stmt -> CallStmt .)
+    NAME            reduce using rule 6 (Stmt -> CallStmt .)
+    IF              reduce using rule 6 (Stmt -> CallStmt .)
+    WHILE           reduce using rule 6 (Stmt -> CallStmt .)
+    FOR             reduce using rule 6 (Stmt -> CallStmt .)
+    FUNC            reduce using rule 6 (Stmt -> CallStmt .)
+    $end            reduce using rule 6 (Stmt -> CallStmt .)
+
+
+state 5
+
+    (62) CallStmt -> Call .
+
+    FUNC            reduce using rule 62 (CallStmt -> Call .)
+    VAR             reduce using rule 62 (CallStmt -> Call .)
+    NAME            reduce using rule 62 (CallStmt -> Call .)
+    IF              reduce using rule 62 (CallStmt -> Call .)
+    WHILE           reduce using rule 62 (CallStmt -> Call .)
+    FOR             reduce using rule 62 (CallStmt -> Call .)
+    $end            reduce using rule 62 (CallStmt -> Call .)
+    RBRACE          reduce using rule 62 (CallStmt -> Call .)
+    RETURN          reduce using rule 62 (CallStmt -> Call .)
+    CONTINUE        reduce using rule 62 (CallStmt -> Call .)
+    BREAK           reduce using rule 62 (CallStmt -> Call .)
+
+
+state 6
+
+    (5) TStmt -> FuncDefStmt .
+
+    FUNC            reduce using rule 5 (TStmt -> FuncDefStmt .)
+    VAR             reduce using rule 5 (TStmt -> FuncDefStmt .)
+    NAME            reduce using rule 5 (TStmt -> FuncDefStmt .)
+    IF              reduce using rule 5 (TStmt -> FuncDefStmt .)
+    WHILE           reduce using rule 5 (TStmt -> FuncDefStmt .)
+    FOR             reduce using rule 5 (TStmt -> FuncDefStmt .)
+    $end            reduce using rule 5 (TStmt -> FuncDefStmt .)
+
+
+state 7
+
+    (9) Stmt -> IfStmt .
+
+    RBRACE          reduce using rule 9 (Stmt -> IfStmt .)
+    RETURN          reduce using rule 9 (Stmt -> IfStmt .)
+    CONTINUE        reduce using rule 9 (Stmt -> IfStmt .)
+    BREAK           reduce using rule 9 (Stmt -> IfStmt .)
+    VAR             reduce using rule 9 (Stmt -> IfStmt .)
+    NAME            reduce using rule 9 (Stmt -> IfStmt .)
+    IF              reduce using rule 9 (Stmt -> IfStmt .)
+    WHILE           reduce using rule 9 (Stmt -> IfStmt .)
+    FOR             reduce using rule 9 (Stmt -> IfStmt .)
+    FUNC            reduce using rule 9 (Stmt -> IfStmt .)
+    $end            reduce using rule 9 (Stmt -> IfStmt .)
+
+
+state 8
+
+    (7) Stmt -> DeclStmt .
+
+    RBRACE          reduce using rule 7 (Stmt -> DeclStmt .)
+    RETURN          reduce using rule 7 (Stmt -> DeclStmt .)
+    CONTINUE        reduce using rule 7 (Stmt -> DeclStmt .)
+    BREAK           reduce using rule 7 (Stmt -> DeclStmt .)
+    VAR             reduce using rule 7 (Stmt -> DeclStmt .)
+    NAME            reduce using rule 7 (Stmt -> DeclStmt .)
+    IF              reduce using rule 7 (Stmt -> DeclStmt .)
+    WHILE           reduce using rule 7 (Stmt -> DeclStmt .)
+    FOR             reduce using rule 7 (Stmt -> DeclStmt .)
+    FUNC            reduce using rule 7 (Stmt -> DeclStmt .)
+    $end            reduce using rule 7 (Stmt -> DeclStmt .)
+
+
+state 9
+
+    (4) TStmt -> Stmt .
+
+    FUNC            reduce using rule 4 (TStmt -> Stmt .)
+    VAR             reduce using rule 4 (TStmt -> Stmt .)
+    NAME            reduce using rule 4 (TStmt -> Stmt .)
+    IF              reduce using rule 4 (TStmt -> Stmt .)
+    WHILE           reduce using rule 4 (TStmt -> Stmt .)
+    FOR             reduce using rule 4 (TStmt -> Stmt .)
+    $end            reduce using rule 4 (TStmt -> Stmt .)
+
+
+state 10
+
+    (79) ForStmt -> FOR . DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+    (80) ForStmt -> FOR . SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> FOR . DeclStmt SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> FOR . DeclStmt SEMIC BooleanExpr SEMIC Block
+    (83) ForStmt -> FOR . SEMIC SEMIC AssignStmt Block
+    (84) ForStmt -> FOR . SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> FOR . DeclStmt SEMIC SEMIC Block
+    (67) DeclStmt -> . VAR NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> . VAR NAME TypeSpec
+    (69) DeclStmt -> . VAR NAME EQUALS Expr
+
+    SEMIC           shift and go to state 20
+    VAR             shift and go to state 13
+
+    DeclStmt                       shift and go to state 21
+
+state 11
+
+    (10) Stmt -> WhileStmt .
+
+    RBRACE          reduce using rule 10 (Stmt -> WhileStmt .)
+    RETURN          reduce using rule 10 (Stmt -> WhileStmt .)
+    CONTINUE        reduce using rule 10 (Stmt -> WhileStmt .)
+    BREAK           reduce using rule 10 (Stmt -> WhileStmt .)
+    VAR             reduce using rule 10 (Stmt -> WhileStmt .)
+    NAME            reduce using rule 10 (Stmt -> WhileStmt .)
+    IF              reduce using rule 10 (Stmt -> WhileStmt .)
+    WHILE           reduce using rule 10 (Stmt -> WhileStmt .)
+    FOR             reduce using rule 10 (Stmt -> WhileStmt .)
+    FUNC            reduce using rule 10 (Stmt -> WhileStmt .)
+    $end            reduce using rule 10 (Stmt -> WhileStmt .)
+
+
+state 12
+
+    (20) FuncDefStmt -> FUNC . NAME LPAREN ParamDecls RPAREN TypeSpec Block
+    (21) FuncDefStmt -> FUNC . NAME LPAREN ParamDecls RPAREN Block
+    (22) FuncDefStmt -> FUNC . NAME LPAREN RPAREN TypeSpec Block
+    (23) FuncDefStmt -> FUNC . NAME LPAREN RPAREN Block
+
+    NAME            shift and go to state 22
+
+
+state 13
+
+    (67) DeclStmt -> VAR . NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> VAR . NAME TypeSpec
+    (69) DeclStmt -> VAR . NAME EQUALS Expr
+
+    NAME            shift and go to state 23
+
+
+state 14
+
+    (73) IfStmt -> IF . BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> IF . BooleanExpr Block
+    (26) BooleanExpr -> . BooleanExpr OR OR AndExpr
+    (27) BooleanExpr -> . AndExpr
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    BooleanExpr                    shift and go to state 24
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 46
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    MulDiv                         shift and go to state 35
+
+state 15
+
+    (3) Stmts -> TStmt .
+
+    FUNC            reduce using rule 3 (Stmts -> TStmt .)
+    VAR             reduce using rule 3 (Stmts -> TStmt .)
+    NAME            reduce using rule 3 (Stmts -> TStmt .)
+    IF              reduce using rule 3 (Stmts -> TStmt .)
+    WHILE           reduce using rule 3 (Stmts -> TStmt .)
+    FOR             reduce using rule 3 (Stmts -> TStmt .)
+    $end            reduce using rule 3 (Stmts -> TStmt .)
+
+
+state 16
+
+    (72) AssignStmt -> NAME . EQUALS Expr
+    (63) Call -> NAME . LPAREN CallParams RPAREN
+    (64) Call -> NAME . LPAREN RPAREN
+
+    EQUALS          shift and go to state 47
+    LPAREN          shift and go to state 48
+
+
+state 17
+
+    (77) WhileStmt -> WHILE . BooleanExpr Block
+    (78) WhileStmt -> WHILE . Block
+    (26) BooleanExpr -> . BooleanExpr OR OR AndExpr
+    (27) BooleanExpr -> . AndExpr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    LBRACE          shift and go to state 51
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    BooleanExpr                    shift and go to state 49
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 46
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    Block                          shift and go to state 50
+    Atomic                         shift and go to state 43
+
+state 18
+
+    (11) Stmt -> ForStmt .
+
+    RBRACE          reduce using rule 11 (Stmt -> ForStmt .)
+    RETURN          reduce using rule 11 (Stmt -> ForStmt .)
+    CONTINUE        reduce using rule 11 (Stmt -> ForStmt .)
+    BREAK           reduce using rule 11 (Stmt -> ForStmt .)
+    VAR             reduce using rule 11 (Stmt -> ForStmt .)
+    NAME            reduce using rule 11 (Stmt -> ForStmt .)
+    IF              reduce using rule 11 (Stmt -> ForStmt .)
+    WHILE           reduce using rule 11 (Stmt -> ForStmt .)
+    FOR             reduce using rule 11 (Stmt -> ForStmt .)
+    FUNC            reduce using rule 11 (Stmt -> ForStmt .)
+    $end            reduce using rule 11 (Stmt -> ForStmt .)
+
+
+state 19
+
+    (2) Stmts -> Stmts TStmt .
+
+    FUNC            reduce using rule 2 (Stmts -> Stmts TStmt .)
+    VAR             reduce using rule 2 (Stmts -> Stmts TStmt .)
+    NAME            reduce using rule 2 (Stmts -> Stmts TStmt .)
+    IF              reduce using rule 2 (Stmts -> Stmts TStmt .)
+    WHILE           reduce using rule 2 (Stmts -> Stmts TStmt .)
+    FOR             reduce using rule 2 (Stmts -> Stmts TStmt .)
+    $end            reduce using rule 2 (Stmts -> Stmts TStmt .)
+
+
+state 20
+
+    (80) ForStmt -> FOR SEMIC . BooleanExpr SEMIC AssignStmt Block
+    (83) ForStmt -> FOR SEMIC . SEMIC AssignStmt Block
+    (84) ForStmt -> FOR SEMIC . BooleanExpr SEMIC Block
+    (26) BooleanExpr -> . BooleanExpr OR OR AndExpr
+    (27) BooleanExpr -> . AndExpr
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    SEMIC           shift and go to state 53
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    BooleanExpr                    shift and go to state 52
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 46
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    Atomic                         shift and go to state 43
+
+state 21
+
+    (79) ForStmt -> FOR DeclStmt . SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> FOR DeclStmt . SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> FOR DeclStmt . SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> FOR DeclStmt . SEMIC SEMIC Block
+
+    SEMIC           shift and go to state 54
+
+
+state 22
+
+    (20) FuncDefStmt -> FUNC NAME . LPAREN ParamDecls RPAREN TypeSpec Block
+    (21) FuncDefStmt -> FUNC NAME . LPAREN ParamDecls RPAREN Block
+    (22) FuncDefStmt -> FUNC NAME . LPAREN RPAREN TypeSpec Block
+    (23) FuncDefStmt -> FUNC NAME . LPAREN RPAREN Block
+
+    LPAREN          shift and go to state 55
+
+
+state 23
+
+    (67) DeclStmt -> VAR NAME . TypeSpec EQUALS Expr
+    (68) DeclStmt -> VAR NAME . TypeSpec
+    (69) DeclStmt -> VAR NAME . EQUALS Expr
+    (71) TypeSpec -> . TypeName
+    (70) TypeName -> . NAME
+
+    EQUALS          shift and go to state 57
+    NAME            shift and go to state 56
+
+    TypeSpec                       shift and go to state 59
+    TypeName                       shift and go to state 58
+
+state 24
+
+    (73) IfStmt -> IF BooleanExpr . Block ElseIfStmt
+    (74) IfStmt -> IF BooleanExpr . Block
+    (26) BooleanExpr -> BooleanExpr . OR OR AndExpr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    OR              shift and go to state 61
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 60
+
+state 25
+
+    (35) CmpExpr -> ArithExpr . CmpOp ArithExpr
+    (44) ArithExpr -> ArithExpr . PLUS MulDiv
+    (45) ArithExpr -> ArithExpr . DASH MulDiv
+    (36) CmpOp -> . LT
+    (37) CmpOp -> . LT EQUALS
+    (38) CmpOp -> . EQUALS EQUALS
+    (39) CmpOp -> . NOT EQUALS
+    (40) CmpOp -> . GT EQUALS
+    (41) CmpOp -> . GT
+
+    PLUS            shift and go to state 67
+    DASH            shift and go to state 65
+    LT              shift and go to state 66
+    EQUALS          shift and go to state 64
+    NOT             shift and go to state 68
+    GT              shift and go to state 62
+
+    CmpOp                          shift and go to state 63
+
+state 26
+
+    (60) SymbolValueExpr -> Call .
+
+    STAR            reduce using rule 60 (SymbolValueExpr -> Call .)
+    SLASH           reduce using rule 60 (SymbolValueExpr -> Call .)
+    PERCENT         reduce using rule 60 (SymbolValueExpr -> Call .)
+    PLUS            reduce using rule 60 (SymbolValueExpr -> Call .)
+    DASH            reduce using rule 60 (SymbolValueExpr -> Call .)
+    LT              reduce using rule 60 (SymbolValueExpr -> Call .)
+    EQUALS          reduce using rule 60 (SymbolValueExpr -> Call .)
+    NOT             reduce using rule 60 (SymbolValueExpr -> Call .)
+    GT              reduce using rule 60 (SymbolValueExpr -> Call .)
+    RBRACE          reduce using rule 60 (SymbolValueExpr -> Call .)
+    AND             reduce using rule 60 (SymbolValueExpr -> Call .)
+    OR              reduce using rule 60 (SymbolValueExpr -> Call .)
+    LBRACE          reduce using rule 60 (SymbolValueExpr -> Call .)
+    SEMIC           reduce using rule 60 (SymbolValueExpr -> Call .)
+    RPAREN          reduce using rule 60 (SymbolValueExpr -> Call .)
+    FUNC            reduce using rule 60 (SymbolValueExpr -> Call .)
+    VAR             reduce using rule 60 (SymbolValueExpr -> Call .)
+    NAME            reduce using rule 60 (SymbolValueExpr -> Call .)
+    IF              reduce using rule 60 (SymbolValueExpr -> Call .)
+    WHILE           reduce using rule 60 (SymbolValueExpr -> Call .)
+    FOR             reduce using rule 60 (SymbolValueExpr -> Call .)
+    $end            reduce using rule 60 (SymbolValueExpr -> Call .)
+    RETURN          reduce using rule 60 (SymbolValueExpr -> Call .)
+    CONTINUE        reduce using rule 60 (SymbolValueExpr -> Call .)
+    BREAK           reduce using rule 60 (SymbolValueExpr -> Call .)
+    COMMA           reduce using rule 60 (SymbolValueExpr -> Call .)
+
+
+state 27
+
+    (58) Constant -> FLOAT_CONST .
+
+    STAR            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    SLASH           reduce using rule 58 (Constant -> FLOAT_CONST .)
+    PERCENT         reduce using rule 58 (Constant -> FLOAT_CONST .)
+    PLUS            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    DASH            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    LT              reduce using rule 58 (Constant -> FLOAT_CONST .)
+    EQUALS          reduce using rule 58 (Constant -> FLOAT_CONST .)
+    NOT             reduce using rule 58 (Constant -> FLOAT_CONST .)
+    GT              reduce using rule 58 (Constant -> FLOAT_CONST .)
+    RPAREN          reduce using rule 58 (Constant -> FLOAT_CONST .)
+    FUNC            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    VAR             reduce using rule 58 (Constant -> FLOAT_CONST .)
+    NAME            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    IF              reduce using rule 58 (Constant -> FLOAT_CONST .)
+    WHILE           reduce using rule 58 (Constant -> FLOAT_CONST .)
+    FOR             reduce using rule 58 (Constant -> FLOAT_CONST .)
+    $end            reduce using rule 58 (Constant -> FLOAT_CONST .)
+    RBRACE          reduce using rule 58 (Constant -> FLOAT_CONST .)
+    RETURN          reduce using rule 58 (Constant -> FLOAT_CONST .)
+    CONTINUE        reduce using rule 58 (Constant -> FLOAT_CONST .)
+    BREAK           reduce using rule 58 (Constant -> FLOAT_CONST .)
+    LBRACE          reduce using rule 58 (Constant -> FLOAT_CONST .)
+    COMMA           reduce using rule 58 (Constant -> FLOAT_CONST .)
+    SEMIC           reduce using rule 58 (Constant -> FLOAT_CONST .)
+    AND             reduce using rule 58 (Constant -> FLOAT_CONST .)
+    OR              reduce using rule 58 (Constant -> FLOAT_CONST .)
+
+
+state 28
+
+    (42) BooleanConstant -> TRUE .
+
+    AND             reduce using rule 42 (BooleanConstant -> TRUE .)
+    OR              reduce using rule 42 (BooleanConstant -> TRUE .)
+    LBRACE          reduce using rule 42 (BooleanConstant -> TRUE .)
+    SEMIC           reduce using rule 42 (BooleanConstant -> TRUE .)
+    RPAREN          reduce using rule 42 (BooleanConstant -> TRUE .)
+
+
+state 29
+
+    (59) Constant -> STRING_CONST .
+
+    STAR            reduce using rule 59 (Constant -> STRING_CONST .)
+    SLASH           reduce using rule 59 (Constant -> STRING_CONST .)
+    PERCENT         reduce using rule 59 (Constant -> STRING_CONST .)
+    PLUS            reduce using rule 59 (Constant -> STRING_CONST .)
+    DASH            reduce using rule 59 (Constant -> STRING_CONST .)
+    LT              reduce using rule 59 (Constant -> STRING_CONST .)
+    EQUALS          reduce using rule 59 (Constant -> STRING_CONST .)
+    NOT             reduce using rule 59 (Constant -> STRING_CONST .)
+    GT              reduce using rule 59 (Constant -> STRING_CONST .)
+    RPAREN          reduce using rule 59 (Constant -> STRING_CONST .)
+    FUNC            reduce using rule 59 (Constant -> STRING_CONST .)
+    VAR             reduce using rule 59 (Constant -> STRING_CONST .)
+    NAME            reduce using rule 59 (Constant -> STRING_CONST .)
+    IF              reduce using rule 59 (Constant -> STRING_CONST .)
+    WHILE           reduce using rule 59 (Constant -> STRING_CONST .)
+    FOR             reduce using rule 59 (Constant -> STRING_CONST .)
+    $end            reduce using rule 59 (Constant -> STRING_CONST .)
+    RBRACE          reduce using rule 59 (Constant -> STRING_CONST .)
+    RETURN          reduce using rule 59 (Constant -> STRING_CONST .)
+    CONTINUE        reduce using rule 59 (Constant -> STRING_CONST .)
+    BREAK           reduce using rule 59 (Constant -> STRING_CONST .)
+    LBRACE          reduce using rule 59 (Constant -> STRING_CONST .)
+    COMMA           reduce using rule 59 (Constant -> STRING_CONST .)
+    SEMIC           reduce using rule 59 (Constant -> STRING_CONST .)
+    AND             reduce using rule 59 (Constant -> STRING_CONST .)
+    OR              reduce using rule 59 (Constant -> STRING_CONST .)
+
+
+state 30
+
+    (57) Constant -> INT_CONST .
+
+    STAR            reduce using rule 57 (Constant -> INT_CONST .)
+    SLASH           reduce using rule 57 (Constant -> INT_CONST .)
+    PERCENT         reduce using rule 57 (Constant -> INT_CONST .)
+    PLUS            reduce using rule 57 (Constant -> INT_CONST .)
+    DASH            reduce using rule 57 (Constant -> INT_CONST .)
+    LT              reduce using rule 57 (Constant -> INT_CONST .)
+    EQUALS          reduce using rule 57 (Constant -> INT_CONST .)
+    NOT             reduce using rule 57 (Constant -> INT_CONST .)
+    GT              reduce using rule 57 (Constant -> INT_CONST .)
+    RPAREN          reduce using rule 57 (Constant -> INT_CONST .)
+    FUNC            reduce using rule 57 (Constant -> INT_CONST .)
+    VAR             reduce using rule 57 (Constant -> INT_CONST .)
+    NAME            reduce using rule 57 (Constant -> INT_CONST .)
+    IF              reduce using rule 57 (Constant -> INT_CONST .)
+    WHILE           reduce using rule 57 (Constant -> INT_CONST .)
+    FOR             reduce using rule 57 (Constant -> INT_CONST .)
+    $end            reduce using rule 57 (Constant -> INT_CONST .)
+    RBRACE          reduce using rule 57 (Constant -> INT_CONST .)
+    RETURN          reduce using rule 57 (Constant -> INT_CONST .)
+    CONTINUE        reduce using rule 57 (Constant -> INT_CONST .)
+    BREAK           reduce using rule 57 (Constant -> INT_CONST .)
+    LBRACE          reduce using rule 57 (Constant -> INT_CONST .)
+    COMMA           reduce using rule 57 (Constant -> INT_CONST .)
+    SEMIC           reduce using rule 57 (Constant -> INT_CONST .)
+    AND             reduce using rule 57 (Constant -> INT_CONST .)
+    OR              reduce using rule 57 (Constant -> INT_CONST .)
+
+
+state 31
+
+    (53) Atomic -> ValueExpr .
+
+    STAR            reduce using rule 53 (Atomic -> ValueExpr .)
+    SLASH           reduce using rule 53 (Atomic -> ValueExpr .)
+    PERCENT         reduce using rule 53 (Atomic -> ValueExpr .)
+    PLUS            reduce using rule 53 (Atomic -> ValueExpr .)
+    DASH            reduce using rule 53 (Atomic -> ValueExpr .)
+    RPAREN          reduce using rule 53 (Atomic -> ValueExpr .)
+    COMMA           reduce using rule 53 (Atomic -> ValueExpr .)
+    FUNC            reduce using rule 53 (Atomic -> ValueExpr .)
+    VAR             reduce using rule 53 (Atomic -> ValueExpr .)
+    NAME            reduce using rule 53 (Atomic -> ValueExpr .)
+    IF              reduce using rule 53 (Atomic -> ValueExpr .)
+    WHILE           reduce using rule 53 (Atomic -> ValueExpr .)
+    FOR             reduce using rule 53 (Atomic -> ValueExpr .)
+    $end            reduce using rule 53 (Atomic -> ValueExpr .)
+    SEMIC           reduce using rule 53 (Atomic -> ValueExpr .)
+    RBRACE          reduce using rule 53 (Atomic -> ValueExpr .)
+    RETURN          reduce using rule 53 (Atomic -> ValueExpr .)
+    CONTINUE        reduce using rule 53 (Atomic -> ValueExpr .)
+    BREAK           reduce using rule 53 (Atomic -> ValueExpr .)
+    LT              reduce using rule 53 (Atomic -> ValueExpr .)
+    EQUALS          reduce using rule 53 (Atomic -> ValueExpr .)
+    NOT             reduce using rule 53 (Atomic -> ValueExpr .)
+    GT              reduce using rule 53 (Atomic -> ValueExpr .)
+    LBRACE          reduce using rule 53 (Atomic -> ValueExpr .)
+    AND             reduce using rule 53 (Atomic -> ValueExpr .)
+    OR              reduce using rule 53 (Atomic -> ValueExpr .)
+
+
+state 32
+
+    (32) BooleanTerm -> CmpExpr .
+
+    AND             reduce using rule 32 (BooleanTerm -> CmpExpr .)
+    OR              reduce using rule 32 (BooleanTerm -> CmpExpr .)
+    LBRACE          reduce using rule 32 (BooleanTerm -> CmpExpr .)
+    SEMIC           reduce using rule 32 (BooleanTerm -> CmpExpr .)
+    RPAREN          reduce using rule 32 (BooleanTerm -> CmpExpr .)
+
+
+state 33
+
+    (51) Negate -> DASH . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 69
+    ValueExpr                      shift and go to state 31
+
+state 34
+
+    (50) MulDiv -> Negate .
+
+    STAR            reduce using rule 50 (MulDiv -> Negate .)
+    SLASH           reduce using rule 50 (MulDiv -> Negate .)
+    PERCENT         reduce using rule 50 (MulDiv -> Negate .)
+    PLUS            reduce using rule 50 (MulDiv -> Negate .)
+    DASH            reduce using rule 50 (MulDiv -> Negate .)
+    LT              reduce using rule 50 (MulDiv -> Negate .)
+    EQUALS          reduce using rule 50 (MulDiv -> Negate .)
+    NOT             reduce using rule 50 (MulDiv -> Negate .)
+    GT              reduce using rule 50 (MulDiv -> Negate .)
+    RPAREN          reduce using rule 50 (MulDiv -> Negate .)
+    FUNC            reduce using rule 50 (MulDiv -> Negate .)
+    VAR             reduce using rule 50 (MulDiv -> Negate .)
+    NAME            reduce using rule 50 (MulDiv -> Negate .)
+    IF              reduce using rule 50 (MulDiv -> Negate .)
+    WHILE           reduce using rule 50 (MulDiv -> Negate .)
+    FOR             reduce using rule 50 (MulDiv -> Negate .)
+    $end            reduce using rule 50 (MulDiv -> Negate .)
+    RBRACE          reduce using rule 50 (MulDiv -> Negate .)
+    RETURN          reduce using rule 50 (MulDiv -> Negate .)
+    CONTINUE        reduce using rule 50 (MulDiv -> Negate .)
+    BREAK           reduce using rule 50 (MulDiv -> Negate .)
+    LBRACE          reduce using rule 50 (MulDiv -> Negate .)
+    COMMA           reduce using rule 50 (MulDiv -> Negate .)
+    SEMIC           reduce using rule 50 (MulDiv -> Negate .)
+    AND             reduce using rule 50 (MulDiv -> Negate .)
+    OR              reduce using rule 50 (MulDiv -> Negate .)
+
+
+state 35
+
+    (46) ArithExpr -> MulDiv .
+    (47) MulDiv -> MulDiv . STAR Negate
+    (48) MulDiv -> MulDiv . SLASH Negate
+    (49) MulDiv -> MulDiv . PERCENT Negate
+
+    PLUS            reduce using rule 46 (ArithExpr -> MulDiv .)
+    DASH            reduce using rule 46 (ArithExpr -> MulDiv .)
+    RPAREN          reduce using rule 46 (ArithExpr -> MulDiv .)
+    COMMA           reduce using rule 46 (ArithExpr -> MulDiv .)
+    RBRACE          reduce using rule 46 (ArithExpr -> MulDiv .)
+    LT              reduce using rule 46 (ArithExpr -> MulDiv .)
+    EQUALS          reduce using rule 46 (ArithExpr -> MulDiv .)
+    NOT             reduce using rule 46 (ArithExpr -> MulDiv .)
+    GT              reduce using rule 46 (ArithExpr -> MulDiv .)
+    FUNC            reduce using rule 46 (ArithExpr -> MulDiv .)
+    VAR             reduce using rule 46 (ArithExpr -> MulDiv .)
+    NAME            reduce using rule 46 (ArithExpr -> MulDiv .)
+    IF              reduce using rule 46 (ArithExpr -> MulDiv .)
+    WHILE           reduce using rule 46 (ArithExpr -> MulDiv .)
+    FOR             reduce using rule 46 (ArithExpr -> MulDiv .)
+    $end            reduce using rule 46 (ArithExpr -> MulDiv .)
+    SEMIC           reduce using rule 46 (ArithExpr -> MulDiv .)
+    RETURN          reduce using rule 46 (ArithExpr -> MulDiv .)
+    CONTINUE        reduce using rule 46 (ArithExpr -> MulDiv .)
+    BREAK           reduce using rule 46 (ArithExpr -> MulDiv .)
+    AND             reduce using rule 46 (ArithExpr -> MulDiv .)
+    OR              reduce using rule 46 (ArithExpr -> MulDiv .)
+    LBRACE          reduce using rule 46 (ArithExpr -> MulDiv .)
+    STAR            shift and go to state 72
+    SLASH           shift and go to state 73
+    PERCENT         shift and go to state 71
+
+
+state 36
+
+    (34) BooleanTerm -> LPAREN . BooleanExpr RPAREN
+    (54) Atomic -> LPAREN . ArithExpr RPAREN
+    (26) BooleanExpr -> . BooleanExpr OR OR AndExpr
+    (27) BooleanExpr -> . AndExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    NOT             shift and go to state 45
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    BooleanExpr                    shift and go to state 74
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 75
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 46
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    Atomic                         shift and go to state 43
+
+state 37
+
+    (29) AndExpr -> NotExpr .
+
+    AND             reduce using rule 29 (AndExpr -> NotExpr .)
+    OR              reduce using rule 29 (AndExpr -> NotExpr .)
+    LBRACE          reduce using rule 29 (AndExpr -> NotExpr .)
+    SEMIC           reduce using rule 29 (AndExpr -> NotExpr .)
+    RPAREN          reduce using rule 29 (AndExpr -> NotExpr .)
+
+
+state 38
+
+    (55) ValueExpr -> Constant .
+
+    STAR            reduce using rule 55 (ValueExpr -> Constant .)
+    SLASH           reduce using rule 55 (ValueExpr -> Constant .)
+    PERCENT         reduce using rule 55 (ValueExpr -> Constant .)
+    PLUS            reduce using rule 55 (ValueExpr -> Constant .)
+    DASH            reduce using rule 55 (ValueExpr -> Constant .)
+    LT              reduce using rule 55 (ValueExpr -> Constant .)
+    EQUALS          reduce using rule 55 (ValueExpr -> Constant .)
+    NOT             reduce using rule 55 (ValueExpr -> Constant .)
+    GT              reduce using rule 55 (ValueExpr -> Constant .)
+    FUNC            reduce using rule 55 (ValueExpr -> Constant .)
+    VAR             reduce using rule 55 (ValueExpr -> Constant .)
+    NAME            reduce using rule 55 (ValueExpr -> Constant .)
+    IF              reduce using rule 55 (ValueExpr -> Constant .)
+    WHILE           reduce using rule 55 (ValueExpr -> Constant .)
+    FOR             reduce using rule 55 (ValueExpr -> Constant .)
+    $end            reduce using rule 55 (ValueExpr -> Constant .)
+    RBRACE          reduce using rule 55 (ValueExpr -> Constant .)
+    RETURN          reduce using rule 55 (ValueExpr -> Constant .)
+    CONTINUE        reduce using rule 55 (ValueExpr -> Constant .)
+    BREAK           reduce using rule 55 (ValueExpr -> Constant .)
+    LBRACE          reduce using rule 55 (ValueExpr -> Constant .)
+    SEMIC           reduce using rule 55 (ValueExpr -> Constant .)
+    RPAREN          reduce using rule 55 (ValueExpr -> Constant .)
+    COMMA           reduce using rule 55 (ValueExpr -> Constant .)
+    AND             reduce using rule 55 (ValueExpr -> Constant .)
+    OR              reduce using rule 55 (ValueExpr -> Constant .)
+
+
+state 39
+
+    (43) BooleanConstant -> FALSE .
+
+    AND             reduce using rule 43 (BooleanConstant -> FALSE .)
+    OR              reduce using rule 43 (BooleanConstant -> FALSE .)
+    LBRACE          reduce using rule 43 (BooleanConstant -> FALSE .)
+    SEMIC           reduce using rule 43 (BooleanConstant -> FALSE .)
+    RPAREN          reduce using rule 43 (BooleanConstant -> FALSE .)
+
+
+state 40
+
+    (61) SymbolValueExpr -> NAME .
+    (63) Call -> NAME . LPAREN CallParams RPAREN
+    (64) Call -> NAME . LPAREN RPAREN
+
+    STAR            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    SLASH           reduce using rule 61 (SymbolValueExpr -> NAME .)
+    PERCENT         reduce using rule 61 (SymbolValueExpr -> NAME .)
+    PLUS            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    DASH            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    LT              reduce using rule 61 (SymbolValueExpr -> NAME .)
+    EQUALS          reduce using rule 61 (SymbolValueExpr -> NAME .)
+    NOT             reduce using rule 61 (SymbolValueExpr -> NAME .)
+    GT              reduce using rule 61 (SymbolValueExpr -> NAME .)
+    RBRACE          reduce using rule 61 (SymbolValueExpr -> NAME .)
+    AND             reduce using rule 61 (SymbolValueExpr -> NAME .)
+    OR              reduce using rule 61 (SymbolValueExpr -> NAME .)
+    LBRACE          reduce using rule 61 (SymbolValueExpr -> NAME .)
+    SEMIC           reduce using rule 61 (SymbolValueExpr -> NAME .)
+    RPAREN          reduce using rule 61 (SymbolValueExpr -> NAME .)
+    FUNC            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    VAR             reduce using rule 61 (SymbolValueExpr -> NAME .)
+    NAME            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    IF              reduce using rule 61 (SymbolValueExpr -> NAME .)
+    WHILE           reduce using rule 61 (SymbolValueExpr -> NAME .)
+    FOR             reduce using rule 61 (SymbolValueExpr -> NAME .)
+    $end            reduce using rule 61 (SymbolValueExpr -> NAME .)
+    RETURN          reduce using rule 61 (SymbolValueExpr -> NAME .)
+    CONTINUE        reduce using rule 61 (SymbolValueExpr -> NAME .)
+    BREAK           reduce using rule 61 (SymbolValueExpr -> NAME .)
+    COMMA           reduce using rule 61 (SymbolValueExpr -> NAME .)
+    LPAREN          shift and go to state 48
+
+
+state 41
+
+    (31) NotExpr -> BooleanTerm .
+
+    AND             reduce using rule 31 (NotExpr -> BooleanTerm .)
+    SEMIC           reduce using rule 31 (NotExpr -> BooleanTerm .)
+    OR              reduce using rule 31 (NotExpr -> BooleanTerm .)
+    LBRACE          reduce using rule 31 (NotExpr -> BooleanTerm .)
+    RPAREN          reduce using rule 31 (NotExpr -> BooleanTerm .)
+
+
+state 42
+
+    (56) ValueExpr -> SymbolValueExpr .
+
+    STAR            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    SLASH           reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    PERCENT         reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    PLUS            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    DASH            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    LT              reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    EQUALS          reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    NOT             reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    GT              reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    FUNC            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    VAR             reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    NAME            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    IF              reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    WHILE           reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    FOR             reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    $end            reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    RBRACE          reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    RETURN          reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    CONTINUE        reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    BREAK           reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    LBRACE          reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    SEMIC           reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    RPAREN          reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    COMMA           reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    AND             reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+    OR              reduce using rule 56 (ValueExpr -> SymbolValueExpr .)
+
+
+state 43
+
+    (52) Negate -> Atomic .
+
+    STAR            reduce using rule 52 (Negate -> Atomic .)
+    SLASH           reduce using rule 52 (Negate -> Atomic .)
+    PERCENT         reduce using rule 52 (Negate -> Atomic .)
+    PLUS            reduce using rule 52 (Negate -> Atomic .)
+    DASH            reduce using rule 52 (Negate -> Atomic .)
+    LT              reduce using rule 52 (Negate -> Atomic .)
+    EQUALS          reduce using rule 52 (Negate -> Atomic .)
+    NOT             reduce using rule 52 (Negate -> Atomic .)
+    GT              reduce using rule 52 (Negate -> Atomic .)
+    RPAREN          reduce using rule 52 (Negate -> Atomic .)
+    FUNC            reduce using rule 52 (Negate -> Atomic .)
+    VAR             reduce using rule 52 (Negate -> Atomic .)
+    NAME            reduce using rule 52 (Negate -> Atomic .)
+    IF              reduce using rule 52 (Negate -> Atomic .)
+    WHILE           reduce using rule 52 (Negate -> Atomic .)
+    FOR             reduce using rule 52 (Negate -> Atomic .)
+    $end            reduce using rule 52 (Negate -> Atomic .)
+    RBRACE          reduce using rule 52 (Negate -> Atomic .)
+    RETURN          reduce using rule 52 (Negate -> Atomic .)
+    CONTINUE        reduce using rule 52 (Negate -> Atomic .)
+    BREAK           reduce using rule 52 (Negate -> Atomic .)
+    LBRACE          reduce using rule 52 (Negate -> Atomic .)
+    COMMA           reduce using rule 52 (Negate -> Atomic .)
+    SEMIC           reduce using rule 52 (Negate -> Atomic .)
+    AND             reduce using rule 52 (Negate -> Atomic .)
+    OR              reduce using rule 52 (Negate -> Atomic .)
+
+
+state 44
+
+    (33) BooleanTerm -> BooleanConstant .
+
+    AND             reduce using rule 33 (BooleanTerm -> BooleanConstant .)
+    OR              reduce using rule 33 (BooleanTerm -> BooleanConstant .)
+    LBRACE          reduce using rule 33 (BooleanTerm -> BooleanConstant .)
+    SEMIC           reduce using rule 33 (BooleanTerm -> BooleanConstant .)
+    RPAREN          reduce using rule 33 (BooleanTerm -> BooleanConstant .)
+
+
+state 45
+
+    (30) NotExpr -> NOT . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 76
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    Constant                       shift and go to state 38
+    ValueExpr                      shift and go to state 31
+    Atomic                         shift and go to state 43
+
+state 46
+
+    (27) BooleanExpr -> AndExpr .
+    (28) AndExpr -> AndExpr . AND AND NotExpr
+
+    OR              reduce using rule 27 (BooleanExpr -> AndExpr .)
+    LBRACE          reduce using rule 27 (BooleanExpr -> AndExpr .)
+    SEMIC           reduce using rule 27 (BooleanExpr -> AndExpr .)
+    RPAREN          reduce using rule 27 (BooleanExpr -> AndExpr .)
+    AND             shift and go to state 77
+
+
+state 47
+
+    (72) AssignStmt -> NAME EQUALS . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    Expr                           shift and go to state 79
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 48
+
+    (63) Call -> NAME LPAREN . CallParams RPAREN
+    (64) Call -> NAME LPAREN . RPAREN
+    (65) CallParams -> . CallParams COMMA Expr
+    (66) CallParams -> . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    RPAREN          shift and go to state 81
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    CallParams                     shift and go to state 80
+    Expr                           shift and go to state 82
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+    Atomic                         shift and go to state 43
+
+state 49
+
+    (77) WhileStmt -> WHILE BooleanExpr . Block
+    (26) BooleanExpr -> BooleanExpr . OR OR AndExpr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    OR              shift and go to state 61
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 83
+
+state 50
+
+    (78) WhileStmt -> WHILE Block .
+
+    RBRACE          reduce using rule 78 (WhileStmt -> WHILE Block .)
+    RETURN          reduce using rule 78 (WhileStmt -> WHILE Block .)
+    CONTINUE        reduce using rule 78 (WhileStmt -> WHILE Block .)
+    BREAK           reduce using rule 78 (WhileStmt -> WHILE Block .)
+    VAR             reduce using rule 78 (WhileStmt -> WHILE Block .)
+    NAME            reduce using rule 78 (WhileStmt -> WHILE Block .)
+    IF              reduce using rule 78 (WhileStmt -> WHILE Block .)
+    WHILE           reduce using rule 78 (WhileStmt -> WHILE Block .)
+    FOR             reduce using rule 78 (WhileStmt -> WHILE Block .)
+    FUNC            reduce using rule 78 (WhileStmt -> WHILE Block .)
+    $end            reduce using rule 78 (WhileStmt -> WHILE Block .)
+
+
+state 51
+
+    (12) Block -> LBRACE . BlockStmts ReturnStmt RBRACE
+    (13) Block -> LBRACE . BlockStmts RBRACE
+    (14) Block -> LBRACE . ReturnStmt RBRACE
+    (15) BlockStmts -> . BlockStmts BlockStmt
+    (16) BlockStmts -> . BlockStmt
+    (86) ReturnStmt -> . RETURN
+    (87) ReturnStmt -> . RETURN Expr
+    (17) BlockStmt -> . Stmt
+    (18) BlockStmt -> . LoopControlStmt
+    (6) Stmt -> . CallStmt
+    (7) Stmt -> . DeclStmt
+    (8) Stmt -> . AssignStmt
+    (9) Stmt -> . IfStmt
+    (10) Stmt -> . WhileStmt
+    (11) Stmt -> . ForStmt
+    (88) LoopControlStmt -> . CONTINUE
+    (89) LoopControlStmt -> . BREAK
+    (62) CallStmt -> . Call
+    (67) DeclStmt -> . VAR NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> . VAR NAME TypeSpec
+    (69) DeclStmt -> . VAR NAME EQUALS Expr
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (73) IfStmt -> . IF BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> . IF BooleanExpr Block
+    (77) WhileStmt -> . WHILE BooleanExpr Block
+    (78) WhileStmt -> . WHILE Block
+    (79) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+    (80) ForStmt -> . FOR SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> . FOR DeclStmt SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC Block
+    (83) ForStmt -> . FOR SEMIC SEMIC AssignStmt Block
+    (84) ForStmt -> . FOR SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> . FOR DeclStmt SEMIC SEMIC Block
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    RETURN          shift and go to state 84
+    CONTINUE        shift and go to state 90
+    BREAK           shift and go to state 89
+    VAR             shift and go to state 13
+    NAME            shift and go to state 16
+    IF              shift and go to state 14
+    WHILE           shift and go to state 17
+    FOR             shift and go to state 10
+
+    LoopControlStmt                shift and go to state 88
+    BlockStmt                      shift and go to state 85
+    Stmt                           shift and go to state 86
+    AssignStmt                     shift and go to state 2
+    WhileStmt                      shift and go to state 11
+    CallStmt                       shift and go to state 4
+    ForStmt                        shift and go to state 18
+    BlockStmts                     shift and go to state 87
+    Call                           shift and go to state 5
+    ReturnStmt                     shift and go to state 91
+    IfStmt                         shift and go to state 7
+    DeclStmt                       shift and go to state 8
+
+state 52
+
+    (80) ForStmt -> FOR SEMIC BooleanExpr . SEMIC AssignStmt Block
+    (84) ForStmt -> FOR SEMIC BooleanExpr . SEMIC Block
+    (26) BooleanExpr -> BooleanExpr . OR OR AndExpr
+
+    SEMIC           shift and go to state 92
+    OR              shift and go to state 61
+
+
+state 53
+
+    (83) ForStmt -> FOR SEMIC SEMIC . AssignStmt Block
+    (72) AssignStmt -> . NAME EQUALS Expr
+
+    NAME            shift and go to state 93
+
+    AssignStmt                     shift and go to state 94
+
+state 54
+
+    (79) ForStmt -> FOR DeclStmt SEMIC . BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> FOR DeclStmt SEMIC . SEMIC AssignStmt Block
+    (82) ForStmt -> FOR DeclStmt SEMIC . BooleanExpr SEMIC Block
+    (85) ForStmt -> FOR DeclStmt SEMIC . SEMIC Block
+    (26) BooleanExpr -> . BooleanExpr OR OR AndExpr
+    (27) BooleanExpr -> . AndExpr
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    SEMIC           shift and go to state 96
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    BooleanExpr                    shift and go to state 95
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 46
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    MulDiv                         shift and go to state 35
+
+state 55
+
+    (20) FuncDefStmt -> FUNC NAME LPAREN . ParamDecls RPAREN TypeSpec Block
+    (21) FuncDefStmt -> FUNC NAME LPAREN . ParamDecls RPAREN Block
+    (22) FuncDefStmt -> FUNC NAME LPAREN . RPAREN TypeSpec Block
+    (23) FuncDefStmt -> FUNC NAME LPAREN . RPAREN Block
+    (24) ParamDecls -> . ParamDecls COMMA NAME TypeSpec
+    (25) ParamDecls -> . NAME TypeSpec
+
+    RPAREN          shift and go to state 97
+    NAME            shift and go to state 98
+
+    ParamDecls                     shift and go to state 99
+
+state 56
+
+    (70) TypeName -> NAME .
+
+    LBRACE          reduce using rule 70 (TypeName -> NAME .)
+    EQUALS          reduce using rule 70 (TypeName -> NAME .)
+    FUNC            reduce using rule 70 (TypeName -> NAME .)
+    VAR             reduce using rule 70 (TypeName -> NAME .)
+    NAME            reduce using rule 70 (TypeName -> NAME .)
+    IF              reduce using rule 70 (TypeName -> NAME .)
+    WHILE           reduce using rule 70 (TypeName -> NAME .)
+    FOR             reduce using rule 70 (TypeName -> NAME .)
+    $end            reduce using rule 70 (TypeName -> NAME .)
+    SEMIC           reduce using rule 70 (TypeName -> NAME .)
+    RBRACE          reduce using rule 70 (TypeName -> NAME .)
+    RETURN          reduce using rule 70 (TypeName -> NAME .)
+    CONTINUE        reduce using rule 70 (TypeName -> NAME .)
+    BREAK           reduce using rule 70 (TypeName -> NAME .)
+    RPAREN          reduce using rule 70 (TypeName -> NAME .)
+    COMMA           reduce using rule 70 (TypeName -> NAME .)
+
+
+state 57
+
+    (69) DeclStmt -> VAR NAME EQUALS . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    Expr                           shift and go to state 100
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 58
+
+    (71) TypeSpec -> TypeName .
+
+    LBRACE          reduce using rule 71 (TypeSpec -> TypeName .)
+    EQUALS          reduce using rule 71 (TypeSpec -> TypeName .)
+    FUNC            reduce using rule 71 (TypeSpec -> TypeName .)
+    VAR             reduce using rule 71 (TypeSpec -> TypeName .)
+    NAME            reduce using rule 71 (TypeSpec -> TypeName .)
+    IF              reduce using rule 71 (TypeSpec -> TypeName .)
+    WHILE           reduce using rule 71 (TypeSpec -> TypeName .)
+    FOR             reduce using rule 71 (TypeSpec -> TypeName .)
+    $end            reduce using rule 71 (TypeSpec -> TypeName .)
+    SEMIC           reduce using rule 71 (TypeSpec -> TypeName .)
+    RBRACE          reduce using rule 71 (TypeSpec -> TypeName .)
+    RETURN          reduce using rule 71 (TypeSpec -> TypeName .)
+    CONTINUE        reduce using rule 71 (TypeSpec -> TypeName .)
+    BREAK           reduce using rule 71 (TypeSpec -> TypeName .)
+    RPAREN          reduce using rule 71 (TypeSpec -> TypeName .)
+    COMMA           reduce using rule 71 (TypeSpec -> TypeName .)
+
+
+state 59
+
+    (67) DeclStmt -> VAR NAME TypeSpec . EQUALS Expr
+    (68) DeclStmt -> VAR NAME TypeSpec .
+
+    EQUALS          shift and go to state 101
+    SEMIC           reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    RBRACE          reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    RETURN          reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    CONTINUE        reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    BREAK           reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    VAR             reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    NAME            reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    IF              reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    WHILE           reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    FOR             reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    FUNC            reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+    $end            reduce using rule 68 (DeclStmt -> VAR NAME TypeSpec .)
+
+
+state 60
+
+    (73) IfStmt -> IF BooleanExpr Block . ElseIfStmt
+    (74) IfStmt -> IF BooleanExpr Block .
+    (75) ElseIfStmt -> . ELSE Block
+    (76) ElseIfStmt -> . ELSE IfStmt
+
+    RBRACE          reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    RETURN          reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    CONTINUE        reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    BREAK           reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    VAR             reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    NAME            reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    IF              reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    WHILE           reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    FOR             reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    FUNC            reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    $end            reduce using rule 74 (IfStmt -> IF BooleanExpr Block .)
+    ELSE            shift and go to state 102
+
+    ElseIfStmt                     shift and go to state 103
+
+state 61
+
+    (26) BooleanExpr -> BooleanExpr OR . OR AndExpr
+
+    OR              shift and go to state 104
+
+
+state 62
+
+    (40) CmpOp -> GT . EQUALS
+    (41) CmpOp -> GT .
+
+    EQUALS          shift and go to state 105
+    DASH            reduce using rule 41 (CmpOp -> GT .)
+    LPAREN          reduce using rule 41 (CmpOp -> GT .)
+    INT_CONST       reduce using rule 41 (CmpOp -> GT .)
+    FLOAT_CONST     reduce using rule 41 (CmpOp -> GT .)
+    STRING_CONST    reduce using rule 41 (CmpOp -> GT .)
+    NAME            reduce using rule 41 (CmpOp -> GT .)
+
+
+state 63
+
+    (35) CmpExpr -> ArithExpr CmpOp . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 106
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    Constant                       shift and go to state 38
+    ValueExpr                      shift and go to state 31
+
+state 64
+
+    (38) CmpOp -> EQUALS . EQUALS
+
+    EQUALS          shift and go to state 107
+
+
+state 65
+
+    (45) ArithExpr -> ArithExpr DASH . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 108
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 66
+
+    (36) CmpOp -> LT .
+    (37) CmpOp -> LT . EQUALS
+
+    DASH            reduce using rule 36 (CmpOp -> LT .)
+    LPAREN          reduce using rule 36 (CmpOp -> LT .)
+    INT_CONST       reduce using rule 36 (CmpOp -> LT .)
+    FLOAT_CONST     reduce using rule 36 (CmpOp -> LT .)
+    STRING_CONST    reduce using rule 36 (CmpOp -> LT .)
+    NAME            reduce using rule 36 (CmpOp -> LT .)
+    EQUALS          shift and go to state 109
+
+
+state 67
+
+    (44) ArithExpr -> ArithExpr PLUS . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 110
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 68
+
+    (39) CmpOp -> NOT . EQUALS
+
+    EQUALS          shift and go to state 111
+
+
+state 69
+
+    (51) Negate -> DASH Atomic .
+
+    STAR            reduce using rule 51 (Negate -> DASH Atomic .)
+    SLASH           reduce using rule 51 (Negate -> DASH Atomic .)
+    PERCENT         reduce using rule 51 (Negate -> DASH Atomic .)
+    PLUS            reduce using rule 51 (Negate -> DASH Atomic .)
+    DASH            reduce using rule 51 (Negate -> DASH Atomic .)
+    LT              reduce using rule 51 (Negate -> DASH Atomic .)
+    EQUALS          reduce using rule 51 (Negate -> DASH Atomic .)
+    NOT             reduce using rule 51 (Negate -> DASH Atomic .)
+    GT              reduce using rule 51 (Negate -> DASH Atomic .)
+    RPAREN          reduce using rule 51 (Negate -> DASH Atomic .)
+    FUNC            reduce using rule 51 (Negate -> DASH Atomic .)
+    VAR             reduce using rule 51 (Negate -> DASH Atomic .)
+    NAME            reduce using rule 51 (Negate -> DASH Atomic .)
+    IF              reduce using rule 51 (Negate -> DASH Atomic .)
+    WHILE           reduce using rule 51 (Negate -> DASH Atomic .)
+    FOR             reduce using rule 51 (Negate -> DASH Atomic .)
+    $end            reduce using rule 51 (Negate -> DASH Atomic .)
+    RBRACE          reduce using rule 51 (Negate -> DASH Atomic .)
+    RETURN          reduce using rule 51 (Negate -> DASH Atomic .)
+    CONTINUE        reduce using rule 51 (Negate -> DASH Atomic .)
+    BREAK           reduce using rule 51 (Negate -> DASH Atomic .)
+    LBRACE          reduce using rule 51 (Negate -> DASH Atomic .)
+    COMMA           reduce using rule 51 (Negate -> DASH Atomic .)
+    SEMIC           reduce using rule 51 (Negate -> DASH Atomic .)
+    AND             reduce using rule 51 (Negate -> DASH Atomic .)
+    OR              reduce using rule 51 (Negate -> DASH Atomic .)
+
+
+state 70
+
+    (54) Atomic -> LPAREN . ArithExpr RPAREN
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 112
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 71
+
+    (49) MulDiv -> MulDiv PERCENT . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 113
+    ValueExpr                      shift and go to state 31
+
+state 72
+
+    (47) MulDiv -> MulDiv STAR . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 114
+    ValueExpr                      shift and go to state 31
+
+state 73
+
+    (48) MulDiv -> MulDiv SLASH . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    SymbolValueExpr                shift and go to state 42
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 115
+    ValueExpr                      shift and go to state 31
+
+state 74
+
+    (34) BooleanTerm -> LPAREN BooleanExpr . RPAREN
+    (26) BooleanExpr -> BooleanExpr . OR OR AndExpr
+
+    RPAREN          shift and go to state 116
+    OR              shift and go to state 61
+
+
+state 75
+
+    (54) Atomic -> LPAREN ArithExpr . RPAREN
+    (44) ArithExpr -> ArithExpr . PLUS MulDiv
+    (45) ArithExpr -> ArithExpr . DASH MulDiv
+    (35) CmpExpr -> ArithExpr . CmpOp ArithExpr
+    (36) CmpOp -> . LT
+    (37) CmpOp -> . LT EQUALS
+    (38) CmpOp -> . EQUALS EQUALS
+    (39) CmpOp -> . NOT EQUALS
+    (40) CmpOp -> . GT EQUALS
+    (41) CmpOp -> . GT
+
+    RPAREN          shift and go to state 117
+    PLUS            shift and go to state 67
+    DASH            shift and go to state 65
+    LT              shift and go to state 66
+    EQUALS          shift and go to state 64
+    NOT             shift and go to state 68
+    GT              shift and go to state 62
+
+    CmpOp                          shift and go to state 63
+
+state 76
+
+    (30) NotExpr -> NOT BooleanTerm .
+
+    AND             reduce using rule 30 (NotExpr -> NOT BooleanTerm .)
+    SEMIC           reduce using rule 30 (NotExpr -> NOT BooleanTerm .)
+    OR              reduce using rule 30 (NotExpr -> NOT BooleanTerm .)
+    LBRACE          reduce using rule 30 (NotExpr -> NOT BooleanTerm .)
+    RPAREN          reduce using rule 30 (NotExpr -> NOT BooleanTerm .)
+
+
+state 77
+
+    (28) AndExpr -> AndExpr AND . AND NotExpr
+
+    AND             shift and go to state 118
+
+
+state 78
+
+    (19) Expr -> ArithExpr .
+    (44) ArithExpr -> ArithExpr . PLUS MulDiv
+    (45) ArithExpr -> ArithExpr . DASH MulDiv
+
+    RBRACE          reduce using rule 19 (Expr -> ArithExpr .)
+    RPAREN          reduce using rule 19 (Expr -> ArithExpr .)
+    COMMA           reduce using rule 19 (Expr -> ArithExpr .)
+    FUNC            reduce using rule 19 (Expr -> ArithExpr .)
+    VAR             reduce using rule 19 (Expr -> ArithExpr .)
+    NAME            reduce using rule 19 (Expr -> ArithExpr .)
+    IF              reduce using rule 19 (Expr -> ArithExpr .)
+    WHILE           reduce using rule 19 (Expr -> ArithExpr .)
+    FOR             reduce using rule 19 (Expr -> ArithExpr .)
+    $end            reduce using rule 19 (Expr -> ArithExpr .)
+    SEMIC           reduce using rule 19 (Expr -> ArithExpr .)
+    RETURN          reduce using rule 19 (Expr -> ArithExpr .)
+    CONTINUE        reduce using rule 19 (Expr -> ArithExpr .)
+    BREAK           reduce using rule 19 (Expr -> ArithExpr .)
+    LBRACE          reduce using rule 19 (Expr -> ArithExpr .)
+    PLUS            shift and go to state 67
+    DASH            shift and go to state 65
+
+
+state 79
+
+    (72) AssignStmt -> NAME EQUALS Expr .
+
+    LBRACE          reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    FUNC            reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    VAR             reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    NAME            reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    IF              reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    WHILE           reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    FOR             reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    $end            reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    RBRACE          reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    RETURN          reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    CONTINUE        reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+    BREAK           reduce using rule 72 (AssignStmt -> NAME EQUALS Expr .)
+
+
+state 80
+
+    (63) Call -> NAME LPAREN CallParams . RPAREN
+    (65) CallParams -> CallParams . COMMA Expr
+
+    RPAREN          shift and go to state 119
+    COMMA           shift and go to state 120
+
+
+state 81
+
+    (64) Call -> NAME LPAREN RPAREN .
+
+    RBRACE          reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    RETURN          reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    CONTINUE        reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    BREAK           reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    VAR             reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    NAME            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    IF              reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    WHILE           reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    FOR             reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    STAR            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    SLASH           reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    PERCENT         reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    PLUS            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    DASH            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    LT              reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    EQUALS          reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    NOT             reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    GT              reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    RPAREN          reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    FUNC            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    $end            reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    LBRACE          reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    COMMA           reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    SEMIC           reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    AND             reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+    OR              reduce using rule 64 (Call -> NAME LPAREN RPAREN .)
+
+
+state 82
+
+    (66) CallParams -> Expr .
+
+    RPAREN          reduce using rule 66 (CallParams -> Expr .)
+    COMMA           reduce using rule 66 (CallParams -> Expr .)
+
+
+state 83
+
+    (77) WhileStmt -> WHILE BooleanExpr Block .
+
+    RBRACE          reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    RETURN          reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    CONTINUE        reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    BREAK           reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    VAR             reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    NAME            reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    IF              reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    WHILE           reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    FOR             reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    FUNC            reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+    $end            reduce using rule 77 (WhileStmt -> WHILE BooleanExpr Block .)
+
+
+state 84
+
+    (86) ReturnStmt -> RETURN .
+    (87) ReturnStmt -> RETURN . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    RBRACE          reduce using rule 86 (ReturnStmt -> RETURN .)
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    Expr                           shift and go to state 121
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+
+state 85
+
+    (16) BlockStmts -> BlockStmt .
+
+    RBRACE          reduce using rule 16 (BlockStmts -> BlockStmt .)
+    RETURN          reduce using rule 16 (BlockStmts -> BlockStmt .)
+    CONTINUE        reduce using rule 16 (BlockStmts -> BlockStmt .)
+    BREAK           reduce using rule 16 (BlockStmts -> BlockStmt .)
+    VAR             reduce using rule 16 (BlockStmts -> BlockStmt .)
+    NAME            reduce using rule 16 (BlockStmts -> BlockStmt .)
+    IF              reduce using rule 16 (BlockStmts -> BlockStmt .)
+    WHILE           reduce using rule 16 (BlockStmts -> BlockStmt .)
+    FOR             reduce using rule 16 (BlockStmts -> BlockStmt .)
+
+
+state 86
+
+    (17) BlockStmt -> Stmt .
+
+    RBRACE          reduce using rule 17 (BlockStmt -> Stmt .)
+    RETURN          reduce using rule 17 (BlockStmt -> Stmt .)
+    CONTINUE        reduce using rule 17 (BlockStmt -> Stmt .)
+    BREAK           reduce using rule 17 (BlockStmt -> Stmt .)
+    VAR             reduce using rule 17 (BlockStmt -> Stmt .)
+    NAME            reduce using rule 17 (BlockStmt -> Stmt .)
+    IF              reduce using rule 17 (BlockStmt -> Stmt .)
+    WHILE           reduce using rule 17 (BlockStmt -> Stmt .)
+    FOR             reduce using rule 17 (BlockStmt -> Stmt .)
+
+
+state 87
+
+    (12) Block -> LBRACE BlockStmts . ReturnStmt RBRACE
+    (13) Block -> LBRACE BlockStmts . RBRACE
+    (15) BlockStmts -> BlockStmts . BlockStmt
+    (86) ReturnStmt -> . RETURN
+    (87) ReturnStmt -> . RETURN Expr
+    (17) BlockStmt -> . Stmt
+    (18) BlockStmt -> . LoopControlStmt
+    (6) Stmt -> . CallStmt
+    (7) Stmt -> . DeclStmt
+    (8) Stmt -> . AssignStmt
+    (9) Stmt -> . IfStmt
+    (10) Stmt -> . WhileStmt
+    (11) Stmt -> . ForStmt
+    (88) LoopControlStmt -> . CONTINUE
+    (89) LoopControlStmt -> . BREAK
+    (62) CallStmt -> . Call
+    (67) DeclStmt -> . VAR NAME TypeSpec EQUALS Expr
+    (68) DeclStmt -> . VAR NAME TypeSpec
+    (69) DeclStmt -> . VAR NAME EQUALS Expr
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (73) IfStmt -> . IF BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> . IF BooleanExpr Block
+    (77) WhileStmt -> . WHILE BooleanExpr Block
+    (78) WhileStmt -> . WHILE Block
+    (79) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block
+    (80) ForStmt -> . FOR SEMIC BooleanExpr SEMIC AssignStmt Block
+    (81) ForStmt -> . FOR DeclStmt SEMIC SEMIC AssignStmt Block
+    (82) ForStmt -> . FOR DeclStmt SEMIC BooleanExpr SEMIC Block
+    (83) ForStmt -> . FOR SEMIC SEMIC AssignStmt Block
+    (84) ForStmt -> . FOR SEMIC BooleanExpr SEMIC Block
+    (85) ForStmt -> . FOR DeclStmt SEMIC SEMIC Block
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    RBRACE          shift and go to state 123
+    RETURN          shift and go to state 84
+    CONTINUE        shift and go to state 90
+    BREAK           shift and go to state 89
+    VAR             shift and go to state 13
+    NAME            shift and go to state 16
+    IF              shift and go to state 14
+    WHILE           shift and go to state 17
+    FOR             shift and go to state 10
+
+    LoopControlStmt                shift and go to state 88
+    BlockStmt                      shift and go to state 122
+    Stmt                           shift and go to state 86
+    AssignStmt                     shift and go to state 2
+    WhileStmt                      shift and go to state 11
+    CallStmt                       shift and go to state 4
+    ForStmt                        shift and go to state 18
+    Call                           shift and go to state 5
+    ReturnStmt                     shift and go to state 124
+    IfStmt                         shift and go to state 7
+    DeclStmt                       shift and go to state 8
+
+state 88
+
+    (18) BlockStmt -> LoopControlStmt .
+
+    RBRACE          reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    RETURN          reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    CONTINUE        reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    BREAK           reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    VAR             reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    NAME            reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    IF              reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    WHILE           reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+    FOR             reduce using rule 18 (BlockStmt -> LoopControlStmt .)
+
+
+state 89
+
+    (89) LoopControlStmt -> BREAK .
+
+    RBRACE          reduce using rule 89 (LoopControlStmt -> BREAK .)
+    RETURN          reduce using rule 89 (LoopControlStmt -> BREAK .)
+    CONTINUE        reduce using rule 89 (LoopControlStmt -> BREAK .)
+    BREAK           reduce using rule 89 (LoopControlStmt -> BREAK .)
+    VAR             reduce using rule 89 (LoopControlStmt -> BREAK .)
+    NAME            reduce using rule 89 (LoopControlStmt -> BREAK .)
+    IF              reduce using rule 89 (LoopControlStmt -> BREAK .)
+    WHILE           reduce using rule 89 (LoopControlStmt -> BREAK .)
+    FOR             reduce using rule 89 (LoopControlStmt -> BREAK .)
+
+
+state 90
+
+    (88) LoopControlStmt -> CONTINUE .
+
+    RBRACE          reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    RETURN          reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    CONTINUE        reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    BREAK           reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    VAR             reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    NAME            reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    IF              reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    WHILE           reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+    FOR             reduce using rule 88 (LoopControlStmt -> CONTINUE .)
+
+
+state 91
+
+    (14) Block -> LBRACE ReturnStmt . RBRACE
+
+    RBRACE          shift and go to state 125
+
+
+state 92
+
+    (80) ForStmt -> FOR SEMIC BooleanExpr SEMIC . AssignStmt Block
+    (84) ForStmt -> FOR SEMIC BooleanExpr SEMIC . Block
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    NAME            shift and go to state 93
+    LBRACE          shift and go to state 51
+
+    AssignStmt                     shift and go to state 126
+    Block                          shift and go to state 127
+
+state 93
+
+    (72) AssignStmt -> NAME . EQUALS Expr
+
+    EQUALS          shift and go to state 47
+
+
+state 94
+
+    (83) ForStmt -> FOR SEMIC SEMIC AssignStmt . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 128
+
+state 95
+
+    (79) ForStmt -> FOR DeclStmt SEMIC BooleanExpr . SEMIC AssignStmt Block
+    (82) ForStmt -> FOR DeclStmt SEMIC BooleanExpr . SEMIC Block
+    (26) BooleanExpr -> BooleanExpr . OR OR AndExpr
+
+    SEMIC           shift and go to state 129
+    OR              shift and go to state 61
+
+
+state 96
+
+    (81) ForStmt -> FOR DeclStmt SEMIC SEMIC . AssignStmt Block
+    (85) ForStmt -> FOR DeclStmt SEMIC SEMIC . Block
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    NAME            shift and go to state 93
+    LBRACE          shift and go to state 51
+
+    AssignStmt                     shift and go to state 130
+    Block                          shift and go to state 131
+
+state 97
+
+    (22) FuncDefStmt -> FUNC NAME LPAREN RPAREN . TypeSpec Block
+    (23) FuncDefStmt -> FUNC NAME LPAREN RPAREN . Block
+    (71) TypeSpec -> . TypeName
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+    (70) TypeName -> . NAME
+
+    LBRACE          shift and go to state 51
+    NAME            shift and go to state 56
+
+    TypeSpec                       shift and go to state 132
+    Block                          shift and go to state 133
+    TypeName                       shift and go to state 58
+
+state 98
+
+    (25) ParamDecls -> NAME . TypeSpec
+    (71) TypeSpec -> . TypeName
+    (70) TypeName -> . NAME
+
+    NAME            shift and go to state 56
+
+    TypeSpec                       shift and go to state 134
+    TypeName                       shift and go to state 58
+
+state 99
+
+    (20) FuncDefStmt -> FUNC NAME LPAREN ParamDecls . RPAREN TypeSpec Block
+    (21) FuncDefStmt -> FUNC NAME LPAREN ParamDecls . RPAREN Block
+    (24) ParamDecls -> ParamDecls . COMMA NAME TypeSpec
+
+    RPAREN          shift and go to state 135
+    COMMA           shift and go to state 136
+
+
+state 100
+
+    (69) DeclStmt -> VAR NAME EQUALS Expr .
+
+    SEMIC           reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    RBRACE          reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    RETURN          reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    CONTINUE        reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    BREAK           reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    VAR             reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    NAME            reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    IF              reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    WHILE           reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    FOR             reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    FUNC            reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+    $end            reduce using rule 69 (DeclStmt -> VAR NAME EQUALS Expr .)
+
+
+state 101
+
+    (67) DeclStmt -> VAR NAME TypeSpec EQUALS . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    Expr                           shift and go to state 137
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    Atomic                         shift and go to state 43
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+    MulDiv                         shift and go to state 35
+
+state 102
+
+    (75) ElseIfStmt -> ELSE . Block
+    (76) ElseIfStmt -> ELSE . IfStmt
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+    (73) IfStmt -> . IF BooleanExpr Block ElseIfStmt
+    (74) IfStmt -> . IF BooleanExpr Block
+
+    LBRACE          shift and go to state 51
+    IF              shift and go to state 14
+
+    Block                          shift and go to state 139
+    IfStmt                         shift and go to state 138
+
+state 103
+
+    (73) IfStmt -> IF BooleanExpr Block ElseIfStmt .
+
+    RBRACE          reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    RETURN          reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    CONTINUE        reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    BREAK           reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    VAR             reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    NAME            reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    IF              reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    WHILE           reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    FOR             reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    FUNC            reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+    $end            reduce using rule 73 (IfStmt -> IF BooleanExpr Block ElseIfStmt .)
+
+
+state 104
+
+    (26) BooleanExpr -> BooleanExpr OR OR . AndExpr
+    (28) AndExpr -> . AndExpr AND AND NotExpr
+    (29) AndExpr -> . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 37
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    AndExpr                        shift and go to state 140
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    Atomic                         shift and go to state 43
+
+state 105
+
+    (40) CmpOp -> GT EQUALS .
+
+    DASH            reduce using rule 40 (CmpOp -> GT EQUALS .)
+    LPAREN          reduce using rule 40 (CmpOp -> GT EQUALS .)
+    INT_CONST       reduce using rule 40 (CmpOp -> GT EQUALS .)
+    FLOAT_CONST     reduce using rule 40 (CmpOp -> GT EQUALS .)
+    STRING_CONST    reduce using rule 40 (CmpOp -> GT EQUALS .)
+    NAME            reduce using rule 40 (CmpOp -> GT EQUALS .)
+
+
+state 106
+
+    (35) CmpExpr -> ArithExpr CmpOp ArithExpr .
+    (44) ArithExpr -> ArithExpr . PLUS MulDiv
+    (45) ArithExpr -> ArithExpr . DASH MulDiv
+
+    AND             reduce using rule 35 (CmpExpr -> ArithExpr CmpOp ArithExpr .)
+    SEMIC           reduce using rule 35 (CmpExpr -> ArithExpr CmpOp ArithExpr .)
+    OR              reduce using rule 35 (CmpExpr -> ArithExpr CmpOp ArithExpr .)
+    LBRACE          reduce using rule 35 (CmpExpr -> ArithExpr CmpOp ArithExpr .)
+    RPAREN          reduce using rule 35 (CmpExpr -> ArithExpr CmpOp ArithExpr .)
+    PLUS            shift and go to state 67
+    DASH            shift and go to state 65
+
+
+state 107
+
+    (38) CmpOp -> EQUALS EQUALS .
+
+    DASH            reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+    LPAREN          reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+    INT_CONST       reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+    FLOAT_CONST     reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+    STRING_CONST    reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+    NAME            reduce using rule 38 (CmpOp -> EQUALS EQUALS .)
+
+
+state 108
+
+    (45) ArithExpr -> ArithExpr DASH MulDiv .
+    (47) MulDiv -> MulDiv . STAR Negate
+    (48) MulDiv -> MulDiv . SLASH Negate
+    (49) MulDiv -> MulDiv . PERCENT Negate
+
+    PLUS            reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    DASH            reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    RPAREN          reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    COMMA           reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    RBRACE          reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    LT              reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    EQUALS          reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    NOT             reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    GT              reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    FUNC            reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    VAR             reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    NAME            reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    IF              reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    WHILE           reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    FOR             reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    $end            reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    SEMIC           reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    RETURN          reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    CONTINUE        reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    BREAK           reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    AND             reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    OR              reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    LBRACE          reduce using rule 45 (ArithExpr -> ArithExpr DASH MulDiv .)
+    STAR            shift and go to state 72
+    SLASH           shift and go to state 73
+    PERCENT         shift and go to state 71
+
+
+state 109
+
+    (37) CmpOp -> LT EQUALS .
+
+    DASH            reduce using rule 37 (CmpOp -> LT EQUALS .)
+    LPAREN          reduce using rule 37 (CmpOp -> LT EQUALS .)
+    INT_CONST       reduce using rule 37 (CmpOp -> LT EQUALS .)
+    FLOAT_CONST     reduce using rule 37 (CmpOp -> LT EQUALS .)
+    STRING_CONST    reduce using rule 37 (CmpOp -> LT EQUALS .)
+    NAME            reduce using rule 37 (CmpOp -> LT EQUALS .)
+
+
+state 110
+
+    (44) ArithExpr -> ArithExpr PLUS MulDiv .
+    (47) MulDiv -> MulDiv . STAR Negate
+    (48) MulDiv -> MulDiv . SLASH Negate
+    (49) MulDiv -> MulDiv . PERCENT Negate
+
+    PLUS            reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    DASH            reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    RPAREN          reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    COMMA           reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    RBRACE          reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    LT              reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    EQUALS          reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    NOT             reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    GT              reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    FUNC            reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    VAR             reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    NAME            reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    IF              reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    WHILE           reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    FOR             reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    $end            reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    SEMIC           reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    RETURN          reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    CONTINUE        reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    BREAK           reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    AND             reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    OR              reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    LBRACE          reduce using rule 44 (ArithExpr -> ArithExpr PLUS MulDiv .)
+    STAR            shift and go to state 72
+    SLASH           shift and go to state 73
+    PERCENT         shift and go to state 71
+
+
+state 111
+
+    (39) CmpOp -> NOT EQUALS .
+
+    DASH            reduce using rule 39 (CmpOp -> NOT EQUALS .)
+    LPAREN          reduce using rule 39 (CmpOp -> NOT EQUALS .)
+    INT_CONST       reduce using rule 39 (CmpOp -> NOT EQUALS .)
+    FLOAT_CONST     reduce using rule 39 (CmpOp -> NOT EQUALS .)
+    STRING_CONST    reduce using rule 39 (CmpOp -> NOT EQUALS .)
+    NAME            reduce using rule 39 (CmpOp -> NOT EQUALS .)
+
+
+state 112
+
+    (54) Atomic -> LPAREN ArithExpr . RPAREN
+    (44) ArithExpr -> ArithExpr . PLUS MulDiv
+    (45) ArithExpr -> ArithExpr . DASH MulDiv
+
+    RPAREN          shift and go to state 117
+    PLUS            shift and go to state 67
+    DASH            shift and go to state 65
+
+
+state 113
+
+    (49) MulDiv -> MulDiv PERCENT Negate .
+
+    STAR            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    SLASH           reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    PERCENT         reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    PLUS            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    DASH            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    LT              reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    EQUALS          reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    NOT             reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    GT              reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    RPAREN          reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    FUNC            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    VAR             reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    NAME            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    IF              reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    WHILE           reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    FOR             reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    $end            reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    RBRACE          reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    RETURN          reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    CONTINUE        reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    BREAK           reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    LBRACE          reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    COMMA           reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    SEMIC           reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    AND             reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+    OR              reduce using rule 49 (MulDiv -> MulDiv PERCENT Negate .)
+
+
+state 114
+
+    (47) MulDiv -> MulDiv STAR Negate .
+
+    STAR            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    SLASH           reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    PERCENT         reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    PLUS            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    DASH            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    LT              reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    EQUALS          reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    NOT             reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    GT              reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    RPAREN          reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    FUNC            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    VAR             reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    NAME            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    IF              reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    WHILE           reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    FOR             reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    $end            reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    RBRACE          reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    RETURN          reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    CONTINUE        reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    BREAK           reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    LBRACE          reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    COMMA           reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    SEMIC           reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    AND             reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+    OR              reduce using rule 47 (MulDiv -> MulDiv STAR Negate .)
+
+
+state 115
+
+    (48) MulDiv -> MulDiv SLASH Negate .
+
+    STAR            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    SLASH           reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    PERCENT         reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    PLUS            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    DASH            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    LT              reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    EQUALS          reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    NOT             reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    GT              reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    RPAREN          reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    FUNC            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    VAR             reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    NAME            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    IF              reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    WHILE           reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    FOR             reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    $end            reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    RBRACE          reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    RETURN          reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    CONTINUE        reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    BREAK           reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    LBRACE          reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    COMMA           reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    SEMIC           reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    AND             reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+    OR              reduce using rule 48 (MulDiv -> MulDiv SLASH Negate .)
+
+
+state 116
+
+    (34) BooleanTerm -> LPAREN BooleanExpr RPAREN .
+
+    AND             reduce using rule 34 (BooleanTerm -> LPAREN BooleanExpr RPAREN .)
+    OR              reduce using rule 34 (BooleanTerm -> LPAREN BooleanExpr RPAREN .)
+    LBRACE          reduce using rule 34 (BooleanTerm -> LPAREN BooleanExpr RPAREN .)
+    SEMIC           reduce using rule 34 (BooleanTerm -> LPAREN BooleanExpr RPAREN .)
+    RPAREN          reduce using rule 34 (BooleanTerm -> LPAREN BooleanExpr RPAREN .)
+
+
+state 117
+
+    (54) Atomic -> LPAREN ArithExpr RPAREN .
+
+    STAR            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    SLASH           reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    PERCENT         reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    PLUS            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    DASH            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    RPAREN          reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    COMMA           reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    FUNC            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    VAR             reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    NAME            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    IF              reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    WHILE           reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    FOR             reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    $end            reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    SEMIC           reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    RBRACE          reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    RETURN          reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    CONTINUE        reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    BREAK           reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    LT              reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    EQUALS          reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    NOT             reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    GT              reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    LBRACE          reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    AND             reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+    OR              reduce using rule 54 (Atomic -> LPAREN ArithExpr RPAREN .)
+
+
+state 118
+
+    (28) AndExpr -> AndExpr AND AND . NotExpr
+    (30) NotExpr -> . NOT BooleanTerm
+    (31) NotExpr -> . BooleanTerm
+    (32) BooleanTerm -> . CmpExpr
+    (33) BooleanTerm -> . BooleanConstant
+    (34) BooleanTerm -> . LPAREN BooleanExpr RPAREN
+    (35) CmpExpr -> . ArithExpr CmpOp ArithExpr
+    (42) BooleanConstant -> . TRUE
+    (43) BooleanConstant -> . FALSE
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    NOT             shift and go to state 45
+    LPAREN          shift and go to state 36
+    TRUE            shift and go to state 28
+    FALSE           shift and go to state 39
+    DASH            shift and go to state 33
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    NotExpr                        shift and go to state 141
+    CmpExpr                        shift and go to state 32
+    BooleanTerm                    shift and go to state 41
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 25
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    BooleanConstant                shift and go to state 44
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+    Constant                       shift and go to state 38
+    Atomic                         shift and go to state 43
+
+state 119
+
+    (63) Call -> NAME LPAREN CallParams RPAREN .
+
+    RBRACE          reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    RETURN          reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    CONTINUE        reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    BREAK           reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    VAR             reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    NAME            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    IF              reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    WHILE           reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    FOR             reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    STAR            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    SLASH           reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    PERCENT         reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    PLUS            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    DASH            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    LT              reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    EQUALS          reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    NOT             reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    GT              reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    RPAREN          reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    FUNC            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    $end            reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    LBRACE          reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    COMMA           reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    SEMIC           reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    AND             reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+    OR              reduce using rule 63 (Call -> NAME LPAREN CallParams RPAREN .)
+
+
+state 120
+
+    (65) CallParams -> CallParams COMMA . Expr
+    (19) Expr -> . ArithExpr
+    (44) ArithExpr -> . ArithExpr PLUS MulDiv
+    (45) ArithExpr -> . ArithExpr DASH MulDiv
+    (46) ArithExpr -> . MulDiv
+    (47) MulDiv -> . MulDiv STAR Negate
+    (48) MulDiv -> . MulDiv SLASH Negate
+    (49) MulDiv -> . MulDiv PERCENT Negate
+    (50) MulDiv -> . Negate
+    (51) Negate -> . DASH Atomic
+    (52) Negate -> . Atomic
+    (53) Atomic -> . ValueExpr
+    (54) Atomic -> . LPAREN ArithExpr RPAREN
+    (55) ValueExpr -> . Constant
+    (56) ValueExpr -> . SymbolValueExpr
+    (57) Constant -> . INT_CONST
+    (58) Constant -> . FLOAT_CONST
+    (59) Constant -> . STRING_CONST
+    (60) SymbolValueExpr -> . Call
+    (61) SymbolValueExpr -> . NAME
+    (63) Call -> . NAME LPAREN CallParams RPAREN
+    (64) Call -> . NAME LPAREN RPAREN
+
+    DASH            shift and go to state 33
+    LPAREN          shift and go to state 70
+    INT_CONST       shift and go to state 30
+    FLOAT_CONST     shift and go to state 27
+    STRING_CONST    shift and go to state 29
+    NAME            shift and go to state 40
+
+    Constant                       shift and go to state 38
+    Expr                           shift and go to state 142
+    SymbolValueExpr                shift and go to state 42
+    ArithExpr                      shift and go to state 78
+    Call                           shift and go to state 26
+    MulDiv                         shift and go to state 35
+    Negate                         shift and go to state 34
+    ValueExpr                      shift and go to state 31
+    Atomic                         shift and go to state 43
+
+state 121
+
+    (87) ReturnStmt -> RETURN Expr .
+
+    RBRACE          reduce using rule 87 (ReturnStmt -> RETURN Expr .)
+
+
+state 122
+
+    (15) BlockStmts -> BlockStmts BlockStmt .
+
+    RBRACE          reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    RETURN          reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    CONTINUE        reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    BREAK           reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    VAR             reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    NAME            reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    IF              reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    WHILE           reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+    FOR             reduce using rule 15 (BlockStmts -> BlockStmts BlockStmt .)
+
+
+state 123
+
+    (13) Block -> LBRACE BlockStmts RBRACE .
+
+    FUNC            reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    VAR             reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    NAME            reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    IF              reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    WHILE           reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    FOR             reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    $end            reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    RBRACE          reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    RETURN          reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    CONTINUE        reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    BREAK           reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+    ELSE            reduce using rule 13 (Block -> LBRACE BlockStmts RBRACE .)
+
+
+state 124
+
+    (12) Block -> LBRACE BlockStmts ReturnStmt . RBRACE
+
+    RBRACE          shift and go to state 143
+
+
+state 125
+
+    (14) Block -> LBRACE ReturnStmt RBRACE .
+
+    FUNC            reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    VAR             reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    NAME            reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    IF              reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    WHILE           reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    FOR             reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    $end            reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    RBRACE          reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    RETURN          reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    CONTINUE        reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    BREAK           reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+    ELSE            reduce using rule 14 (Block -> LBRACE ReturnStmt RBRACE .)
+
+
+state 126
+
+    (80) ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 144
+
+state 127
+
+    (84) ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .
+
+    RBRACE          reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    RETURN          reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    CONTINUE        reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    BREAK           reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    VAR             reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    NAME            reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    IF              reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    WHILE           reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    FOR             reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    FUNC            reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+    $end            reduce using rule 84 (ForStmt -> FOR SEMIC BooleanExpr SEMIC Block .)
+
+
+state 128
+
+    (83) ForStmt -> FOR SEMIC SEMIC AssignStmt Block .
+
+    RBRACE          reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    RETURN          reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    CONTINUE        reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    BREAK           reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    VAR             reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    NAME            reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    IF              reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    WHILE           reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    FOR             reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    FUNC            reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+    $end            reduce using rule 83 (ForStmt -> FOR SEMIC SEMIC AssignStmt Block .)
+
+
+state 129
+
+    (79) ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC . AssignStmt Block
+    (82) ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC . Block
+    (72) AssignStmt -> . NAME EQUALS Expr
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    NAME            shift and go to state 93
+    LBRACE          shift and go to state 51
+
+    AssignStmt                     shift and go to state 145
+    Block                          shift and go to state 146
+
+state 130
+
+    (81) ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 147
+
+state 131
+
+    (85) ForStmt -> FOR DeclStmt SEMIC SEMIC Block .
+
+    RBRACE          reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    RETURN          reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    CONTINUE        reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    BREAK           reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    VAR             reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    NAME            reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    IF              reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    WHILE           reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    FOR             reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    FUNC            reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+    $end            reduce using rule 85 (ForStmt -> FOR DeclStmt SEMIC SEMIC Block .)
+
+
+state 132
+
+    (22) FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 148
+
+state 133
+
+    (23) FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .
+
+    FUNC            reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    VAR             reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    NAME            reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    IF              reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    WHILE           reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    FOR             reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+    $end            reduce using rule 23 (FuncDefStmt -> FUNC NAME LPAREN RPAREN Block .)
+
+
+state 134
+
+    (25) ParamDecls -> NAME TypeSpec .
+
+    RPAREN          reduce using rule 25 (ParamDecls -> NAME TypeSpec .)
+    COMMA           reduce using rule 25 (ParamDecls -> NAME TypeSpec .)
+
+
+state 135
+
+    (20) FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN . TypeSpec Block
+    (21) FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN . Block
+    (71) TypeSpec -> . TypeName
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+    (70) TypeName -> . NAME
+
+    LBRACE          shift and go to state 51
+    NAME            shift and go to state 56
+
+    TypeName                       shift and go to state 58
+    TypeSpec                       shift and go to state 149
+    Block                          shift and go to state 150
+
+state 136
+
+    (24) ParamDecls -> ParamDecls COMMA . NAME TypeSpec
+
+    NAME            shift and go to state 151
+
+
+state 137
+
+    (67) DeclStmt -> VAR NAME TypeSpec EQUALS Expr .
+
+    SEMIC           reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    RBRACE          reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    RETURN          reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    CONTINUE        reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    BREAK           reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    VAR             reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    NAME            reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    IF              reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    WHILE           reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    FOR             reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    FUNC            reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+    $end            reduce using rule 67 (DeclStmt -> VAR NAME TypeSpec EQUALS Expr .)
+
+
+state 138
+
+    (76) ElseIfStmt -> ELSE IfStmt .
+
+    FUNC            reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    VAR             reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    NAME            reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    IF              reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    WHILE           reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    FOR             reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    $end            reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    RBRACE          reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    RETURN          reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    CONTINUE        reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+    BREAK           reduce using rule 76 (ElseIfStmt -> ELSE IfStmt .)
+
+
+state 139
+
+    (75) ElseIfStmt -> ELSE Block .
+
+    FUNC            reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    VAR             reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    NAME            reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    IF              reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    WHILE           reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    FOR             reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    $end            reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    RBRACE          reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    RETURN          reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    CONTINUE        reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+    BREAK           reduce using rule 75 (ElseIfStmt -> ELSE Block .)
+
+
+state 140
+
+    (26) BooleanExpr -> BooleanExpr OR OR AndExpr .
+    (28) AndExpr -> AndExpr . AND AND NotExpr
+
+    OR              reduce using rule 26 (BooleanExpr -> BooleanExpr OR OR AndExpr .)
+    LBRACE          reduce using rule 26 (BooleanExpr -> BooleanExpr OR OR AndExpr .)
+    SEMIC           reduce using rule 26 (BooleanExpr -> BooleanExpr OR OR AndExpr .)
+    RPAREN          reduce using rule 26 (BooleanExpr -> BooleanExpr OR OR AndExpr .)
+    AND             shift and go to state 77
+
+
+state 141
+
+    (28) AndExpr -> AndExpr AND AND NotExpr .
+
+    AND             reduce using rule 28 (AndExpr -> AndExpr AND AND NotExpr .)
+    OR              reduce using rule 28 (AndExpr -> AndExpr AND AND NotExpr .)
+    LBRACE          reduce using rule 28 (AndExpr -> AndExpr AND AND NotExpr .)
+    SEMIC           reduce using rule 28 (AndExpr -> AndExpr AND AND NotExpr .)
+    RPAREN          reduce using rule 28 (AndExpr -> AndExpr AND AND NotExpr .)
+
+
+state 142
+
+    (65) CallParams -> CallParams COMMA Expr .
+
+    RPAREN          reduce using rule 65 (CallParams -> CallParams COMMA Expr .)
+    COMMA           reduce using rule 65 (CallParams -> CallParams COMMA Expr .)
+
+
+state 143
+
+    (12) Block -> LBRACE BlockStmts ReturnStmt RBRACE .
+
+    FUNC            reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    VAR             reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    NAME            reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    IF              reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    WHILE           reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    FOR             reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    $end            reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    RBRACE          reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    RETURN          reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    CONTINUE        reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    BREAK           reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+    ELSE            reduce using rule 12 (Block -> LBRACE BlockStmts ReturnStmt RBRACE .)
+
+
+state 144
+
+    (80) ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .
+
+    RBRACE          reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    RETURN          reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    CONTINUE        reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    BREAK           reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    VAR             reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    NAME            reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    IF              reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    WHILE           reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    FOR             reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    FUNC            reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    $end            reduce using rule 80 (ForStmt -> FOR SEMIC BooleanExpr SEMIC AssignStmt Block .)
+
+
+state 145
+
+    (79) ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 152
+
+state 146
+
+    (82) ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .
+
+    RBRACE          reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    RETURN          reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    CONTINUE        reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    BREAK           reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    VAR             reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    NAME            reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    IF              reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    WHILE           reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    FOR             reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    FUNC            reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+    $end            reduce using rule 82 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC Block .)
+
+
+state 147
+
+    (81) ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .
+
+    RBRACE          reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    RETURN          reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    CONTINUE        reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    BREAK           reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    VAR             reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    NAME            reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    IF              reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    WHILE           reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    FOR             reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    FUNC            reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+    $end            reduce using rule 81 (ForStmt -> FOR DeclStmt SEMIC SEMIC AssignStmt Block .)
+
+
+state 148
+
+    (22) FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .
+
+    FUNC            reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    VAR             reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    NAME            reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    IF              reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    WHILE           reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    FOR             reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+    $end            reduce using rule 22 (FuncDefStmt -> FUNC NAME LPAREN RPAREN TypeSpec Block .)
+
+
+state 149
+
+    (20) FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec . Block
+    (12) Block -> . LBRACE BlockStmts ReturnStmt RBRACE
+    (13) Block -> . LBRACE BlockStmts RBRACE
+    (14) Block -> . LBRACE ReturnStmt RBRACE
+
+    LBRACE          shift and go to state 51
+
+    Block                          shift and go to state 153
+
+state 150
+
+    (21) FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .
+
+    FUNC            reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    VAR             reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    NAME            reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    IF              reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    WHILE           reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    FOR             reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+    $end            reduce using rule 21 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN Block .)
+
+
+state 151
+
+    (24) ParamDecls -> ParamDecls COMMA NAME . TypeSpec
+    (71) TypeSpec -> . TypeName
+    (70) TypeName -> . NAME
+
+    NAME            shift and go to state 56
+
+    TypeSpec                       shift and go to state 154
+    TypeName                       shift and go to state 58
+
+state 152
+
+    (79) ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .
+
+    RBRACE          reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    RETURN          reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    CONTINUE        reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    BREAK           reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    VAR             reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    NAME            reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    IF              reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    WHILE           reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    FOR             reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    FUNC            reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+    $end            reduce using rule 79 (ForStmt -> FOR DeclStmt SEMIC BooleanExpr SEMIC AssignStmt Block .)
+
+
+state 153
+
+    (20) FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .
+
+    FUNC            reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    VAR             reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    NAME            reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    IF              reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    WHILE           reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    FOR             reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+    $end            reduce using rule 20 (FuncDefStmt -> FUNC NAME LPAREN ParamDecls RPAREN TypeSpec Block .)
+
+
+state 154
+
+    (24) ParamDecls -> ParamDecls COMMA NAME TypeSpec .
+
+    RPAREN          reduce using rule 24 (ParamDecls -> ParamDecls COMMA NAME TypeSpec .)
+    COMMA           reduce using rule 24 (ParamDecls -> ParamDecls COMMA NAME TypeSpec .)
+
