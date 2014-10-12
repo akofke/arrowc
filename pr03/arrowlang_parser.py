@@ -163,33 +163,41 @@ class ArrowParser(object):
 
     def p_AndExpr(self, p):
         'AndExpr : AndExpr AND AND NotExpr'
+        p[0] = Node("And").addkid(p[1]).addkid(p[4])
 
     def p_AndExpr2(self, p):
         'AndExpr : NotExpr'
+        p[0] = p[1]
 
     ###################################
 
     def p_NotExpr(self, p):
         'NotExpr : NOT BooleanTerm'
+        p[0] = Node("Not").addkid(p[2])
 
     def p_NotExpr2(self, p):
         'NotExpr : BooleanTerm'
+        p[0] = p[1]
 
     ###################################
 
     def p_BooleanTerm(self, p):
         'BooleanTerm : CmpExpr'
+        p[0] = p[1]
 
     def p_BooleanTerm2(self, p):
         'BooleanTerm : BooleanConstant'
+        p[0] = p[1]
 
     def p_BooleanTerm3(self, p):
         'BooleanTerm : LPAREN BooleanExpr RPAREN'
+        p[0] = p[2]
 
     ###################################
 
     def p_CmpExpr(self, p):
         'CompExpr : ArithExpr CmpOp ArithExpr'
+        p[0] = p[2].addkid(p[1]).addkid(p[3])
 
     ###################################
 
@@ -231,69 +239,87 @@ class ArrowParser(object):
 
     def p_ArithExpr(self, p):
         'ArithExpr : ArithExpr PLUS MulDiv'
+        p[0] = Node("+").addkid(p[1]).addkid(p[3])
 
     def p_ArithExpr2(self, p):
         'ArithExpr : ArithExpr DASH MulDiv'
+        p[0] = Node("-").addkid(p[1]).addkid(p[3])
 
     def p_ArithExpr3(self, p):
         'ArithExpr : MulDiv'
+        p[0] = p[1]
 
     ###################################
 
     def p_MulDiv(self, p):
         'MulDiv : MulDiv STAR Negate'
+        p[0] = Node("*").addkid(p[1]).addkid(p[3])
 
     def p_MulDiv2(self, p):
         'MulDiv : MulDiv SLASH Negate'
+        p[0] = Node("/").addkid(p[1]).addkid(p[3])
 
     def p_MulDiv3(self, p):
         'MulDiv : MulDiv PERCENT Negate'
+        p[0] = Node("%").addkid(p[1]).addkid(p[3])
 
     def p_MulDiv4(self, p):
         'MulDiv : Negate'
+        p[0] = p[1]
 
     ###################################
 
     def p_Negate(self, p):
         'Negate : DASH Atomic'
+        p[0] = Node("Negate").addkid(p[2])
 
     def p_MulDiv2(self, p):
         'Negate : Atomic'
+        p[0] = p[1]
 
     ###################################
 
     def p_Atomic(self, p):
         'Atomic : ValueExpr'
+        p[0] = p[1]
 
     def p_Atomic2(self, p):
         'Atomic : LPAREN ArithExpr RPAREN'
+        p[0] = p[2]
 
     ###################################
 
     def p_ValueExpr(self, p):
         'ValueExpr : Constant'
+        p[0] = p[1]
 
     def p_ValueExpr2(self, p):
         'ValueExpr : SymbolValueExpr'
+        p[0] = p[1]
 
     ###################################
 
     def p_Constant(self, p):
         'Constant : INT_CONST'
+        p[0] = Node("Int," + p[1])
 
     def p_Constant2(self, p):
         'Constant : FLOAT_CONST'
+        p[0] = Node("Float," + p[1])
 
     def p_Constant3(self, p):
         'Constant : STRING_CONST'
+        p[0] = Node("String," + p[1])
 
     ###################################
 
     def p_SymbolValueExpr(self, p):
         'SymbolValueExpr : Call'
+        p[0] = p[1]
 
     def p_SymbolValueExpr2(self, p):
         'SymbolValueExpr : NAME'
+        p[0] = Node("Symbol," + p[1])
 
     ###################################
 
@@ -481,3 +507,6 @@ class ArrowParser(object):
     def p_LoopControlStmt2(self, p):
         'LoopControlStmt : BREAK'
         p[0] = Node("Break")
+
+    def p_error(self, p):
+        raise SyntaxError, "Syntax Error at '%s', line %s" % (p, p.lineno)
