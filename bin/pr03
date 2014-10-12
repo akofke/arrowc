@@ -6,8 +6,7 @@ import os
 import sys
 import getopt
 
-from pr03 import arrowlang_lexer
-import ply.lex as lex
+from pr03 import arrowlang_lexer, arrowlang_parser
 
 usage_message = 'Usage: pr03 -A -o [output] [input...]'
 
@@ -20,7 +19,7 @@ Example
 
 Options
     -h, --help                          print this message
-    -a, --arg-example=<string>          an example option which takes an argument
+    -A, --ast                           stop at the AST
     -o, --output=<path>                 output path
 
     **Not yet implemented**
@@ -91,11 +90,11 @@ def main(argv):
     #testing
 
     test_input = ''.join(sys.stdin.readlines())
-    al_lexer = arrowlang_lexer.ArrowLexer()
-    al_lexer.build(debug=False)
-    al_lexer.input(test_input)
-    for tok in al_lexer:
-        print '(%s, %s)' % (tok.type, tok.value)
+    al_parser = arrowlang_parser.ArrowParser()
+    al_parser.build()
+    ast = al_parser.yacc.parse(test_input, lexer=arrowlang_lexer.ArrowLexer())
+    print(ast)
+
 
 
 
