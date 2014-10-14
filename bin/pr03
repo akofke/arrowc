@@ -87,17 +87,17 @@ def main(argv):
 
 
     ast = ""
-    for input in inputs:
+    for input_name in inputs:
         try:
-            with open(input, 'r') as input_file:
+            with open(input_name, 'r') as input_file:
                 program = input_file.read()
                 try:
-                    al_parser = ArrowParser()
-                    ast += str(al_parser.parse(program, lexer=ArrowLexer()))
+                    #al_parser = ArrowParser()
+                    ast += str(ArrowParser().parse(program))
                 except SyntaxError, e:
-                    log("Error in %s: %s" % (input, e))
+                    log("Error in %s: %s" % (input_name, e))
         except IOError:
-            log("Error reading file: " + input)
+            log("Error reading file: " + input_name)
 
 
     with open(output, 'w') as out:

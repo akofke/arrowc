@@ -7,16 +7,30 @@ from arrowlang_lexer import ArrowLexer
 
 
 class ArrowParser(object):
-    def __new__(cls, *args, **kwargs):
-        self = super(ArrowParser, cls).__new__(cls, **kwargs)
-        self.yacc = yacc.yacc(module=self, **kwargs)
-        return self.yacc
+    def __init__(self, **kwargs):
+        self.al_lexer = ArrowLexer()
+        self.tokens = ArrowLexer.tokens
+        self.al_parser = yacc.yacc(module=self, **kwargs)
 
+    def parse(self, text):
+        return self.al_parser.parse(input=text, lexer=self.al_lexer)
 
-    def build(self, **kwargs):
-        self.yacc = yacc.yacc(module=self, **kwargs)
+    def find_column(self, token):
+        """
+        finds the column position of a token by subtracting from its absolute position
+        the position of the last newline
+        """
+        last_cr = self.al_lexer.lexdata.rfind('\n', 0, token.lexpos)
+        return token.lexpos - last_cr
 
-    tokens = ArrowLexer.tokens
+    # def __new__(cls, *args, **kwargs):
+    #     self = super(ArrowParser, cls).__new__(cls, **kwargs)
+    #     self.yacc = yacc.yacc(module=self, **kwargs)
+    #     return self.yacc
+    #
+    #
+    # def build(self, **kwargs):
+    #     self.yacc = yacc.yacc(module=self, **kwargs)
 
     def p_Start(self, p):
         'Start : Stmts'
@@ -518,4 +532,5 @@ class ArrowParser(object):
         if p is None:
             raise SyntaxError, "Syntax Error: unexpected end of file"
         else:
-            raise SyntaxError, "Syntax Error at '%s', line %s" % (p, p.lineno)
+            raise SyntaxError, "Syntax Error at '%s' (line %s, column %s, offset %s)"\
+                               % (p, p.lineno, self.find_column(p), p.lexpos)
