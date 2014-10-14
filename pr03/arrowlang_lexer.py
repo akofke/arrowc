@@ -22,10 +22,10 @@ reserved = {
 
 
 class ArrowLexer(object):
-
-    def build(self, **kwargs):
-        """Must be called on an instance of ArrowLexer"""
-        self.lexer = lex.lex(module=self, **kwargs)
+    def __new__(cls, **kwargs):
+        self = super(ArrowLexer, cls).__new__(cls, **kwargs)
+        self.lexer = lex.lex(object=self, **kwargs)
+        return self.lexer
 
     tokens = [
         # Identifier or keyword

@@ -4,7 +4,9 @@
 ''' Put your test code for pr03 here '''
 
 import pr03
+from pr03.arrowlang_parser import ArrowParser
+from pr03.arrowlang_lexer import ArrowLexer
 
 def test_Hello():
-    print "hello"
-    assert "hello" == "hello"
+    
+

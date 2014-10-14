@@ -6,7 +6,8 @@ import os
 import sys
 import getopt
 
-from pr03 import arrowlang_lexer, arrowlang_parser
+from pr03.arrowlang_lexer import ArrowLexer
+from pr03.arrowlang_parser import ArrowParser
 
 usage_message = 'Usage: pr03 -A -o [output] [input...]'
 
@@ -81,17 +82,28 @@ def main(argv):
         usage(1)
 
     if not inputs:
-         log("You must supply some inputs")
-         usage(1)
+        log("You must supply some inputs")
+        usage(1)
 
 
-    test_input = ''.join(sys.stdin.readlines())
-    al_lexer = arrowlang_lexer.ArrowLexer()
-    al_lexer.build()
+    ast = ""
+    for input in inputs:
+        with open(input, 'r') as input_file:
+            program = input_file.read()
+            al_parser = ArrowParser()
+            ast += str(al_parser.parse(program, lexer=ArrowLexer()))
 
-    al_parser = arrowlang_parser.ArrowParser()
-    al_parser.build()
-    ast = al_parser.yacc.parse(test_input, lexer=al_lexer.lexer)
+    with open(output, 'w') as out:
+        out.write(ast)
+
+
+    # test_input = ''.join(sys.stdin.readlines())
+    # al_lexer = arrowlang_lexer.ArrowLexer()
+    # al_lexer.build()
+    #
+    # al_parser = arrowlang_parser.ArrowParser()
+    # al_parser.build()
+    # ast = al_parser.yacc.parse(test_input, lexer=al_lexer.lexer)
 
 
 

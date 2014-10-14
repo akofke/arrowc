@@ -7,6 +7,12 @@ from arrowlang_lexer import ArrowLexer
 
 
 class ArrowParser(object):
+    def __new__(cls, *args, **kwargs):
+        self = super(ArrowParser, cls).__new__(cls, **kwargs)
+        self.yacc = yacc.yacc(module=self, **kwargs)
+        return self.yacc
+
+
     def build(self, **kwargs):
         self.yacc = yacc.yacc(module=self, **kwargs)
 
