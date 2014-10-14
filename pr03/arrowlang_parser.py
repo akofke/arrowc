@@ -515,4 +515,7 @@ class ArrowParser(object):
         p[0] = Node("Break")
 
     def p_error(self, p):
-        raise SyntaxError, "Syntax Error at '%s', line %s" % (p, p.lineno)
+        if p is None:
+            raise SyntaxError, "Syntax Error: unexpected end of file"
+        else:
+            raise SyntaxError, "Syntax Error at '%s', line %s" % (p, p.lineno)

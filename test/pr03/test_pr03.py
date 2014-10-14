@@ -8,6 +8,7 @@ from pr03.arrowlang_parser import ArrowParser
 from pr03.arrowlang_lexer import ArrowLexer
 from nose.tools import raises
 
+
 def test_lexer_comments():
     assert str(ArrowParser().parse('''
     /*line comment \* escape sequences \/ \*/
@@ -23,6 +24,7 @@ def test_lexer_comments():
 0:Int,0
 '''.strip()
 
+
 def test_lexer_string():
     assert str(ArrowParser().parse('''
     var x = "a string with escaped \\" and \\\\"
@@ -30,9 +32,16 @@ def test_lexer_string():
 1:Stmts
 2:ShortDecl
 0:Name,x
-0:String,a string with escaped " and \\
+0:String,a string with escaped \\" and \\
 '''.strip()
+#The actual output should contain the sequences \" and \
 
+
+#The following parser tests implement every node call that could be created.
+#A running list of each node will be stated for each test, identifying the 
+#additional nodes that had not yet been tested
+
+#Nodes:Stmts, ShortDecl, Name, Int
 def test_parser1():
     assert str(ArrowParser().parse("var x = 0", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -41,6 +50,8 @@ def test_parser1():
 0:Int,0
 '''.strip()
 
+
+#Nodes:AssignStmt
 def test_parser2():
     assert str(ArrowParser().parse("x = 1", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -49,6 +60,8 @@ def test_parser2():
 0:Int,1
 '''.strip()
 
+
+#Nodes:If, BooleanExpr, ==, Symbol, Block, ElseIf
 def test_parser3():
     assert str(ArrowParser().parse("if x == 0 {y = 1} else {y = 0}", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -68,6 +81,8 @@ def test_parser3():
 0:Int,0
 '''.strip()
 
+
+#Nodes:-, Float
 def test_parser4():
     assert str(ArrowParser().parse("var x = 1 - 1.0", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -79,6 +94,7 @@ def test_parser4():
 '''.strip()
 
 
+#Nodes:+
 def test_parser5():
     assert str(ArrowParser().parse("var x = 1 + 1", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -89,6 +105,8 @@ def test_parser5():
 0:Int,1
 '''.strip()
 
+
+#Nodes:Decl, Type, TypeName, *
 def test_parser6():
     assert str(ArrowParser().parse("var x int32 = 1*1", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -101,6 +119,8 @@ def test_parser6():
 0:Int,1
 '''.strip()
 
+
+#Nodes:FuncDef, ParamDecls, ParamDecl, ReturnType, Return
 def test_parser7():
     assert str(ArrowParser().parse("func f (i int32) int32 { return 5}", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -119,6 +139,8 @@ def test_parser7():
 0:Int,5
 '''.strip()
 
+
+#Nodes:Call, Params
 def test_parser8():
     assert str(ArrowParser().parse("print_int32(i)", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -128,6 +150,8 @@ def test_parser8():
 0:Symbol,i
 '''.strip()
 
+
+#Nodes:For, DeclExpr, UpdateExpr, Continue
 def test_parser9():
     assert str(ArrowParser().parse("for var i = 0; i < 20; i = i + 1 {print_int32(i) continue}", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -154,6 +178,8 @@ def test_parser9():
 0:Continue
 '''.strip()
 
+
+#Nodes:While,Break
 def test_parser10():
     assert str(ArrowParser().parse("while(true){break}", lexer=ArrowLexer())) == '''
 1:Stmts
@@ -166,6 +192,8 @@ def test_parser10():
 0:Break
 '''.strip()
 
+
+#Large overall test
 def test_parser11():
     assert str(ArrowParser().parse('''
 var x = 1
@@ -252,6 +280,3 @@ if x == y && (y == z || z == c) {
 0:Symbol,baz
 0:Params
 """.strip()
-
-
-

@@ -85,7 +85,7 @@ class ArrowLexer(object):
     def t_STRING_CONST(self, t):
         r'"(\\"|\\{2}|[^"])*?"'
         t.value = t.value.strip('\"')
-        t.value = re.sub(r'\\"', r'"', t.value)
+        #t.value = re.sub(r'\\"', r'"', t.value) #leave escape characters for quotes since they need to be escaped later
         t.value = re.sub(r'\\{2}', r'\\', t.value)
         return t
 

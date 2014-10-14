@@ -88,10 +88,17 @@ def main(argv):
 
     ast = ""
     for input in inputs:
-        with open(input, 'r') as input_file:
-            program = input_file.read()
-            al_parser = ArrowParser()
-            ast += str(al_parser.parse(program, lexer=ArrowLexer()))
+        try:
+            with open(input, 'r') as input_file:
+                program = input_file.read()
+                try:
+                    al_parser = ArrowParser()
+                    ast += str(al_parser.parse(program, lexer=ArrowLexer()))
+                except SyntaxError, e:
+                    log("Error in %s: %s" % (input, e))
+        except IOError:
+            log("Error reading file: " + input)
+
 
     with open(output, 'w') as out:
         out.write(ast)
