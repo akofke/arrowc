@@ -23,15 +23,6 @@ class ArrowParser(object):
         last_cr = self.al_lexer.lexdata.rfind('\n', 0, token.lexpos)
         return token.lexpos - last_cr
 
-    # def __new__(cls, *args, **kwargs):
-    #     self = super(ArrowParser, cls).__new__(cls, **kwargs)
-    #     self.yacc = yacc.yacc(module=self, **kwargs)
-    #     return self.yacc
-    #
-    #
-    # def build(self, **kwargs):
-    #     self.yacc = yacc.yacc(module=self, **kwargs)
-
     def p_Start(self, p):
         'Start : Stmts'
         p[0] = p[1]

@@ -120,7 +120,6 @@ class ArrowLexer(object):
         t.lexer.lineno += 1
         pass
 
-    #add column tracking?
     t_ignore = ' \t'
 
     def t_error(self, t):

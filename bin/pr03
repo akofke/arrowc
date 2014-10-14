@@ -6,7 +6,6 @@ import os
 import sys
 import getopt
 
-from pr03.arrowlang_lexer import ArrowLexer
 from pr03.arrowlang_parser import ArrowParser
 
 usage_message = 'Usage: pr03 -A -o [output] [input...]'
@@ -85,7 +84,6 @@ def main(argv):
         log("You must supply some inputs")
         usage(1)
 
-
     ast = ""
     for input_name in inputs:
         try:
@@ -99,22 +97,8 @@ def main(argv):
         except IOError:
             log("Error reading file: " + input_name)
 
-
     with open(output, 'w') as out:
         out.write(ast)
-
-
-    # test_input = ''.join(sys.stdin.readlines())
-    # al_lexer = arrowlang_lexer.ArrowLexer()
-    # al_lexer.build()
-    #
-    # al_parser = arrowlang_parser.ArrowParser()
-    # al_parser.build()
-    # ast = al_parser.yacc.parse(test_input, lexer=al_lexer.lexer)
-
-
-
-
 
 if __name__ == "__main__":
     main(sys.argv[1:])
