@@ -20,7 +20,7 @@ Example
 Options
     -h, --help                          print this message
     -A, --ast                           stop at the AST
-    -o, --output=<path>                 output path
+    -o, --output=<path>                 output path. If the -o flag is not given or blank, output is written to stdout
 
     **Not yet implemented**
     -T, typed-ast                       stop at type checked AST
@@ -91,14 +91,19 @@ def main(argv):
                 program = input_file.read()
                 try:
                     #al_parser = ArrowParser()
-                    ast += str(ArrowParser().parse(program))
+                    ast += str(ArrowParser().parse(program)) + '\n'
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))
+                    sys.exit(1)
         except IOError:
             log("Error reading file: " + input_name)
+            sys.exit(1)
 
-    with open(output, 'w') as out:
-        out.write(ast)
+    if output:
+        with open(output, 'w') as out:
+            out.write(ast)
+    else:
+        sys.stdout.write(ast)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
