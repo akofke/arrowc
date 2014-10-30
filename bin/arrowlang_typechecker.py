@@ -15,11 +15,12 @@ class Typechecker:
     def parse_node(node):
         return string.split(node.label, ',')
 
-    def undef(self, name):
+    def is_undef(self, name):
         if name not in self.scope_stack[-1]:
             return True
         else:
             return False
+
 
     @staticmethod
     def node_append(node, label):
@@ -69,28 +70,55 @@ class Typechecker:
     def tc_Decl(self, node):
         name = self.parse_node(node.children[0])[0]
 
-        if self.undef(name):
+        if self.is_undef(name):
             expr_type = self.typecheck(node.children[2])
             if expr_type != self.tc_Type(node.children[1]):
                 raise TypeError
 
             node.children[0].label.append(":%s" % expr_type)
             self.node_append(node, "unit")
+            return "unit"
+        else:
+            raise TypeError
 
     def tc_ShortDecl(self, node):
         name = self.parse_node(node.children[0])[0]
 
-        if self.undef(name):
+        if self.is_undef(name):
             expr_type = self.typecheck(node.children[1])
             node.children[0].label.append(":%s" % expr_type)
             self.node_append(node, "unit")
-
+            return "unit"
+        else:
+            raise TypeError
 
     def tc_Type(self, node):
         type = self.parse_node(node.children[0])[1]
         node.children[0].label.append(":%s" % type)
         node.label.append(":%s" % type)
         return type
+
+    def tc_And(self, node):
+        if self.typecheck(node.children[0]) == self.typecheck(node.children[1]) == "boolean":
+            self.node_append(node, "boolean")
+        else:
+            raise TypeError
+
+    def tc_Or(self, node):
+        if self.typecheck(node.children[0]) == self.typecheck(node.children[1]) == "boolean":
+            self.node_append(node, "boolean")
+        else:
+            raise TypeError
+
+    def tc_Not(self, node):
+        if self.typecheck(node.children[0]) == "boolean":
+            self.node_append(node, "boolean")
+        else:
+            raise TypeError
+
+    
+
+
 
 
 
