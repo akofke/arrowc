@@ -7,12 +7,67 @@ class TypecheckError(Exception):
     pass
 
 
+class Type:
+    def __init__(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+
+class SizedType(Type):
+    def __init__(self, name, size):
+        Type.__init__(self, name)
+        self.size = size
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.name == other.name and self.size == other.size
+        else:
+            return False
+
+
+class IntType(Type):
+    def __init__(self, name, size, signed):
+        Type.__init__(self, name)
+        self.size = size
+        self.signed = signed
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.name == other.name and self.size == other.size and self.signed == other.signed
+        else:
+            return False
+
+
+class FuncType(Type):
+    def __init__(self, name, params, return_type):
+        Type.__init__(self, name)
+        self.params = params
+        self.return_type = return_type
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.name == other.name and self.params == other.params and self.return_type == other.return_type
+        else:
+            return False
+
+
 class ArrowTypechecker:
 
     def __init__(self, ast):
         self.scope_stack = [dict()]
         self.ast = ast
-        self.int_types = frozenset(("int32", "uint32", "int8", "uint8", "float32"))
+        #self.int_types = frozenset(("int32", "uint32", "int8", "uint8", "float32"))
+
+        self.num_types = frozenset((
+            IntType("int32", 32, True),
+            IntType("uint32", 32, False),
+            IntType("int8", 8, True),
+            IntType("uint32", 8, False),
+            SizedType("float32", 32)
+        ))
+
         self.cmp_ops = frozenset(("<", "<=", "==", "!=", ">=", ">"))
         self.arith_ops = frozenset(("+", "-", "*", "/", "%"))
 
@@ -206,12 +261,20 @@ class ArrowTypechecker:
         block_type = self.typecheck_child(node, 3)
 
         if decl_type == update_type == block_type == "unit" and bool_type == "boolean":
+            self.pop_scope()
             return self.append_type("unit", node)
         else:
             raise TypecheckError
 
     def tc_Block(self, node):
-        pass
+        self.push_scope()
+
+        for child in node.children:
+            if self.typecheck(child) != "unit":
+                raise TypecheckError
+
+        self.pop_scope()
+        return self.append_type("unit", node)
 
     def tc_Cmp(self, node):
         if self.typecheck(node.children[0]) == self.typecheck(node.children[1]):
