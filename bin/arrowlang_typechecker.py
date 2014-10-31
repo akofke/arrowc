@@ -6,11 +6,9 @@ import betterast
 def parse_node(node):
     return string.split(node.label, ',')
 
-
 def append_type(type_obj, node):
-    node_append(node, type_obj.name)
+    node_append(node, str(type_obj))
     return type_obj
-
 
 def node_append(node, label):
     node.label.append(":%s" % label)
@@ -19,10 +17,10 @@ class ArrowTypechecker:
 
     def __init__(self, ast):
         self.scope_stack = [dict()]
+        self.enclosing_funcdef = list()
         self.ast = ast
-        #self.int_types = frozenset(("int32", "uint32", "int8", "uint8", "float32"))
 
-        self.prim_types = {
+        self.prims = {
             "unit": SizedType("unit", 0),
             "boolean": SizedType("boolean", 1),
             "int32": IntType("int32", 32, True),
@@ -34,11 +32,11 @@ class ArrowTypechecker:
         }
 
         self.num_types = frozenset((
-            self.prim_types["int32"],
-            self.prim_types["uint32"],
-            self.prim_types["int8"],
-            self.prim_types["uint8"],
-            self.prim_types["float32"]
+            self.prims["int32"],
+            self.prims["uint32"],
+            self.prims["int8"],
+            self.prims["uint8"],
+            self.prims["float32"]
         ))
 
         self.cmp_ops = frozenset(("<", "<=", "==", "!=", ">=", ">"))
@@ -63,6 +61,8 @@ class ArrowTypechecker:
         else:
             return getattr(self, "tc_" + node_name)(node)
 
+
+
     def typecheck_child(self, node, child_num):
         return self.typecheck(node.children[child_num])
 
@@ -71,6 +71,13 @@ class ArrowTypechecker:
             return True
         else:
             return False
+
+    def is_undef_all(self, name):
+        for gamma in self.scope_stack:
+            if name in gamma:
+                return False
+
+        return True
 
     def lookup_symbol(self, sym):
         type_obj = None
@@ -81,16 +88,16 @@ class ArrowTypechecker:
         return type_obj
 
     def tc_Int(self, node):
-        return append_type(self.prim_types["int32"], node)
+        return append_type(self.prims["int32"], node)
 
     def tc_Float(self, node):
-        return append_type(self.prim_types["float32"], node)
+        return append_type(self.prims["float32"], node)
 
     def tc_Boolean(self, node):
-        return append_type(self.prim_types["boolean"], node)
+        return append_type(self.prims["boolean"], node)
 
     def tc_String(self, node):
-        return append_type(self.prim_types["string"], node)
+        return append_type(self.prims["string"], node)
 
     def tc_Symbol(self, node):
         sym = parse_node(node)[1]
@@ -98,19 +105,58 @@ class ArrowTypechecker:
         sym_type = self.lookup_symbol(sym)
 
         if sym_type is None:
-            raise TypeError
+            raise TypecheckError
 
         return append_type(sym_type, node)
 
     def tc_Stmts(self, node):
         for child in node.children:
-            if self.typecheck(child) != self.prim_types["unit"]:
-                raise TypeError
+            if self.typecheck(child) != self.prims["unit"]:
+                raise TypecheckError
 
-        return append_type(self.prim_types["unit"], node)
+        return append_type(self.prims["unit"], node)
+
+    def tc_ParamDecls(self, node):
+        type_list = list()
+        for child in node.children:
+            type_list.append(self.tc_ParamDecl(child))
+
+        return append_type(tuple(type_list), node)
+
+    def tc_ParamDecl(self, node):
+        name = parse_node(node.children[0])[0]
+        if self.is_undef(name):
+            asserted_type = self.tc_Type(node.children[1])
+            self.add_symbol(name, asserted_type)
+            return append_type(asserted_type, node.children[0])
+        else:
+            raise TypecheckError
+
+    def tc_ReturnType(self, node):
+        return append_type(self.typecheck_child(node, 0), node)
 
     def tc_FuncDef(self, node):
-        pass
+        name = parse_node(node.children[0])[0]
+        if self.is_undef(name):
+            self.push_scope()
+
+            param_types = self.tc_ParamDecls(node.children[1])
+            return_type = self.tc_ReturnType(node.children[2])
+            func_type = FuncType(param_types, return_type)
+
+            self.add_symbol(name, func_type)
+            self.enclosing_funcdef.append(func_type)
+            block_type = self.tc_Block(node.children[3])
+
+            if block_type != self.prims["unit"]:
+                raise TypecheckError
+
+            self.pop_scope()
+            self.enclosing_funcdef.pop()
+            self.add_symbol(name, func_type)
+            return append_type(self.prims["unit"], node)
+        else:
+            raise TypecheckError
 
     def tc_Decl(self, node):
         name = parse_node(node.children[0])[0]
@@ -120,103 +166,121 @@ class ArrowTypechecker:
             expr_type = self.typecheck_child(node, 2)
 
             if expr_type != aserted_type:
-                raise TypeError
+                raise TypecheckError
 
             append_type(aserted_type, node.children[0])
-
-            return append_type(self.prim_types["unit"])
+            self.add_symbol(name, aserted_type)
+            return append_type(self.prims["unit"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_ShortDecl(self, node):
         name = parse_node(node.children[0])[0]
 
         if self.is_undef(name):
-            expr_type = self.typecheck(node.children[1])
-            node.children[0].label.append(":%s" % expr_type)
-            node_append(node, "unit")
-            return "unit"
+            expr_type = self.typecheck_child(node, 1)
+            append_type(expr_type, node.children[0])
+            self.add_symbol(name, expr_type)
+            return append_type(self.prims["unit"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_Type(self, node):
         type_name = parse_node(node.children[0])[1]
-        if type_name in self.prim_types.keys():
-            type_obj = self.prim_types[type_name]
+        if type_name in self.prims.keys():
+            type_obj = self.prims[type_name]
             node_append(node.children[0], type_name)
             return append_type(type_obj, node)
         else:
             raise TypecheckError
 
     def tc_And(self, node):
-        if self.typecheck_child(node, 0) == self.typecheck_child(node, 1) == self.prim_types["boolean"]:
-            return append_type(self.prim_types["boolean"], node)
+        if self.typecheck_child(node, 0) == self.typecheck_child(node, 1) == self.prims["boolean"]:
+            return append_type(self.prims["boolean"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_Or(self, node):
-        if self.typecheck_child(node, 0) == self.typecheck_child(node, 1) == self.prim_types["boolean"]:
-            return append_type(self.prim_types["boolean"], node)
+        if self.typecheck_child(node, 0) == self.typecheck_child(node, 1) == self.prims["boolean"]:
+            return append_type(self.prims["boolean"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_Not(self, node):
-        if self.typecheck_child(node, 0) == self.prim_types["boolean"]:
-            return append_type(self.prim_types["boolean"], node)
+        if self.typecheck_child(node, 0) == self.prims["boolean"]:
+            return append_type(self.prims["boolean"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
-################
     def tc_AssignStmt(self, node):
         name = parse_node(node.children[0])[0]
+        name_type = self.lookup_symbol(name)
 
-        if self.is_undef(name):
-            raise TypeError
+        if name_type is not None:
+            expr_type = self.typecheck_child(node, 1)
+            if name_type == expr_type:
+                append_type(name_type, node.children[0])
+                return append_type(self.prims["unit"])
+            else:
+                raise TypecheckError
         else:
-            expr_type = self.typecheck(node.children[1])
-            node.children[0].label.append(":%s" % expr_type)
-            node_append(node, "unit")
-            return "unit"
-
-
-
-    def tc_DeclExpr(self, node):
-        if self.typecheck(node.children[0]) == "unit":
-            node_append(node, "unit")
-        else:
-            raise TypeError
-
-    def tc_UpdateExpr(self, node):
-        if self.typecheck(node.children[0]) == "unit":
-            node_append(node, "unit")
-        else:
-            raise TypeError
-
-    def tc_BooleanExpr(self, node):
-        if self.typecheck(node.children[0]) == "boolean":
-            node_append(node, "boolean")
-        else:
-            raise TypeError
-
+            raise TypecheckError
 
     def tc_Return(self, node):
-        pass
+        expected_return = self.enclosing_funcdef[-1].return_type
+
+        if len(node.children) != 0:
+            returns_type = self.typecheck_child(node, 0)
+        else:
+            returns_type = self.prims["unit"]
+
+        if returns_type == expected_return:
+            return append_type(returns_type, node)
+        else:
+            raise TypecheckError
 
     def tc_If(self, node):
         condition_type = self.typecheck_child(node, 0)
         then_type = self.typecheck_child(node, 1)
         else_type = self.typecheck_child(node, 2)
 
-        if condition_type == "boolean" and then_type == else_type == "unit":
-            return append_type("unit", node)
+        if condition_type == self.prims["boolean"] and then_type == else_type == self.prims["unit"]:
+            return append_type(self.prims["unit"], node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_ElseIf(self, node):
-            if self.typecheck_child(node, 0) == "unit":
+        if len(node.children) != 0:
+            if self.typecheck_child(node, 0) == self.prims["unit"]:
                 return append_type("unit", node)
             else:
-                raise TypeError
+                raise TypecheckError
+        else:
+            return append_type(self.prims["unit"], node)
+
+    def tc_DeclExpr(self, node):
+        if len(node.children) != 0:
+            if self.typecheck(node.children[0]) == self.prims["unit"]:
+                return append_type(self.prims["unit"], node)
+            else:
+                raise TypecheckError
+        else:
+            return append_type(self.prims["unit"], node)
+
+    def tc_UpdateExpr(self, node):
+        if len(node.children) != 0:
+            if self.typecheck(node.children[0]) == self.prims["unit"]:
+                return append_type(self.prims["unit"], node)
+            else:
+                raise TypecheckError
+        else:
+            return append_type(self.prims["unit"], node)
+
+    def tc_BooleanExpr(self, node):
+        if self.typecheck_child(node, 0) == self.prims["boolean"]:
+            return append_type(self.prims["boolean"], node)
+        else:
+            raise TypecheckError
 
     def tc_For(self, node):
         self.push_scope()
@@ -226,9 +290,11 @@ class ArrowTypechecker:
         update_type = self.typecheck_child(node, 2)
         block_type = self.typecheck_child(node, 3)
 
-        if decl_type == update_type == block_type == "unit" and bool_type == "boolean":
+        if decl_type == update_type == block_type == self.prims["unit"]\
+                and bool_type == self.prims["boolean"]:
+
             self.pop_scope()
-            return append_type("unit", node)
+            return append_type(self.prims["unit"], node)
         else:
             raise TypecheckError
 
@@ -236,34 +302,66 @@ class ArrowTypechecker:
         self.push_scope()
 
         for child in node.children:
-            if self.typecheck(child) != "unit":
+            if self.typecheck(child) != self.prims["unit"]:
                 raise TypecheckError
 
         self.pop_scope()
-        return append_type("unit", node)
+        return append_type(self.prims["unit"], node)
 
-    def tc_Cmp(self, node):
-        if self.typecheck(node.children[0]) == self.typecheck(node.children[1]):
-            node_append(node, "boolean")
+    def tc_Params(self, node):
+        type_list = list()
+        for child in node.children:
+            type_list.append(self.typecheck(child))
+
+        return append_type(tuple(type_list), node)
+
 
     def tc_Call(self, node):
-        pass
+        func_name = parse_node(node.children[0])[0]
+        func_type = self.lookup_symbol(func_name)
 
-    def tc_Cast(self, node):
-        pass
+        for t in self.num_types:
+            if func_name == t.name:
+                return self.tc_Cast(node, t)
+
+        if func_type is not None:
+            param_types = self.tc_Params(node.children[1])
+            if param_types == func_type.params:
+                append_type(func_type, node.children[0])
+                append_type(param_types, node.children[1])
+                return append_type(func_type.return_type, node)
+            else:
+                raise TypecheckError
+        else:
+            raise TypecheckError
+
+
+
+    def tc_Cast(self, node, num_type):
+        if len(node.children[1].children) == 1:
+            param_type = self.tc_Params(node.children[1])
+            if param_type in self.num_types:
+                cast_type = FuncType()
+
+
+
+
+    def tc_Cmp(self, node):
+        type1, type2 = self.typecheck_child(node, 0), self.typecheck_child(node, 1)
+        if type1 == type2 and type1 in self.num_types:
+            return append_type(type1, node)
 
     def tc_ArithOp(self, node):
-        type1, type2 = self.typecheck(node.children[0]), self.typecheck(node.children[1])
-        if type1 == type2 and type1 in self.int_types:
-            node_append(":%s" % type1)
-            return type1
+        type1, type2 = self.typecheck_child(node, 0), self.typecheck_child(node, 1)
+        if type1 == type2 and type1 in self.num_types:
+            return append_type(type1, node)
         else:
-            raise TypeError
+            raise TypecheckError
 
     def tc_Negate(self, node):
-        type_name = self.typecheck(node.children[0])
-        if type_name in self.int_types:
-            return append_type(type_name, node)
+        type_obj = self.typecheck(node.children[0])
+        if type_obj in self.num_types:
+            return append_type(type_obj, node)
 
 
     def tc_Error(self, node):
@@ -283,6 +381,9 @@ class Type:
             return other.name == self.name
         else:
             return False
+
+    def __str__(self):
+        return self.name
 
 
 class SizedType(Type):
@@ -311,16 +412,20 @@ class IntType(Type):
 
 
 class FuncType(Type):
-    def __init__(self, name, params, return_type):
-        Type.__init__(self, name)
+    def __init__(self, params, return_type):
+
         self.params = params
         self.return_type = return_type
+        Type.__init__(self, str(self))
 
     def __eq__(self, other):
         if type(other) is type(self):
             return self.name == other.name and self.params == other.params and self.return_type == other.return_type
         else:
             return False
+
+    def __str__(self):
+        return "fn({!s})->{}".format(tuple(self.params), self.return_type)
 
 
 

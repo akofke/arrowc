@@ -276,3 +276,182 @@ if x == y && (y == z || z == c) {
 0:Symbol,baz
 0:Params
 """.strip()
+
+#Start of Typing tests
+#A running list of every node created and type are listed. 
+
+#Nodes:Stmts, call, symbol, Params, Int
+#Types:Unit, int32
+def test_checker1():
+    assert str(ArrowParser().parse("print_int32(0)")) == '''
+1:Stmts:unit
+2:Call:unit
+0:Symbol,print_int32:fn(int32)->unit
+1:Params:(int32)
+0:Int,0:int32
+'''.strip()
+
+#Nodes:ShortDecl, Name, Arith, Negate
+def test_checker2():
+    assert str(ArrowParser().parse("var x = 1 * 2 + 3 * (-1 + 7) / 2")) == '''
+1:Stmts:unit
+2:ShortDecl:unit
+0:Name,x:int32
+2:+:int32
+2:*:int32
+0:Int,1:int32
+0:Int,2:int32
+2:/:int32
+2:*:int32
+0:Int,3:int32
+2:+:int32
+1:Negate:int32
+0:Int,1:int32
+0:Int,7:int32
+0:Int,2:int32
+'''.strip()
+
+#Nodes:Decl, Type, TypeName, Float
+#Types:float32
+def test_checker3():
+    assert str(ArrowParser().parse("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")) == '''
+1:Stmts:unit
+3:Decl:unit
+0:Name,x:float32
+1:Type:float32
+0:TypeName,float32:float32
+2:+:float32
+2:*:float32
+0:Float,1:float32
+0:Float,2:float32
+2:/:float32
+2:*:float32
+0:Float,3:float32
+2:+:float32
+1:Negate:float32
+0:Float,1:float32
+0:Float,7:float32
+0:Float,2:float32
+'''.strip()
+
+#Nodes:If, BooleanExpr, Boolean, ElseIf Block, AssignStmt, BooleanExpr
+#Types:boolean
+def test_checker4():
+    assert str(ArrowParser().parse('''
+var x = 0
+if true {
+  x = 1
+} else {
+  x = 2
+}
+}''')) == """
+2:Stmts:unit
+2:ShortDecl:unit
+0:Name,x:int32
+0:Int,0:int32
+3:If:unit
+1:BooleanExpr:boolean
+0:Boolean,true:boolean
+1:Block:unit
+2:AssignStmt:unit
+0:Name,x:int32
+0:Int,1:int32
+1:ElseIf:unit
+1:Block:unit
+2:AssignStmt:unit
+0:Name,x:int32
+0:Int,2:int32
+""".strip()
+
+#Nodes:FuncDef, ParamsDecls, ParamDecl, ReturnType, Return, BlockStmt For, UpdateExpr, DeclExpr, cmp
+def test_checker5():
+    assert str(ArrowParser().parse('''
+func fib(x int32) int32 {
+  if x <= 0 {
+    return 0
+  }
+  var prev = 0
+  var cur = 1
+  for var i = 1; i < x; i = i + 1 {
+    var next = cur + prev
+    prev = cur
+    cur = next
+  }
+  return cur
+}
+print_int32(fib(10))
+}''')) == """
+2:Stmts:unit
+4:FuncDef:unit
+0:Name,fib:fn(int32)->int32
+1:ParamDecls:(int32)
+2:ParamDecl:int32
+0:Name,x:int32
+1:Type:int32
+0:TypeName,int32:int32
+1:ReturnType:int32
+1:Type:int32
+0:TypeName,int32:int32
+5:Block:unit
+3:If:unit
+1:BooleanExpr:boolean
+2:<=:boolean
+0:Symbol,x:int32
+0:Int,0:int32
+1:Block:unit
+1:Return:unit
+0:Int,0:int32
+0:ElseIf:unit
+2:ShortDecl:unit
+0:Name,prev:int32
+0:Int,0:int32
+2:ShortDecl:unit
+0:Name,cur:int32
+0:Int,1:int32
+4:For:unit
+1:DeclExpr:unit
+2:ShortDecl:unit
+0:Name,i:int32
+0:Int,1:int32
+1:BooleanExpr:unit
+2:<:boolean
+0:Symbol,i:int32
+0:Symbol,x:int32
+1:UpdateExpr:unit
+2:AssignStmt:unit
+0:Name,i:int32
+2:+:int32
+0:Symbol,i:int32
+0:Int,1:int32
+3:Block:unit
+2:ShortDecl:unit
+0:Name,next:int32
+2:+:int32
+0:Symbol,cur:int32
+0:Symbol,prev:int32
+2:AssignStmt:unit
+0:Name,prev:int32
+0:Symbol,cur:int32
+2:AssignStmt:unit
+0:Name,cur:int32
+0:Symbol,next:int32
+1:Return:unit
+0:Symbol,cur:int32
+2:Call:unit
+0:Symbol,print_int32:fn(int32)->unit
+1:Params:(int32)
+2:Call:int32
+0:Symbol,fib:fn(int32)->int32
+1:Params:(int32)
+0:Int,10:int32
+""".strip()
+
+#Types:function
+def test_checker6():
+    assert str(ArrowParser().parse("print_int32(0)")) == '''
+1:Stmts:unit
+2:Call:unit
+0:Symbol,print_int32:fn(int32)->unit
+1:Params:(int32)
+0:Int,0:int32
+'''.strip()
