@@ -6,15 +6,17 @@ import betterast
 def parse_node(node):
     return string.split(node.label, ',')
 
+
 def append_type(type_obj, node):
     node_append(node, str(type_obj))
     return type_obj
 
+
 def node_append(node, label):
-    node.label.append(":%s" % label)
+    node.label += ":%s" % label
+
 
 class ArrowTypechecker:
-
     def __init__(self, ast):
         self.scope_stack = [dict()]
         self.enclosing_funcdef = list()
@@ -31,6 +33,15 @@ class ArrowTypechecker:
             "string": Type("string")
         }
 
+        self.scope_stack[0].update({
+            "print_int32": FuncType((self.prims["int32"],), self.prims["unit"]),
+            "print_uint32": FuncType((self.prims["uint32"],), self.prims["unit"]),
+            "print_int8": FuncType((self.prims["int8"],), self.prims["unit"]),
+            "print_uint8": FuncType((self.prims["uint8"],), self.prims["unit"]),
+            "print_float32": FuncType((self.prims["float32"],), self.prims["unit"]),
+            "print": FuncType((self.prims["string"],), self.prims["unit"])
+        })
+
         self.num_types = frozenset((
             self.prims["int32"],
             self.prims["uint32"],
@@ -42,6 +53,10 @@ class ArrowTypechecker:
         self.cmp_ops = frozenset(("<", "<=", "==", "!=", ">=", ">"))
         self.arith_ops = frozenset(("+", "-", "*", "/", "%"))
 
+    def typecheck(self):
+        self.tc_Stmts(self.ast)
+        return self.ast
+
     def push_scope(self):
         self.scope_stack.append(dict())
 
@@ -51,7 +66,7 @@ class ArrowTypechecker:
     def add_symbol(self, sym_name, sym_type):
         self.scope_stack[-1].update({sym_name: sym_type})
 
-    def typecheck(self, node):
+    def typecheck_node(self, node):
         node_name = parse_node(node)[0]
 
         if node_name in self.cmp_ops:
@@ -61,10 +76,8 @@ class ArrowTypechecker:
         else:
             return getattr(self, "tc_" + node_name)(node)
 
-
-
     def typecheck_child(self, node, child_num):
-        return self.typecheck(node.children[child_num])
+        return self.typecheck_node(node.children[child_num])
 
     def is_undef(self, name):
         if name not in self.scope_stack[-1]:
@@ -111,7 +124,7 @@ class ArrowTypechecker:
 
     def tc_Stmts(self, node):
         for child in node.children:
-            if self.typecheck(child) != self.prims["unit"]:
+            if self.typecheck_node(child) != self.prims["unit"]:
                 raise TypecheckError
 
         return append_type(self.prims["unit"], node)
@@ -220,7 +233,7 @@ class ArrowTypechecker:
             expr_type = self.typecheck_child(node, 1)
             if name_type == expr_type:
                 append_type(name_type, node.children[0])
-                return append_type(self.prims["unit"])
+                return append_type(self.prims["unit"], node)
             else:
                 raise TypecheckError
         else:
@@ -260,7 +273,7 @@ class ArrowTypechecker:
 
     def tc_DeclExpr(self, node):
         if len(node.children) != 0:
-            if self.typecheck(node.children[0]) == self.prims["unit"]:
+            if self.typecheck_node(node.children[0]) == self.prims["unit"]:
                 return append_type(self.prims["unit"], node)
             else:
                 raise TypecheckError
@@ -269,7 +282,7 @@ class ArrowTypechecker:
 
     def tc_UpdateExpr(self, node):
         if len(node.children) != 0:
-            if self.typecheck(node.children[0]) == self.prims["unit"]:
+            if self.typecheck_node(node.children[0]) == self.prims["unit"]:
                 return append_type(self.prims["unit"], node)
             else:
                 raise TypecheckError
@@ -290,7 +303,7 @@ class ArrowTypechecker:
         update_type = self.typecheck_child(node, 2)
         block_type = self.typecheck_child(node, 3)
 
-        if decl_type == update_type == block_type == self.prims["unit"]\
+        if decl_type == update_type == block_type == self.prims["unit"] \
                 and bool_type == self.prims["boolean"]:
 
             self.pop_scope()
@@ -302,7 +315,7 @@ class ArrowTypechecker:
         self.push_scope()
 
         for child in node.children:
-            if self.typecheck(child) != self.prims["unit"]:
+            if self.typecheck_node(child) != self.prims["unit"]:
                 raise TypecheckError
 
         self.pop_scope()
@@ -311,10 +324,9 @@ class ArrowTypechecker:
     def tc_Params(self, node):
         type_list = list()
         for child in node.children:
-            type_list.append(self.typecheck(child))
+            type_list.append(self.typecheck_node(child))
 
         return append_type(tuple(type_list), node)
-
 
     def tc_Call(self, node):
         func_name = parse_node(node.children[0])[0]
@@ -328,23 +340,24 @@ class ArrowTypechecker:
             param_types = self.tc_Params(node.children[1])
             if param_types == func_type.params:
                 append_type(func_type, node.children[0])
-                append_type(param_types, node.children[1])
                 return append_type(func_type.return_type, node)
             else:
                 raise TypecheckError
         else:
             raise TypecheckError
 
-
-
     def tc_Cast(self, node, num_type):
         if len(node.children[1].children) == 1:
-            param_type = self.tc_Params(node.children[1])
-            if param_type in self.num_types:
-                cast_type = FuncType()
-
-
-
+            param_type = self.tc_Params(node.children[1])  # singleton tuple
+            if param_type[0] in self.num_types:
+                cast_type = FuncType(param_type, num_type)
+                append_type(cast_type, node.children[0])
+                node.label = "Cast"
+                return append_type(cast_type, node)
+            else:
+                raise TypecheckError
+        else:
+            raise TypecheckError
 
     def tc_Cmp(self, node):
         type1, type2 = self.typecheck_child(node, 0), self.typecheck_child(node, 1)
@@ -359,10 +372,9 @@ class ArrowTypechecker:
             raise TypecheckError
 
     def tc_Negate(self, node):
-        type_obj = self.typecheck(node.children[0])
+        type_obj = self.typecheck_node(node.children[0])
         if type_obj in self.num_types:
             return append_type(type_obj, node)
-
 
     def tc_Error(self, node):
         pass
@@ -384,6 +396,9 @@ class Type:
 
     def __str__(self):
         return self.name
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 class SizedType(Type):
@@ -426,20 +441,3 @@ class FuncType(Type):
 
     def __str__(self):
         return "fn({!s})->{}".format(tuple(self.params), self.return_type)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

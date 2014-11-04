@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import os
 import sys
 import getopt
 
 from pr03.arrowlang_parser import ArrowParser
+from pr03.arrowlang_typechecker import ArrowTypechecker, TypecheckError
 
 usage_message = 'Usage: pr03 -A -o [output] [input...]'
 
@@ -51,9 +51,9 @@ def usage(code=None):
 
 def main(argv):
 
-    short_opts = 'ho:A'
+    short_opts = 'ho:AT'
     long_opts = [
-        'help', 'output=', 'ast'
+        'help', 'output=', 'ast', 'typed-ast'
     ]
 
     try:
@@ -64,26 +64,27 @@ def main(argv):
 
     output = None
     ast = False
+    typecheck = False
     inputs = args
+    if not inputs:
+        log("You must supply some inputs")
+        usage(1)
+
     for opt, arg in opts:
         if opt in ('-h', '--help',):
             usage()
         elif opt in ('-o', '--output',):
             output = arg
         elif opt in ('-A', '--ast'):
-            ast = True
+            print_ast(inputs, output)
+        elif opt in ('-T', '--typed-ast'):
+            print_typed_ast(inputs, output)
         else:
             log("Unkown option", opt)
             usage(1)
 
-    if not ast:
-        log("For this version of arrowc (pr03) you can only use the -A or --ast option")
-        usage(1)
 
-    if not inputs:
-        log("You must supply some inputs")
-        usage(1)
-
+def print_ast(inputs, output):
     ast = ""
     for input_name in inputs:
         try:
@@ -92,6 +93,7 @@ def main(argv):
                 try:
                     #al_parser = ArrowParser()
                     ast += str(ArrowParser().parse(program)) + '\n'
+
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))
                     sys.exit(1)
@@ -104,6 +106,34 @@ def main(argv):
             out.write(ast)
     else:
         sys.stdout.write(ast)
+
+
+def print_typed_ast(inputs, output):
+    typed_ast = ""
+    for input_name in inputs:
+        try:
+            with open(input_name, 'r') as input_file:
+                program = input_file.read()
+                try:
+                    ast = ArrowParser().parse(program)
+                    typed_ast += str(ArrowTypechecker(ast).typecheck()) + '\n'
+                except SyntaxError, e:
+                    log("Error in %s: %s" % (input_name, e))
+                    sys.exit(1)
+                except TypecheckError, e:
+                    log("Error typing %s" % input_name)
+        except IOError:
+            log("Error reading file: " + input_name)
+            sys.exit(1)
+
+    if output:
+        with open(output, 'w') as out:
+            out.write(typed_ast)
+    else:
+        sys.stdout.write(typed_ast)
+
+
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
