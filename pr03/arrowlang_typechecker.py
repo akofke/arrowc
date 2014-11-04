@@ -118,7 +118,7 @@ class ArrowTypechecker:
         sym_type = self.lookup_symbol(sym)
 
         if sym_type is None:
-            raise TypecheckError
+            raise TypecheckError, ""
 
         return append_type(sym_type, node)
 
