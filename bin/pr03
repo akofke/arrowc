@@ -95,7 +95,7 @@ def print_ast(inputs, output):
                     ast += str(ArrowParser().parse(program)) + '\n'
 
                 except SyntaxError, e:
-                    log("Error in %s: %s" % (input_name, e))
+                    log("Error parsing %s: %s" % (input_name, e))
                     sys.exit(1)
         except IOError:
             log("Error reading file: " + input_name)
@@ -121,7 +121,7 @@ def print_typed_ast(inputs, output):
                     log("Error in %s: %s" % (input_name, e))
                     sys.exit(1)
                 except TypecheckError, e:
-                    log("Error typing %s" % input_name)
+                    log("Error typing %s: \n%s" % (input_name, e))
         except IOError:
             log("Error reading file: " + input_name)
             sys.exit(1)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import string
 
+
 def parse_node(node):
     """
     returns a list of the words in the node, split around ','.
@@ -20,18 +21,7 @@ def append_type(type_obj, node):
     :return: The given Type object
     """
     node.label += ":%s" % str(type_obj)
-    # node_append(node, str(type_obj))
     return type_obj
-
-
-# def node_append(node, label):
-#     """
-#
-#     :param node:
-#     :param label:
-#     :return:
-#     """
-#     node.label += ":%s" % label
 
 
 class ArrowTypechecker:
@@ -91,26 +81,6 @@ class ArrowTypechecker:
         self.tc_Stmts(self.ast)
         return self.ast
 
-    def push_scope(self):
-        """
-        Appends a new scope dictionary to the top of the stack.
-        """
-        self.scope_stack.append(dict())
-
-    def pop_scope(self):
-        """
-        Removes a scope from the top of the stack
-        """
-        self.scope_stack.pop()
-
-    def add_symbol(self, sym_name, sym_type):
-        """
-        Adds the symbol name and type to the current active scope.
-        :param sym_name: The string name of the symbol
-        :param sym_type: The Type of the symbol.
-        """
-        self.scope_stack[-1].update({sym_name: sym_type})
-
     def typecheck_node(self, node):
         """
         Runs the correct typechecking method for the given node. If the node name is a comparison or
@@ -135,6 +105,26 @@ class ArrowTypechecker:
         Runs the typecheck_node method on the node's child with the given index in the child list.
         """
         return self.typecheck_node(node.children[child_num])
+
+    def push_scope(self):
+        """
+        Appends a new scope dictionary to the top of the stack.
+        """
+        self.scope_stack.append(dict())
+
+    def pop_scope(self):
+        """
+        Removes a scope from the top of the stack
+        """
+        self.scope_stack.pop()
+
+    def add_symbol(self, sym_name, sym_type):
+        """
+        Adds the symbol name and type to the current active scope.
+        :param sym_name: The string name of the symbol
+        :param sym_type: The Type of the symbol.
+        """
+        self.scope_stack[-1].update({sym_name: sym_type})
 
     def is_undef(self, name):
         """
@@ -166,6 +156,8 @@ class ArrowTypechecker:
                 type_obj = gamma[sym]
 
         return type_obj
+
+    ######################################################################
 
     def tc_Int(self, node):
         return append_type(self.prims["int32"], node)
@@ -205,7 +197,7 @@ class ArrowTypechecker:
         return append_type(tuple(type_list), node)
 
     def tc_ParamDecl(self, node):
-        name = parse_node(node.children[0])[0]
+        name = parse_node(node.children[0])[1]
         if self.is_undef(name):
             asserted_type = self.tc_Type(node.children[1])
             self.add_symbol(name, asserted_type)
@@ -217,7 +209,7 @@ class ArrowTypechecker:
         return append_type(self.typecheck_child(node, 0), node)
 
     def tc_FuncDef(self, node):
-        name = parse_node(node.children[0])[0]
+        name = parse_node(node.children[0])[1]
         if self.is_undef(name):
             self.push_scope()
 
@@ -240,7 +232,7 @@ class ArrowTypechecker:
             raise TypecheckError("At '%s', name '%s' is redefined in same scope" % (node.label, name))
 
     def tc_Decl(self, node):
-        name = parse_node(node.children[0])[0]
+        name = parse_node(node.children[0])[1]
 
         if self.is_undef(name):
             declared_type = self.tc_Type(node.children[1])
@@ -259,7 +251,7 @@ class ArrowTypechecker:
             raise TypecheckError("At '%s, name '%s' is redefined in same scope" % (node.label, name))
 
     def tc_ShortDecl(self, node):
-        name = parse_node(node.children[0])[0]
+        name = parse_node(node.children[0])[1]
 
         if self.is_undef(name):
             expr_type = self.typecheck_child(node, 1)
@@ -303,7 +295,7 @@ class ArrowTypechecker:
             raise TypecheckError("At '%s', expected 'boolean' but got '%s'" % (node.label, child_type.name))
 
     def tc_AssignStmt(self, node):
-        name = parse_node(node.children[0])[0]
+        name = parse_node(node.children[0])[1]
         name_type = self.lookup_symbol(name)
 
         if name_type is not None:
@@ -337,72 +329,85 @@ class ArrowTypechecker:
 
     def tc_If(self, node):
         condition_type = self.typecheck_child(node, 0)
-        then_type = self.typecheck_child(node, 1)
-        else_type = self.typecheck_child(node, 2)
+        if condition_type != self.prims["boolean"]:
+            raise TypecheckError("At 'If', condition expected type is 'boolean' but got '%s'" % condition_type.name)
 
-        if condition_type == self.prims["boolean"] and then_type == else_type == self.prims["unit"]:
-            return append_type(self.prims["unit"], node)
-        else:
-            raise TypecheckError(
-                "At 'If', expected 'boolean', 'unit', 'unit' but got '%s', '%s', '%s'"
-                % (condition_type.name, then_type.name, else_type.name)
-            )
+        then_type = self.typecheck_child(node, 1)
+        if then_type != self.prims["unit"]:
+            raise TypecheckError("At 'If', then-block expected type is 'unit' but got '%s'" % then_type.name)
+
+        else_type = self.typecheck_child(node, 2)
+        if else_type != self.prims["unit"]:
+            raise TypecheckError("At 'If', elseif statement expected type is 'unit' but got '%s'" % else_type.name)
+
+        return append_type(self.prims["unit"], node)
 
     def tc_ElseIf(self, node):
         if len(node.children) != 0:
-            if self.typecheck_child(node, 0) == self.prims["unit"]:
+            child_type = self.typecheck_child(node, 0)
+            if child_type == self.prims["unit"]:
                 return append_type("unit", node)
             else:
-                raise TypecheckError
+                raise TypecheckError("At '%s', expected 'unit' but got '%s'" % (node.label, child_type.name))
         else:
             return append_type(self.prims["unit"], node)
 
     def tc_DeclExpr(self, node):
         if len(node.children) != 0:
-            if self.typecheck_node(node.children[0]) == self.prims["unit"]:
-                return append_type(self.prims["unit"], node)
+            child_type = self.typecheck_child(node, 0)
+            if child_type == self.prims["unit"]:
+                return append_type("unit", node)
             else:
-                raise TypecheckError
+                raise TypecheckError("At '%s', expected 'unit' but got '%s'" % (node.label, child_type.name))
         else:
             return append_type(self.prims["unit"], node)
 
     def tc_UpdateExpr(self, node):
         if len(node.children) != 0:
-            if self.typecheck_node(node.children[0]) == self.prims["unit"]:
-                return append_type(self.prims["unit"], node)
+            child_type = self.typecheck_child(node, 0)
+            if child_type == self.prims["unit"]:
+                return append_type("unit", node)
             else:
-                raise TypecheckError
+                raise TypecheckError("At '%s', expected 'unit' but got '%s'" % (node.label, child_type.name))
         else:
             return append_type(self.prims["unit"], node)
 
     def tc_BooleanExpr(self, node):
-        if self.typecheck_child(node, 0) == self.prims["boolean"]:
+        child_type = self.typecheck_child(node, 0)
+        if child_type == self.prims["boolean"]:
             return append_type(self.prims["boolean"], node)
         else:
-            raise TypecheckError
+            raise TypecheckError("At '%s', expected 'boolean' but got '%s'" % (node.label, child_type.name))
 
     def tc_For(self, node):
         self.push_scope()
 
         decl_type = self.typecheck_child(node, 0)
+        if decl_type != self.prims["unit"]:
+            raise TypecheckError("At 'For', expected type 'unit' for declaration but got '%s'" % decl_type)
+
         bool_type = self.typecheck_child(node, 1)
+        if bool_type != self.prims["boolean"]:
+            raise TypecheckError("At 'For', expected type 'boolean' for condition but got '%s'" % decl_type)
+
         update_type = self.typecheck_child(node, 2)
+        if update_type != self.prims["unit"]:
+            raise TypecheckError("At 'For', expected type 'unit' for update but got '%s'" % decl_type)
+
         block_type = self.typecheck_child(node, 3)
+        if block_type != self.prims["unit"]:
+            raise TypecheckError("At 'For', expected type 'unit' for block but got '%s'" % decl_type)
 
-        if decl_type == update_type == block_type == self.prims["unit"] \
-                and bool_type == self.prims["boolean"]:
-
-            self.pop_scope()
-            return append_type(self.prims["unit"], node)
-        else:
-            raise TypecheckError
+        self.pop_scope()
+        return append_type(self.prims["unit"], node)
 
     def tc_Block(self, node):
         self.push_scope()
 
         for child in node.children:
-            if self.typecheck_node(child) != self.prims["unit"]:
-                raise TypecheckError
+            child_type = self.typecheck_node(child)
+            if child_type != self.prims["unit"]:
+                raise TypecheckError("At 'Block', expected 'unit' but got %s" % child_type.name)
 
         self.pop_scope()
         return append_type(self.prims["unit"], node)
@@ -415,22 +420,25 @@ class ArrowTypechecker:
         return append_type(tuple(type_list), node)
 
     def tc_Call(self, node):
-        func_name = parse_node(node.children[0])[0]
+        func_name = parse_node(node.children[0])[1]
         func_type = self.lookup_symbol(func_name)
 
         for t in self.num_types:
             if func_name == t.name:
                 return self.tc_Cast(node, t)
 
-        if func_type is not None:
+        if func_type is not None and func_type is FuncType:
             param_types = self.tc_Params(node.children[1])
             if param_types == func_type.params:
                 append_type(func_type, node.children[0])
                 return append_type(func_type.return_type, node)
             else:
-                raise TypecheckError
+                raise TypecheckError(
+                    "Given parameters %s do not match parameters %s for function %s"
+                    % (param_types, func_type.params, func_name)
+                )
         else:
-            raise TypecheckError
+            raise TypecheckError("Function '%s' is not defined in scope" % func_name)
 
     def tc_Cast(self, node, num_type):
         if len(node.children[1].children) == 1:
@@ -441,26 +449,47 @@ class ArrowTypechecker:
                 node.label = "Cast"
                 return append_type(cast_type, node)
             else:
-                raise TypecheckError
+                raise TypecheckError("Cannot cast '%s' to '%s'" % (param_type[0], num_type))
         else:
-            raise TypecheckError
+            raise TypecheckError(
+                "Cast '%s' requires one parameter but got %s"
+                % num_type, len(node.children[1].children)
+            )
 
     def tc_Cmp(self, node):
-        type1, type2 = self.typecheck_child(node, 0), self.typecheck_child(node, 1)
-        if type1 == type2 and type1 in self.num_types:
-            return append_type(type1, node)
+        type1 = self.typecheck_child(node, 0)
+        if type1 not in self.num_types:
+            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type1))
 
-    def tc_ArithOp(self, node):
-        type1, type2 = self.typecheck_child(node, 0), self.typecheck_child(node, 1)
-        if type1 == type2 and type1 in self.num_types:
+        type2 = self.typecheck_child(node, 1)
+        if type2 not in self.num_types:
+            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type2))
+
+        if type1 == type2:
             return append_type(type1, node)
         else:
-            raise TypecheckError
+            raise TypecheckError("Cannot compare '%s' to '%s'" % (type1, type2))
+
+    def tc_ArithOp(self, node):
+        type1 = self.typecheck_child(node, 0)
+        if type1 not in self.num_types:
+            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type1))
+
+        type2 = self.typecheck_child(node, 1)
+        if type2 not in self.num_types:
+            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type2))
+
+        if type1 == type2:
+            return append_type(type1, node)
+        else:
+            raise TypecheckError("Cannot perform operation '%s' on '%s' and '%s'" % (node.label, type1, type2))
 
     def tc_Negate(self, node):
-        type_obj = self.typecheck_node(node.children[0])
-        if type_obj in self.num_types:
-            return append_type(type_obj, node)
+        child_type = self.typecheck_node(node.children[0])
+        if child_type in self.num_types:
+            return append_type(child_type, node)
+        else:
+            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, child_type))
 
     def tc_Error(self, node):
         pass
@@ -520,7 +549,8 @@ class FuncType(Type):
 
     def __eq__(self, other):
         if type(other) is type(self):
-            return self.name == other.name and self.params == other.params and self.return_type == other.return_type
+            return self.name == other.name \
+                and tuple(self.params) == tuple(other.params) and self.return_type == other.return_type
         else:
             return False
 
