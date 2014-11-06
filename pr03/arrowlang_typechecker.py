@@ -205,9 +205,10 @@ class ArrowTypechecker:
     def tc_ParamDecl(self, node):
         name = parse_node(node.children[0])[1]
         if self.is_undef(name):
-            asserted_type = self.tc_Type(node.children[1])
-            self.add_symbol(name, asserted_type)
-            return append_type(asserted_type, node.children[0])
+            declared_type = self.tc_Type(node.children[1])
+            self.add_symbol(name, declared_type)
+            append_type(declared_type, node.children[0])
+            return append_type(declared_type, node)
         else:
             raise TypecheckError("At '%s', parameter '%s' is already defined in scope" % (node.label, name))
 
@@ -232,7 +233,9 @@ class ArrowTypechecker:
 
             self.pop_scope()
             self.enclosing_funcdef.pop()
+
             self.add_symbol(name, func_type)
+            append_type(func_type, node.children[0])
             return append_type(self.prims["unit"], node)
         else:
             raise TypecheckError("At '%s', name '%s' is redefined in same scope" % (node.label, name))
