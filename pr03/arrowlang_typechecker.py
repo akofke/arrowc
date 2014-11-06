@@ -389,8 +389,8 @@ class ArrowTypechecker:
         self.push_scope()
 
         decl_type = self.typecheck_child(node, 0)
-        #if decl_type != self.prims["unit"]:
-         #   raise TypecheckError("At 'For', expected type 'unit' for declaration but got '%s'" % decl_type)
+        if decl_type != self.prims["unit"]:
+            raise TypecheckError("At 'For', expected type 'unit' for declaration but got '%s'" % decl_type)
 
         bool_type = self.typecheck_child(node, 1)
         if bool_type != self.prims["boolean"]:
@@ -472,7 +472,7 @@ class ArrowTypechecker:
             raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type2))
 
         if type1 == type2:
-            return append_type(type1, node)
+            return append_type(self.prims["boolean"], node)
         else:
             raise TypecheckError("Cannot compare '%s' to '%s'" % (type1, type2))
 
