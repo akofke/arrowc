@@ -20,8 +20,14 @@ def append_type(type_obj, node):
     :param node: The Node object to be labelled with the type
     :return: The given Type object
     """
-    node.label += ":%s" % str(type_obj)
+    node.label += ":{!s}".format(type_obj)
     return type_obj
+
+
+def append_typeList(type_list, node):
+    list_str = ', '.join(map(str, type_list))
+    node.label += ":({})".format(list_str)
+    return type_list
 
 
 class ArrowTypechecker:
@@ -194,7 +200,7 @@ class ArrowTypechecker:
         for child in node.children:
             type_list.append(self.tc_ParamDecl(child))
 
-        return append_type(tuple(type_list), node)
+        return append_typeList(tuple(type_list), node)
 
     def tc_ParamDecl(self, node):
         name = parse_node(node.children[0])[1]
@@ -417,7 +423,7 @@ class ArrowTypechecker:
         for child in node.children:
             type_list.append(self.typecheck_node(child))
 
-        return append_type(tuple(type_list), node)
+        return append_typeList(tuple(type_list), node)
 
     def tc_Call(self, node):
         func_name = parse_node(node.children[0])[1]
@@ -427,15 +433,15 @@ class ArrowTypechecker:
             if func_name == t.name:
                 return self.tc_Cast(node, t)
 
-        if func_type is not None and func_type is FuncType:
+        if func_type is not None and isinstance(func_type, FuncType):
             param_types = self.tc_Params(node.children[1])
             if param_types == func_type.params:
                 append_type(func_type, node.children[0])
                 return append_type(func_type.return_type, node)
             else:
                 raise TypecheckError(
-                    "Given parameters %s do not match parameters %s for function %s"
-                    % (param_types, func_type.params, func_name)
+                    "Given parameters {!s} do not match parameters {!s} for function {}"
+                    .format(param_types, func_type.params, func_name)
                 )
         else:
             raise TypecheckError("Function '%s' is not defined in scope" % func_name)
@@ -473,23 +479,24 @@ class ArrowTypechecker:
     def tc_ArithOp(self, node):
         type1 = self.typecheck_child(node, 0)
         if type1 not in self.num_types:
-            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type1))
+            raise TypecheckError("Expected one of '{!s}' but got '{!s}'".format(self.num_types, type1))
 
         type2 = self.typecheck_child(node, 1)
         if type2 not in self.num_types:
-            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, type2))
+            raise TypecheckError("Expected one of '{!s}' but got '{!s}'".format(self.num_types, type2))
 
         if type1 == type2:
             return append_type(type1, node)
         else:
-            raise TypecheckError("Cannot perform operation '%s' on '%s' and '%s'" % (node.label, type1, type2))
+            raise TypecheckError(
+                "Cannot perform operation '{0:s}' on '{!s}' and '{!s}'".format(node.label, type1, type2))
 
     def tc_Negate(self, node):
         child_type = self.typecheck_node(node.children[0])
         if child_type in self.num_types:
             return append_type(child_type, node)
         else:
-            raise TypecheckError("Expected one of '%s' but got '%s'" % (self.num_types, child_type))
+            raise TypecheckError("Expected one of '{!s}' but got '{!s}'".format(self.num_types, child_type))
 
     def tc_Error(self, node):
         pass
@@ -543,7 +550,7 @@ class IntType(Type):
 
 class FuncType(Type):
     def __init__(self, params, return_type):
-        Type.__init__(self, "fn({!s})->{}".format(tuple(params), return_type))
+        Type.__init__(self, "fn({})->{!s}".format(', '.join(map(str, params)), return_type))
         self.params = params
         self.return_type = return_type
 
