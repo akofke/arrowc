@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pr03.arrowlang_parser import ArrowParser
+from pr03.arrowlang_typechecker import ArrowTypechecker
 from nose.tools import raises
 
 
@@ -283,7 +284,7 @@ if x == y && (y == z || z == c) {
 #Nodes:Stmts, call, symbol, Params, Int
 #Types:Unit, int32
 def test_checker1():
-    assert str(ArrowParser().parse("print_int32(0)")) == '''
+    assert str(ArrowTypechecker(ArrowParser().parse("print_int32(0)")).typecheck()) == '''
 1:Stmts:unit
 2:Call:unit
 0:Symbol,print_int32:fn(int32)->unit
@@ -293,7 +294,7 @@ def test_checker1():
 
 #Nodes:ShortDecl, Name, Arith, Negate
 def test_checker2():
-    assert str(ArrowParser().parse("var x = 1 * 2 + 3 * (-1 + 7) / 2")) == '''
+    assert str(ArrowTypechecker(ArrowParser().parse("var x = 1 * 2 + 3 * (-1 + 7) / 2")).typecheck()) == '''
 1:Stmts:unit
 2:ShortDecl:unit
 0:Name,x:int32
@@ -314,7 +315,7 @@ def test_checker2():
 #Nodes:Decl, Type, TypeName, Float
 #Types:float32
 def test_checker3():
-    assert str(ArrowParser().parse("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")) == '''
+    assert str(ArrowTypechecker(ArrowParser().parse("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")).typecheck()) == '''
 1:Stmts:unit
 3:Decl:unit
 0:Name,x:float32
@@ -337,14 +338,14 @@ def test_checker3():
 #Nodes:If, BooleanExpr, Boolean, ElseIf Block, AssignStmt, BooleanExpr
 #Types:boolean
 def test_checker4():
-    assert str(ArrowParser().parse('''
+    assert str(ArrowTypechecker(ArrowParser().parse('''
 var x = 0
 if true {
   x = 1
 } else {
   x = 2
 }
-}''')) == """
+}''')).typecheck()) == """
 2:Stmts:unit
 2:ShortDecl:unit
 0:Name,x:int32
@@ -365,7 +366,7 @@ if true {
 
 #Nodes:FuncDef, ParamsDecls, ParamDecl, ReturnType, Return, BlockStmt For, UpdateExpr, DeclExpr, cmp
 def test_checker5():
-    assert str(ArrowParser().parse('''
+    assert str(ArrowTypechecker(ArrowParser().parse('''
 func fib(x int32) int32 {
   if x <= 0 {
     return 0
@@ -380,7 +381,7 @@ func fib(x int32) int32 {
   return cur
 }
 print_int32(fib(10))
-}''')) == """
+}''')).typecheck()) == """
 2:Stmts:unit
 4:FuncDef:unit
 0:Name,fib:fn(int32)->int32
@@ -448,7 +449,7 @@ print_int32(fib(10))
 
 #Types:function
 def test_checker6():
-    assert str(ArrowParser().parse("print_int32(0)")) == '''
+    assert str(ArrowTypechecker(ArrowParser().parse("print_int32(0)")).typecheck()) == '''
 1:Stmts:unit
 2:Call:unit
 0:Symbol,print_int32:fn(int32)->unit
