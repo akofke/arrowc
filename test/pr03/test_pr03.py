@@ -459,7 +459,7 @@ def test_checker6():
 
 #Tests casting
 def test_checker7():
-    assert str(ArrowTypechecker(ArrowParser().parse("var x float32 = float32(1)"))) == '''
+    assert str(ArrowTypechecker(ArrowParser().parse("var x float32 = float32(1)")).typecheck()) == '''
 1:Stmts:unit
 3:Decl:unit
 0:Name,x:float32
