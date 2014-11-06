@@ -414,7 +414,7 @@ print_int32(fib(10))
 2:ShortDecl:unit
 0:Name,i:int32
 0:Int,1:int32
-1:BooleanExpr:unit
+1:BooleanExpr:boolean
 2:<:boolean
 0:Symbol,i:int32
 0:Symbol,x:int32
