@@ -345,7 +345,7 @@ if true {
 } else {
   x = 2
 }
-}''')).typecheck()) == """
+''')).typecheck()) == """
 2:Stmts:unit
 2:ShortDecl:unit
 0:Name,x:int32
@@ -381,7 +381,7 @@ func fib(x int32) int32 {
   return cur
 }
 print_int32(fib(10))
-}''')).typecheck()) == """
+''')).typecheck()) == """
 2:Stmts:unit
 4:FuncDef:unit
 0:Name,fib:fn(int32)->int32
