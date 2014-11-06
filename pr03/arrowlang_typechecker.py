@@ -326,7 +326,7 @@ class ArrowTypechecker:
             returns_type = self.prims["unit"]
 
         if returns_type == expected_return:
-            return append_type(returns_type, node)
+            return append_type(self.prims["unit"], node)
         else:
             raise TypecheckError(
                 "Return type '%s' does not agree with expected return type '%s'"
