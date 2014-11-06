@@ -456,3 +456,17 @@ def test_checker6():
 1:Params:(int32)
 0:Int,0:int32
 '''.strip()
+
+#Tests casting
+def test_checker7():
+    assert str(ArrowTypechecker(ArrowParser().parse("var x float32 = float32(1)"))) == '''
+1:Stmts:unit
+3:Decl:unit
+0:Name,x:float32
+1:Type:float32
+0:TypeName,float32:float32
+2:Cast:float32
+0:Symbol,float32:fn(int32)->float32
+1:Params:(int32)
+0:Int,1:int32
+'''.strip()

@@ -459,10 +459,10 @@ class ArrowTypechecker:
         if len(node.children[1].children) == 1:
             param_type = self.tc_Params(node.children[1])  # singleton tuple
             if param_type[0] in self.num_types:
-                cast_type = FuncType(param_type, num_type)
-                append_type(cast_type, node.children[0])
+                cast_func_type = FuncType(param_type, num_type)
+                append_type(cast_func_type, node.children[0])
                 node.label = "Cast"
-                return append_type(cast_type, node)
+                return append_type(num_type, node)
             else:
                 raise TypecheckError("Cannot cast '{!s}' to '{!s}'".format(param_type[0], num_type))
         else:
