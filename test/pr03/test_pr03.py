@@ -323,16 +323,16 @@ def test_checker3():
 0:TypeName,float32:float32
 2:+:float32
 2:*:float32
-0:Float,1:float32
-0:Float,2:float32
+0:Float,1.0:float32
+0:Float,2.0:float32
 2:/:float32
 2:*:float32
-0:Float,3:float32
+0:Float,3.0:float32
 2:+:float32
 1:Negate:float32
-0:Float,1:float32
-0:Float,7:float32
-0:Float,2:float32
+0:Float,1.0:float32
+0:Float,7.0:float32
+0:Float,2.0:float32
 '''.strip()
 
 #Nodes:If, BooleanExpr, Boolean, ElseIf Block, AssignStmt, BooleanExpr
