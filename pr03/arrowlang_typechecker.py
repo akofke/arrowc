@@ -595,7 +595,7 @@ class FuncType(Type):
     """
     Function type that has a list of types as params and a single return type.
     """
-    
+
     def __init__(self, params, return_type):
         Type.__init__(self, "fn({})->{!s}".format(', '.join(map(str, params)), return_type))
         self.params = params

@@ -278,6 +278,7 @@ if x == y && (y == z || z == c) {
 0:Params
 """.strip()
 
+
 #Start of Typing tests
 #A running list of every node created and type are listed. 
 
@@ -291,6 +292,7 @@ def test_checker1():
 1:Params:(int32)
 0:Int,0:int32
 '''.strip()
+
 
 #Nodes:ShortDecl, Name, Arith, Negate
 def test_checker2():
@@ -311,6 +313,7 @@ def test_checker2():
 0:Int,7:int32
 0:Int,2:int32
 '''.strip()
+
 
 #Nodes:Decl, Type, TypeName, Float
 #Types:float32
@@ -334,6 +337,7 @@ def test_checker3():
 0:Float,7.0:float32
 0:Float,2.0:float32
 '''.strip()
+
 
 #Nodes:If, BooleanExpr, Boolean, ElseIf Block, AssignStmt, BooleanExpr
 #Types:boolean
@@ -363,6 +367,7 @@ if true {
 0:Name,x:int32
 0:Int,2:int32
 """.strip()
+
 
 #Nodes:FuncDef, ParamsDecls, ParamDecl, ReturnType, Return, BlockStmt For, UpdateExpr, DeclExpr, cmp
 def test_checker5():
@@ -447,6 +452,7 @@ print_int32(fib(10))
 0:Int,10:int32
 """.strip()
 
+
 #Types:function
 def test_checker6():
     assert str(ArrowTypechecker(ArrowParser().parse("print_int32(0)")).typecheck()) == '''
@@ -456,6 +462,7 @@ def test_checker6():
 1:Params:(int32)
 0:Int,0:int32
 '''.strip()
+
 
 #Tests casting
 def test_checker7():

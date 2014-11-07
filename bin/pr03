@@ -8,22 +8,16 @@ import getopt
 from pr03.arrowlang_parser import ArrowParser
 from pr03.arrowlang_typechecker import ArrowTypechecker, TypecheckError
 
-usage_message = 'Usage: pr03 -A -o [output] [input...]'
+usage_message = 'Usage: pr03 [option] -o [output] [input...]'
 
 extended_message = '''
-Put a description of your program, pr03, here
-
-Example
-
-    Put some examples of how to use your program here
-
 Options
     -h, --help                          print this message
     -A, --ast                           stop at the AST
     -o, --output=<path>                 output path. If the -o flag is not given or blank, output is written to stdout
+    -T, typed-ast                       stop at type checked AST
 
     **Not yet implemented**
-    -T, typed-ast                       stop at type checked AST
     -I, intermediate                    stop at intermediate code generation
     -J, json-il                         like -I, but generate json
     -S, assembly                        stop at assembly generation
@@ -32,7 +26,7 @@ Options
 
 
 def log(*msgs):
-    '''log messages to stderr'''
+    """log messages to stderr"""
     for msg in msgs:
         print >>sys.stderr, msg,
     print >>sys.stderr
@@ -40,8 +34,8 @@ def log(*msgs):
 
 
 def usage(code=None):
-    '''Prints the usage and exits with an error code specified by code. If code
-    is not given it exits with error_codes['usage']'''
+    """Prints the usage and exits with an error code specified by code. If code
+    is not given it exits with error_codes['usage']"""
     log(usage_message)
     if code is None:
         log(extended_message)
@@ -76,13 +70,19 @@ def main(argv):
         elif opt in ('-o', '--output',):
             output = arg
         elif opt in ('-A', '--ast'):
-            print_ast(inputs, output)
+            ast = True
+            # print_ast(inputs, output)
         elif opt in ('-T', '--typed-ast'):
-            print_typed_ast(inputs, output)
+            typecheck = True
+            # print_typed_ast(inputs, output)
         else:
             log("Unkown option", opt)
             usage(1)
 
+    if ast:
+        print_ast(inputs, output)
+    elif typecheck:
+        print_typed_ast(inputs, output)
 
 def print_ast(inputs, output):
     ast = ""
@@ -101,7 +101,7 @@ def print_ast(inputs, output):
             log("Error reading file: " + input_name)
             sys.exit(1)
 
-    if output:
+    if output and output != "":
         with open(output, 'w') as out:
             out.write(ast)
     else:
@@ -126,7 +126,7 @@ def print_typed_ast(inputs, output):
             log("Error reading file: " + input_name)
             sys.exit(1)
 
-    if output:
+    if output and output != "":
         with open(output, 'w') as out:
             out.write(typed_ast)
     else:
