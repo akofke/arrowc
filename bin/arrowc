@@ -5,10 +5,10 @@ import os
 import sys
 import getopt
 
-from pr03.arrowlang_parser import ArrowParser
-from pr03.arrowlang_typechecker import ArrowTypechecker, TypecheckError
+from arrowc.arrowlang_parser import ArrowParser
+from arrowc.arrowlang_typechecker import ArrowTypechecker, TypecheckError
 
-usage_message = 'Usage: pr03 [option] -o [output] [input...]'
+usage_message = 'Usage: arrowc [option] -o [output] [input...]'
 
 extended_message = '''
 Options

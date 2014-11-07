@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pr03.arrowlang_parser import ArrowParser
-from pr03.arrowlang_typechecker import ArrowTypechecker
+from arrowc.arrowlang_parser import ArrowParser
+from arrowc.arrowlang_typechecker import ArrowTypechecker
 from nose.tools import raises
 
 
