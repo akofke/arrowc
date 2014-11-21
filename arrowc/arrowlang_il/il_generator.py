@@ -7,5 +7,6 @@ def init_program():
     main_func = Function()
     main_block_0 = BasicBlock()
 
+
     # ...
 

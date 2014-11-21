@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import string
-from arrowlang_types import *
+from arrowlang_types import FuncType, arrowlang_prims, library_funcs
+
 
 
 def parse_node(node):
@@ -51,25 +52,9 @@ class ArrowTypechecker:
         self.enclosing_funcdef = list()
         self.ast = ast
 
-        self.prims = {
-            "unit": SizedType("unit", 0),
-            "boolean": SizedType("boolean", 1),
-            "int32": IntType("int32", 32, True),
-            "uint32": IntType("uint32", 32, False),
-            "int8": IntType("int8", 8, True),
-            "uint8": IntType("uint32", 8, False),
-            "float32": SizedType("float32", 32),
-            "string": Type("string")
-        }
+        self.prims = arrowlang_prims
 
-        self.scope_stack[0].update({
-            "print_int32": FuncType((self.prims["int32"],), self.prims["unit"]),
-            "print_uint32": FuncType((self.prims["uint32"],), self.prims["unit"]),
-            "print_int8": FuncType((self.prims["int8"],), self.prims["unit"]),
-            "print_uint8": FuncType((self.prims["uint8"],), self.prims["unit"]),
-            "print_float32": FuncType((self.prims["float32"],), self.prims["unit"]),
-            "print": FuncType((self.prims["string"],), self.prims["unit"])
-        })
+        self.scope_stack[0].update(library_funcs)
 
         self.num_types = frozenset((
             self.prims["int32"],
@@ -323,7 +308,7 @@ class ArrowTypechecker:
             raise TypecheckError("At '{}', name '{}' is not defined".format(node.label, name))
 
     def tc_Return(self, node):
-        expected_return = self.enclosing_funcdef[-1].return_type
+        expected_return = self.enclosing_funcdef[-1].returns
 
         if len(node.children) != 0:
             returns_type = self.typecheck_child(node, 0)
@@ -439,7 +424,7 @@ class ArrowTypechecker:
             param_types = self.tc_Params(node.children[1])
             if param_types == func_type.params:
                 append_type(func_type, node.children[0])
-                return append_type(func_type.return_type, node)
+                return append_type(func_type.returns, node)
             else:
                 raise TypecheckError(
                     "Given parameters {!s} do not match parameters {!s} for function {}"
