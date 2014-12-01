@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import string
-from arrowlang_types import FuncType, arrowlang_prims, library_funcs
+from arrowlang_types import FuncType, prims, library_funcs
 
 
 
@@ -52,7 +52,7 @@ class ArrowTypechecker:
         self.enclosing_funcdef = list()
         self.ast = ast
 
-        self.prims = arrowlang_prims
+        self.prims = prims
 
         self.scope_stack[0].update(library_funcs)
 

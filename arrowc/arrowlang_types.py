@@ -72,8 +72,8 @@ class FuncType(Type):
             return False
 
 
-arrowlang_prims = {
-    "unit": SizedType("unit", 0),
+prims = {
+    "unit": Type("unit"),
     "boolean": SizedType("boolean", 1),
     "int32": IntType("int32", 32, True),
     "uint32": IntType("uint32", 32, False),
@@ -84,10 +84,10 @@ arrowlang_prims = {
 }
 
 library_funcs = {
-    "print_int32": FuncType((arrowlang_prims["int32"],), arrowlang_prims["unit"]),
-    "print_uint32": FuncType((arrowlang_prims["uint32"],), arrowlang_prims["unit"]),
-    "print_int8": FuncType((arrowlang_prims["int8"],), arrowlang_prims["unit"]),
-    "print_uint8": FuncType((arrowlang_prims["uint8"],), arrowlang_prims["unit"]),
-    "print_float32": FuncType((arrowlang_prims["float32"],), arrowlang_prims["unit"]),
-    "print": FuncType((arrowlang_prims["string"],), arrowlang_prims["unit"])
+    "print_int32": FuncType((prims["int32"],), prims["unit"]),
+    "print_uint32": FuncType((prims["uint32"],), prims["unit"]),
+    "print_int8": FuncType((prims["int8"],), prims["unit"]),
+    "print_uint8": FuncType((prims["uint8"],), prims["unit"]),
+    "print_float32": FuncType((prims["float32"],), prims["unit"]),
+    "print": FuncType((prims["string"],), prims["unit"])
 }
