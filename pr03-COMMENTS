@@ -1,0 +1,90 @@
+Grading Comments for Project 003
+
+Graded Revision: 63b2dcf17affbe4b6eb1dd61bfad3a7b76c19739
+
+Partner Id's: adk62, cym8
+
+---------------------------------
+
+Testing harness results: 231 / 266
+
+This input caused you program to fail:
+
+      "func fbup ( ) float32 { continue continue } func fbqfnkvnx ( pqoyhx float32 , bnd int32 , ito uint8 , prg int32 ) { return fwboa / "kintyegl" + - y * "tb" / - "hjulcgr" } while { break }"
+      > /home/tester/compilers/support/pr03/arrowc -A -o /tmp/tmpIbWFVc /tmp/tmp9MYf1Z
+      > export PS1="$ " && export PATH=/tmp/tmpShMAxB/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmpShMAxB/arrowc/bin/arrowc -A -o /tmp/tmpvEiOPK /tmp/tmp1oWKEL
+                                failed -- good test
+                                     recieved non-zero exit code
+                                     ('', 'Traceback (most recent call last):\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 139, in <module>\n    main(sys.argv[1:])\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 83, in main\n    print_ast(inputs, output)\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 95, in print_ast\n    ast += str(ArrowParser().parse(program)) + \'\\n\'\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 16, in parse\n    return self.al_parser.parse(input=text, lexer=self.al_lexer)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 265, in parse\n    return self.parseopt_notrack(input,lexer,debug,tracking,tokenfunc)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 971, in parseopt_notrack\n    p.callable(pslice)\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 441, in p_WhileStmt2\n    .addkid(p[3])\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 198, in __getitem__\n    if n >= 0: return self.slice[n].value\nIndexError: list index out of range\n')
+
+      "func i ( ) { while { return } }"
+      > /home/tester/compilers/support/pr03/arrowc -A -o /tmp/tmp9eRWtc /tmp/tmpsG_g4U
+      > export PS1="$ " && export PATH=/tmp/tmpShMAxB/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmpShMAxB/arrowc/bin/arrowc -A -o /tmp/tmpwxkckl /tmp/tmpVAXFp5
+                                failed -- good test
+                                     recieved non-zero exit code
+                                     ('', 'Traceback (most recent call last):\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 139, in <module>\n    main(sy
+s.argv[1:])\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 83, in main\n    print_ast(inputs, output)\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 95,
+ in print_ast\n    ast += str(ArrowParser().parse(program)) + \'\\n\'\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 16, in parse\n    ret
+urn self.al_parser.parse(input=text, lexer=self.al_lexer)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 265, in pa
+rse\n    return self.parseopt_notrack(input,lexer,debug,tracking,tokenfunc)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py
+", line 971, in parseopt_notrack\n    p.callable(pslice)\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 441, in p_WhileStmt2\n    .addkid(
+p[3])\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 198, in __getitem__\n    if n >= 0: return self.slice[n].value
+\nIndexError: list index out of range\n')
+
+      "while { return }"
+      > /home/tester/compilers/support/pr03/arrowc -A -o /tmp/tmpdI68bO /tmp/tmp26enUd
+      > export PS1="$ " && export PATH=/tmp/tmpShMAxB/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmpShMAxB/arrowc/bin/arrowc -A -o /tmp/tmpx_1cv9 /tmp/tmpTGFGJa
+                                failed -- good test
+                                     recieved non-zero exit code
+                                     ('', 'Traceback (most recent call last):\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 139, in <module>\n    main(sys.argv[1:])\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 83, in main\n    print_ast(inputs, output)\n  File "/tmp/tmpShMAxB/arrowc/bin/arrowc", line 95, in print_ast\n    ast += str(ArrowParser().parse(program)) + \'\\n\'\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 16, in parse\n    return self.al_parser.parse(input=text, lexer=self.al_lexer)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 265, in parse\n    return self.parseopt_notrack(input,lexer,debug,tracking,tokenfunc)\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 971, in parseopt_notrack\n    p.callable(pslice)\n  File "/tmp/tmpShMAxB/arrowc/arrowc/arrowlang_parser.py", line 441, in p_WhileStmt2\n    .addkid(p[3])\n  File "/tmp/tmpShMAxB/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 198, in __getitem__\n    if n >= 0: return self.slice[n].value\nIndexError: list index out of range\n')
+
+Incorrectly labeled an UpdateExpr an AssignStmt:
+
+      "for ; ; wt = - 3.40832869766 / apcmbq * -491 - ( - "hlmrgkgf" ) { return - "rslfphjfw" / xdqyjc / tkbmfwko }"
+      > /home/tester/compilers/support/pr03/arrowc -A -o /tmp/tmpbnpXhc /tmp/tmp6SwUKD
+      > export PS1="$ " && export PATH=/tmp/tmpShMAxB/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmpShMAxB/arrowc/bin/arrowc -A -o /tmp/tmpGUAW3C /tmp/tmpRLgMMY
+                                     distance -  10
+                                     difference -  0.0386847195358
+                                failed -- good test
+                                     expected "1:Stmts;4:For;0:DeclExpr;0:BooleanExpr;1:UpdateExpr;2:AssignStmt;0:Name,wt;2:-;2:*;2:/;1:Negate;0:Float,3.408;0:Symbol,apcmbq;1:Negate;0:Int,491;1:Negate;0:String,hlmrgkgf;1:Block;1:Return;2:/;2:/;1:Negate;0:String,rslfphjfw;0:Symbol,xdqyjc;0:Symbol,tkbmfwko"
+                                     got      "1:Stmts;4:For;0:DeclExpr;0:BooleanExpr;2:AssignStmt;0:Name,wt;2:-;2:*;2:/;1:Negate;0:Float,3.408;0:Symbol,apcmbq;1:Negate;0:Int,491;1:Negate;0:String,hlmrgkgf;1:Block;1:Return;2:/;2:/;1:Negate;0:String,rslfphjfw;0:Symbol,xdqyjc;0:Symbol,tkbmfwko"
+
+You incorrectly parsed this bad string:
+
+      "var x = "awefawef\\\\"""
+      > export PS1="$ " && export PATH=/tmp/tmpShMAxB/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmpShMAxB/arrowc/bin/arrowc -A -o /tmp/tmpVRXTim /tmp/tmpvK5Fvo
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+                                     1:Stmts
+                                     2:ShortDecl
+                                     0:Name,x
+                                     0:String,awefawef\\
+
+-10
+
+----------------------------------
+
+Code looks ok.
+
+-0
+
+----------------------------------
+
+Tests are a little skimpy but ok.
+
+-0
+
+----------------------------------
+
+Final Grade : 90
+Grader : Tim Henderson
+
+

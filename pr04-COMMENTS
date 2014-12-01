@@ -1,0 +1,155 @@
+Grading Comments for Project 004
+
+Graded Revision: 63b2dcf17affbe4b6eb1dd61bfad3a7b76c19739
+Revision Date: 2014-11-06
+Due Date: 2014-10-30
+Lateness Discount: 10%
+
+Partner Id's: adk62, cym8
+
+-------------------------------
+
+testing harness results: 194/347
+
+These results are slightly provisional. I had a bug in my compiler in
+incorrectly tagging BooleanExpr in For loops as unit. I am re-running now. I
+will modify this if it would significantly impact my assessment of your project.
+
+You had an out of bounds error:
+
+      "func i ( ) { while { return } }"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpIlY09n /tmp/tmpzkdN4f
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpYkVMqf /tmp/tmpERnBll
+                                failed -- good test
+                                     recieved non-zero exit code
+                                     ('', 'Traceback (most recent call last):\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 139, in <module>\n    main(sys.argv[1:])\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 85, in main\n    print_typed_ast(inputs, output)\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 118, in print_typed_ast\n    ast = ArrowParser().parse(program)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_parser.py", line 16, in parse\n    return self.al_parser.parse(input=text, lexer=self.al_lexer)\n  File "/tmp/tmp8Yju4x/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 265, in parse\n    return self.parseopt_notrack(input,lexer,debug,tracking,tokenfunc)\n  File "/tmp/tmp8Yju4x/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 971, in parseopt_notrack\n    p.callable(pslice)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_parser.py", line 441, in p_WhileStmt2\n    .addkid(p[3])\n  File "/tmp/tmp8Yju4x/arrowc/env/local/lib/python2.7/site-packages/ply/yacc.py", line 198, in __getitem__\n    if n >= 0: return self.slice[n].value\nIndexError: list index out of range\n')
+                                     1:Stmts:unit
+                                     4:FuncDef:unit
+                                     0:Name,i:fn()->unit
+                                     0:ParamDecls:()
+                                     1:ReturnType:unit
+                                     1:Type:unit
+                                     0:TypeName,unit:unit
+                                     1:Block:unit
+                                     4:For:unit
+                                     0:DeclExpr:unit
+                                     0:BooleanExpr:unit
+                                     0:UpdateExpr:unit
+                                     1:Block:unit
+                                     0:Return:unit
+
+Incorrectly taggeda unit8 as a uint32
+
+      "func hp ( azezlcoxt uint8 ) { return }"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpHCCTpl /tmp/tmpGGbwNX
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpz64qa4 /tmp/tmpW7jQyo
+                                     distance -  10
+                                     difference -  0.0430107526882
+                                failed -- good test
+                                     expected "1:Stmts:unit;4:FuncDef:unit;0:Name,hp:fn(uint8)->unit;1:ParamDecls:(uint8);2:ParamDecl:uint8;0:Name,azezlcoxt:uint8;1:Type:uint8;0:TypeName,uint8:uint8;1:ReturnType:unit;1:Type:unit;0:TypeName,unit:unit;1:Block:unit;0:Return:unit"
+                                     got      "1:Stmts:unit;4:FuncDef:unit;0:Name,hp:fn(uint32)->unit;1:ParamDecls:(uint32);2:ParamDecl:uint32;0:Name,azezlcoxt:uint32;1:Type:uint32;0:TypeName,uint8:uint8;1:ReturnType:unit;1:Type:unit;0:TypeName,unit:unit;1:Block:unit;0:Return:unit"
+
+Another exception:
+
+      "for ; true; {
+          break
+      }"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpixwmYI /tmp/tmp2nskCt
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpDJOhxy /tmp/tmpUM1DuJ
+                                failed -- good test
+                                     recieved non-zero exit code
+                                     ('', 'Traceback (most recent call last):\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 139, in <module>\n    main(sys.argv[1:])\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 85, in main\n    print_typed_ast(inputs, output)\n  File "/tmp/tmp8Yju4x/arrowc/bin/arrowc", line 119, in print_typed_ast\n    typed_ast += str(ArrowTypechecker(ast).typecheck()) + \'\\n\'\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 90, in typecheck\n    self.tc_Stmts(self.ast)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 199, in tc_Stmts\n    child_type = self.typecheck_node(child)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 110, in typecheck_node\n    return getattr(self, "tc_" + node_name)(node)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 412, in tc_For\n    block_type = self.typecheck_child(node, 3)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 116, in typecheck_child\n    return self.typecheck_node(node.children[child_num])\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 110, in typecheck_node\n    return getattr(self, "tc_" + node_name)(node)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 219, in tc_Block\n    child_type = self.typecheck_node(child)\n  File "/tmp/tmp8Yju4x/arrowc/arrowc/arrowlang_typechecker.py", line 110, in typecheck_node\n    return getattr(self, "tc_" + node_name)(node)\nAttributeError: ArrowTypechecker instance has no attribute \'tc_Break\'\n')
+
+Another casting issue:
+
+      "print_uint32(uint32(2))"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpHNrQdY /tmp/tmpXl0Mm2
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpNd6GmX /tmp/tmpQbblgH
+                                failed -- good test
+      Error typing /tmp/tmpQbblgH: 
+      Given parameters (<arrowc.arrowlang_typechecker.IntType instance at 0x7fab56688ef0>,) do not match parameters (<arrowc.arrowlang_typechecker.IntType instance at 0x7fab56688bd8>,) for function print_uint32
+
+Did not correctly give an error for:
+
+      "var x = 1
+      var x = 2
+      func foo() { return }
+      func bar() { return }
+      func baz() { return }
+      if x == y && (y == z || z == c) {
+          foo()
+      } else if (y < z) || (z > x && x != y) {
+          bar()
+      } else {
+          baz()
+      }"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpMRyMSG /tmp/tmp04BnuD
+       ('', '> parsing /tmp/tmp04BnuD\n> type checking\n["redeclared 2:ShortDecl\n0:Name,x\n0:Int,2:int32", "symbol, y, undeclared", "symbol, y, undeclared"
+, "symbol, z, undeclared", "symbol, z, undeclared", "symbol, c, undeclared", "symbol, y, undeclared", "symbol, z, undeclared", "symbol, z, undeclared", "sym
+bol, y, undeclared"]\n')
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpXkFveb /tmp/tmpb6riUm
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+
+      "var x float32 = 1 * 2 + 3 * (-1 + 7) / 2"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmph37COC /tmp/tmpfkz9xG
+       ('', '> parsing /tmp/tmpfkz9xG\n> type checking\n["declared type, float32 does not agree with expression, 2:+:int32\n2:*:int32\n0:Int,1:int32\n0:Int,
+2:int32\n2:/:int32\n2:*:int32\n0:Int,3:int32\n2:+:int32\n1:Negate:int32\n0:Int,1:int32\n0:Int,7:int32\n0:Int,2:int32."]\n')
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpgTp3Ks /tmp/tmpTiOuUH
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+
+      "x = 1 + 1.0"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmpQnwM0e /tmp/tmpaipmkX
+       ('', '> parsing /tmp/tmpaipmkX\n> type checking\n["Symbol, 0:Name,x, not in symbol table", "a, 0:Int,1:int32, does not agree with b, 0:Float,1:float32, in types"]\n')
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmpMv9C_0 /tmp/tmpkciexX
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+
+      "func smlv ( ) float32 { if ! false | | false & & "ikdcb" - nzr ( ) < - abytdkgv ( ) % ynonacx { break break return } }"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmp_VKJV4 /tmp/tmp268pKK
+       ('', '> parsing /tmp/tmp268pKK\n> type checking\n["function nzr not defined", "function abytdkgv not defined", "symbol, ynonacx, undeclared", "Break outside of loop", "Break outside of loop", "Returned unit but needed float32", "Function needs to end in return"]\n')
+      > export PS1="$ " && export PATH=/tmp/tmp8Yju4x/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp8Yju4x/arrowc/bin/arrowc -T -o /tmp/tmp5Ox3lo /tmp/tmpyjXSnN
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+
+      "f()"
+      > /home/tester/compilers/support/pr04/arrowc -T -o /tmp/tmplmvm7t /tmp/tmpYRvCIc
+       ('', '> parsing /tmp/tmpYRvCIc\n> type checking\n["function f not defined"]\n')
+      > export PS1="$ " && export PATH=/tmp/tmpzjCcX2/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/ho
+me/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+:/usr/local/games && source env/bin/activate && python /tmp/tmpzjCcX2/arrowc/bin/arrowc -T -o /tmp/tmpIH9CxB /tmp/tmpzwe2MC
+                                failed -- bad test
+                                     recieved zero exit code, expected an error
+
+ect....
+
+-12
+
+-------------------------------
+
+Code looks ok.
+
+-0
+
+----------------------------------
+
+I would have liked to see more tests.
+
+-0
+
+----------------------------------
+
+Final Grade : 88
+Grader : Tim Henderson
+
