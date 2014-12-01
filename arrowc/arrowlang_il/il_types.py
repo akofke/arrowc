@@ -5,11 +5,20 @@ import arrowc.arrowlang_types as arrowlang_types
 
 
 class ILType(object):
+    """
+    General object used to represent intermediate language types.
+    All IL json type objects have a type field. An underscore is used to not shadow the python type builtin.
+    """
+
     def __init__(self, type_):
         self.type_ = type_
 
 
 class Program(ILType):
+    """
+    Program types have a list of functions and a list of types
+    """
+
     def __init__(self):
         super(Program, self).__init__("program")
         self.functions = list()
@@ -17,7 +26,12 @@ class Program(ILType):
 
 
 class Function(ILType):
-    def __init__(self, name, func_type, scope_level, static_scope):
+    """
+    Functions have a name, function type, scope level (main starts at 0), static scope (a list of containing functions),
+    and a list of blocks.
+    """
+
+    def __init__(self, name, func_type, scope_level, static_scope=list()):
         super(Function, self).__init__("function")
         self.name = name
         self.func_type = func_type
@@ -25,8 +39,15 @@ class Function(ILType):
         self.static_scope = static_scope
         self.blocks = list()
 
+    def add_block(self):
+        
+
 
 class BasicBlock(ILType):
+    """
+    Blocks have a name, lists of next and previous blocks, and a list of instructions.
+    """
+
     def __init__(self):
         super(BasicBlock, self).__init__("block")
         self.name = ""
@@ -39,12 +60,17 @@ class BasicBlock(ILType):
 
 
 class Instruction(ILType):
-    def __init__(self, op, A=Operand(), B=Operand(), R=Operand()):
+    """
+    Instructions contain the name of the operation, and operands A (first argument), B (second argument),
+    and R (register to put result)
+    """
+
+    def __init__(self, op, a=Operand(), b=Operand(), r=Operand()):
         super(Instruction, self).__init__("instruction")
         self.op = op
-        self.A = A
-        self.B = B
-        self.R = R
+        self.A = a
+        self.B = b
+        self.R = r
 
 
 
@@ -54,6 +80,16 @@ class Instruction(ILType):
 
 
 class Operand(ILType):
+    """
+    Operands have the following fields:
+
+    operand_value: a Value object (can be a register, label, literal, etc)
+    operand_type: the type of the operand; i.e. label if the value is a jump target or native target,
+    the type contained in the register if the value is a register, or the type of the literal if the value
+    is a literal
+
+    Operands that are blank have the default unit type.
+    """
     def __init__(self, ):
         super(Operand, self).__init__("operand")
         self.operand_value = {
@@ -65,26 +101,34 @@ class Operand(ILType):
 
 
 class Value(ILType):
+    """
+
+    """
+
     def __init__(self, type_, **kwargs):
         super(Value, self).__init__(type_)
         for key, val in kwargs.iteritems():
             self.__setattr__(key, val)
 
+    @staticmethod
+    def int_const(value):
+        return Value("int-constant", value=value)
 
-def int_const(value):
-    return Value("int-constant", value=value)
+    @staticmethod
+    def float_const(value):
+        return Value("float-constant", value=value)
 
+    @staticmethod
+    def register(scope, id_):
+        return Value("register", scope=scope, id=id_)
 
-def float_const(value):
-    return Value("float-constant", value=value)
+    @staticmethod
+    def jmp_label(block, func):
+        return Value("jump-target", block=block, func=func)
 
-
-def register(scope, id_):
-    return Value("register", scope=scope, id=id_)
-
-
-def label(block, func):
-    return Value("jump-target", block=block, func=func)
+    @staticmethod
+    def native_label(func_name):
+        return Value("native-target", func=func_name)
 
 
 class ArrowType(ILType):
@@ -137,7 +181,7 @@ def main():
 
     # print json.dumps(prog, indent=4, default=json_convert)
 
-    print json.dumps(register(0, 1), indent=4, default=json_convert)
+    print json.dumps(Value.register(0, 1), indent=4, default=json_convert)
 
 
 if __name__ == '__main__':
