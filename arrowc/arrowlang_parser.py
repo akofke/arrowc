@@ -438,7 +438,7 @@ class ArrowParser(object):
             .addkid(Node("DeclExpr"))\
             .addkid(Node("BooleanExpr"))\
             .addkid(Node("UpdateExpr"))\
-            .addkid(p[3])
+            .addkid(p[2])
 
     ###################################
 
