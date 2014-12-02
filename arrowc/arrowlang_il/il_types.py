@@ -1,7 +1,7 @@
 #!usr/bin/env python
 
 import json
-import arrowc.arrowlang_types as arrowlang_types
+import arrowc.arrowlang_types as al_types
 
 
 class ILType(object):
@@ -11,7 +11,7 @@ class ILType(object):
     """
 
     def __init__(self, type_):
-        self.type_ = type_
+        self.type = type_
 
 
 class Program(ILType):
@@ -21,8 +21,20 @@ class Program(ILType):
 
     def __init__(self):
         super(Program, self).__init__("program")
-        self.functions = list()
+        self.functions = dict()
         self.types = dict()
+
+    def add_main(self):
+        m = Function("main", str(al_types.FuncType([], al_types.prims["unit"])), 0)
+        self.functions.update({m.name: m})
+        return m
+
+    def add_func(self, func_name, func_type, scope_level, static_scope):
+        f = Function("fn-{}-{}".format(len(self.functions) - 1, func_name), func_type, scope_level, static_scope)
+        self.functions.update({f.name: f})
+        return f
+
+
 
 
 class Function(ILType):
@@ -31,16 +43,20 @@ class Function(ILType):
     and a list of blocks.
     """
 
-    def __init__(self, name, func_type, scope_level, static_scope=list()):
+    def __init__(self, func_name, func_type, scope_level, static_scope=list()):
         super(Function, self).__init__("function")
-        self.name = name
+        self.name = func_name
         self.func_type = func_type
         self.scope_level = scope_level
         self.static_scope = static_scope
         self.blocks = list()
 
     def add_block(self):
-        
+        block = BasicBlock("{}-b-{}".format(self.name, len(self.blocks)))
+        self.blocks.append(block)
+        return block
+
+
 
 
 class BasicBlock(ILType):
@@ -48,15 +64,39 @@ class BasicBlock(ILType):
     Blocks have a name, lists of next and previous blocks, and a list of instructions.
     """
 
-    def __init__(self):
+    def __init__(self, name):
         super(BasicBlock, self).__init__("block")
-        self.name = ""
+        self.name = name
         self.next = list()
         self.prev = list()
         self.instructions = list()
 
-    def add_instr(self, instruction):
-        self.instructions.append(instruction)
+    def add_instr(self, op, **kwargs):
+        self.instructions.append(Instruction(op, **kwargs))
+
+
+
+
+
+class Operand(ILType):
+    """
+    Operands have the following fields:
+
+    operand_value: a Value object (can be a register, label, literal, etc)
+    operand_type: the type of the operand; i.e. label if the value is a jump target or native target,
+    the type contained in the register if the value is a register, or the type of the literal if the value
+    is a literal
+
+    Operands that are blank have the default unit type.
+    """
+
+    def __init__(self, op_type="unit", op_val=None):
+        super(Operand, self).__init__("operand")
+
+        if not op_val:
+            op_val = {'type': "unit"}
+        self.operand_type = op_type
+        self.operand_value = op_val
 
 
 class Instruction(ILType):
@@ -77,27 +117,6 @@ class Instruction(ILType):
     def set_op(self, op, op_type, op_value):
         self.__getattribute__(op).operand_type = op_type
         self.__getattribute__(op).operand_value = op_value
-
-
-class Operand(ILType):
-    """
-    Operands have the following fields:
-
-    operand_value: a Value object (can be a register, label, literal, etc)
-    operand_type: the type of the operand; i.e. label if the value is a jump target or native target,
-    the type contained in the register if the value is a register, or the type of the literal if the value
-    is a literal
-
-    Operands that are blank have the default unit type.
-    """
-    def __init__(self, ):
-        super(Operand, self).__init__("operand")
-        self.operand_value = {
-            "type": "unit"
-        }
-
-        self.operand_type = "unit"
-
 
 
 class Value(ILType):
@@ -135,7 +154,7 @@ class ArrowType(ILType):
     def __init__(self, arrow_type):
         super(ArrowType, self).__init__("arrow-type")
 
-        if isinstance(arrow_type, arrowlang_types.FuncType):
+        if isinstance(arrow_type, al_types.FuncType):
             func_dict = arrow_type.__dict__
             self.__setattr__("args", {
                 "components": self.make_components(func_dict["params"]),
@@ -145,7 +164,7 @@ class ArrowType(ILType):
             self.__setattr__("returns", ArrowType(func_dict["returns"]))
             self.__setattr__("name", "function")
 
-        elif isinstance(arrow_type, arrowlang_types.Type):
+        elif isinstance(arrow_type, al_types.Type):
             for attr, value in arrow_type.__dict__.iteritems():
                 self.__setattr__(attr, value)
         else:
@@ -162,26 +181,26 @@ class ArrowType(ILType):
 def json_convert(il_obj):
     if isinstance(il_obj, ILType):
         obj_dict = il_obj.__dict__
-        obj_dict["type"] = obj_dict.pop("type_")
+        # obj_dict["type"] = obj_dict.pop("type_")
+
+        # remove private fields not used for json
+        # for key in obj_dict.keys():
+        #     if key.startswith("_"):
+        #         obj_dict.pop(key)
+
         return obj_dict
-    else:
-        print il_obj
-        raise TypeError
+
 
 
 def main():
     prog = Program()
-    func = Function()
-    block = BasicBlock()
-    instr = Instruction("IMM")
-
-    block.instructions.append(instr)
-    func.blocks.append(block)
-    prog.functions.append(func)
+    # func = Function()
+    # block = BasicBlock()
+    # instr = Instruction("IMM")
 
     # print json.dumps(prog, indent=4, default=json_convert)
 
-    print json.dumps(Value.register(0, 1), indent=4, default=json_convert)
+    print json.dumps(prog, indent=4, default=json_convert)
 
 
 if __name__ == '__main__':
