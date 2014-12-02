@@ -2,6 +2,11 @@
 
 from il_types import *
 import arrowc.arrowlang_types as types
+import re
+
+
+def node_info(node):
+    return re.split(r",|:", node.children[0].label)
 
 
 class ILGenerator():
@@ -39,7 +44,14 @@ class ILGenerator():
 
             self.reg_table[-1].update({func_name: (reg, func_type)})
 
-    
+    def gen_decl(self, node):
+        var_name, var_type = node_info(node)[1:]
+
+        result_reg = self.get_register()
+        r = Operand(var_type, result_reg)
+
+
+    def gen_expr(self):
 
 
 
