@@ -479,7 +479,7 @@ class ArrowParser(object):
         p[0] = Node("For")\
             .addkid(Node("DeclExpr"))\
             .addkid(Node("BooleanExpr"))\
-            .addkid(p[4])\
+            .addkid(Node("UpdateExpr").addkid(p[4]))\
             .addkid(p[5])
 
     def p_ForStmt6(self, p):
