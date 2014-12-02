@@ -122,6 +122,7 @@ def print_typed_ast(inputs, output):
                     sys.exit(1)
                 except TypecheckError, e:
                     log("Error typing %s: \n%s" % (input_name, e))
+                    sys.exit(1)
         except IOError:
             log("Error reading file: " + input_name)
             sys.exit(1)
