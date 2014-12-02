@@ -19,8 +19,8 @@ class ILGenerator():
 
     def get_register(self):
         """
-
-        :return:
+        Gets the next free register in the current scope, and increments the register counter.
+        :return: The next available register as a Register object
         """
         reg = Value.register(len(self.reg_counter) - 1, self.reg_counter[-1])
         self.reg_counter[-1] += 1
@@ -51,7 +51,21 @@ class ILGenerator():
         r = Operand(var_type, result_reg)
 
 
-    def gen_expr(self):
+    def gen_expr(self, node):
+        node_type = node_info(node)[0]
+
+        if re.match("[+\-*/%]", node_type):
+            pass
+        elif re.match("int|float|string", node_type):
+            pass
+        elif node_type == "Symbol":
+            pass
+        elif node_type == "Call":
+            pass
+        elif node_type == "Cast":
+            pass
+
+
 
 
 
