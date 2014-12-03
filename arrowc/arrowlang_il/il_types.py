@@ -95,7 +95,7 @@ class Operand(ILType):
 
         if not op_val:
             op_val = {'type': "unit"}
-        self.operand_type = op_type
+        self.operand_type = str(op_type)
         self.operand_value = op_val
 
 
@@ -151,6 +151,16 @@ class Value(ILType):
     @staticmethod
     def native_label(func_name):
         return Value("native-target", func=func_name)
+
+
+    @staticmethod
+    def const(const_type, value):
+        if const_type.name.startswith("int"):
+            return Value("int-constant", value=value)
+        elif const_type.name.startswith("float"):
+            return Value("float-constant", value=value)
+        elif const_type.name == "string":
+            return Value("string", value=value)
 
 
 class ArrowType(ILType):
