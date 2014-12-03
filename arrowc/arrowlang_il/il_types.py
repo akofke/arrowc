@@ -112,11 +112,14 @@ class Instruction(ILType):
         self.B = b
         self.R = r
 
+    def set_a(self, operand):
+        self.A = operand
 
+    def set_b(self, operand):
+        self.B = operand
 
-    def set_op(self, op, op_type, op_value):
-        self.__getattribute__(op).operand_type = op_type
-        self.__getattribute__(op).operand_value = op_value
+    def set_r(self, operand):
+        self.R = operand
 
 
 class Value(ILType):
@@ -138,8 +141,8 @@ class Value(ILType):
         return Value("float-constant", value=value)
 
     @staticmethod
-    def register(scope, id_):
-        return Value("register", scope=scope, id=id_)
+    def register(id_, scope):
+        return Value("register", id=id_, scope=scope)
 
     @staticmethod
     def jmp_label(block, func):
