@@ -17,6 +17,16 @@ def node_info(node):
     """
     return re.split(r",|:", node.children[0].label)
 
+def node_label(node):
+    return re.split(",|:", node.label)[0]
+
+def node_name(node):
+    return re.split(",|:", node.label)[1]
+
+def node_value(node):
+    return node_name(node)
+
+
 arith_ops = {
     "+": "ADD",
     "-": "SUB",
@@ -29,6 +39,8 @@ arith_ops = {
 class ILGenerator():
     def __init__(self, typed_ast):
         self.ast = typed_ast
+
+        # maps symbols to Operands, i.e. the register and the type, in each scope
         self.reg_table = [dict()]
         self.func_param_table = dict()
         self.reg_counter = [0]
@@ -123,40 +135,42 @@ class ILGenerator():
 
 
     def gen_decl(self, node):
-        var_name, var_type = node_info(node)[1:]
+        var_name = node_name(node.children[0])
+        var_type = node.children[0].arrowtype
 
         result_reg = self.get_register()
         r = Operand(var_type, result_reg)
 
         instr = self.gen_expr(node)
-        instr.set_r(r)
+        instr.R = r
 
 
     def gen_expr(self, node):
-        node_type = node_info(node)[0]
+        expr_kind = node_label(node)
 
         # +, -, *, /, or % operators
-        if re.match("[+\-*/%]", node_type):
-            pass
-        elif re.match("int|float|string", node_type):
-            instr = self.gen_literal(node.children[0])
+        if re.match("[+\-*/%]", expr_kind):
+            return self.gen_arith_op(node, expr_kind)
+        elif re.match("int|float|string", expr_kind):
+            instr = self.gen_literal(node)
             return instr
-        elif node_type == "Symbol":
+        elif expr_kind == "Symbol":
             pass
-        elif node_type == "Call":
+        elif expr_kind == "Call":
             pass
-        elif node_type == "Cast":
+        elif expr_kind == "Cast":
             pass
-        elif node_type == "Negate":
+        elif expr_kind == "Negate":
             pass
 
     def gen_literal(self, node):
 
-        node_value, value_type = node_info(node)[1:]
+        lit_val = node_value(node)
+        lit_type = node.arrowtype
 
         instr = Instruction(
             "IMM",
-            a=Operand(value_type, node_value),
+            a=Operand(str(lit_type), node_value),
         )
 
         return instr

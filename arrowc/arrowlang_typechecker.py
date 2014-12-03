@@ -22,6 +22,7 @@ def append_type(type_obj, node):
     :param node: The Node object to be labelled with the type
     :return: The given Type object
     """
+    node.arrowtype = type_obj
     node.label += ":{!s}".format(type_obj)
     return type_obj
 
@@ -32,6 +33,7 @@ def append_typeList(type_list, node):
     """
     list_str = ', '.join(map(str, type_list))
     node.label += ":({})".format(list_str)
+    node.arrowtype = type_list
     return type_list
 
 
