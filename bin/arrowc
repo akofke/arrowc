@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from arrowc.arrowlang_il import il_generator
+from arrowc.arrowlang_il.il_types import json_convert
 
 import os
 import sys
 import getopt
+import json
 
 from arrowc.arrowlang_parser import ArrowParser
 from arrowc.arrowlang_typechecker import ArrowTypechecker, TypecheckError
@@ -45,9 +48,9 @@ def usage(code=None):
 
 def main(argv):
 
-    short_opts = 'ho:AT'
+    short_opts = 'ho:ATIJ'
     long_opts = [
-        'help', 'output=', 'ast', 'typed-ast'
+        'help', 'output=', 'ast', 'typed-ast', 'intermediate', 'json-il'
     ]
 
     try:
@@ -59,6 +62,8 @@ def main(argv):
     output = None
     ast = False
     typecheck = False
+    il = False
+    json_ = False
     inputs = args
     if not inputs:
         log("You must supply some inputs")
@@ -75,6 +80,11 @@ def main(argv):
         elif opt in ('-T', '--typed-ast'):
             typecheck = True
             # print_typed_ast(inputs, output)
+        elif opt in ("-I", '--intermediate'):
+            il = True
+        elif opt in ("-J", 'json-il'):
+            json_ = True
+
         else:
             log("Unkown option", opt)
             usage(1)
@@ -83,6 +93,8 @@ def main(argv):
         print_ast(inputs, output)
     elif typecheck:
         print_typed_ast(inputs, output)
+    elif json_:
+        print_json(inputs[0])
 
 def print_ast(inputs, output):
     ast = ""
@@ -132,6 +144,22 @@ def print_typed_ast(inputs, output):
             out.write(typed_ast)
     else:
         sys.stdout.write(typed_ast)
+
+def print_json(inp):
+    try:
+        with open(inp, 'r') as in_file:
+            program = in_file.read()
+
+            ast = ArrowParser().parse(program)
+            typed_ast = ArrowTypechecker(ast).typecheck()
+            prog = il_generator.ILGenerator(typed_ast).gen_il()
+
+            sys.stdout.write(json.dumps(prog, indent=4, default=json_convert))
+
+    except IOError:
+        log()
+
+
 
 
 

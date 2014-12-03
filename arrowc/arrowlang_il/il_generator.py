@@ -102,10 +102,12 @@ class ILGenerator():
             self.reg_table[-1].update({func_name: r})
 
     def gen_il(self):
+        print self.ast
         for stmt in self.ast.children:
             self.gen_stmt(stmt)
 
         self.write_instr(Instruction("EXIT"))
+        return self.program
 
 
     def gen_stmt(self, node):
@@ -157,7 +159,7 @@ class ILGenerator():
         if re.match("[+\-*/%]", expr_kind):
             return self.gen_arith_op(node, expr_kind)
 
-        elif re.match("int|float|string", expr_kind):
+        elif re.match("Int|Float|String", expr_kind):
             return self.gen_literal(node)
         elif expr_kind == "Symbol":
             pass
@@ -167,6 +169,8 @@ class ILGenerator():
             pass
         elif expr_kind == "Negate":
             return self.gen_negate(node)
+        else:
+            print node
 
     def gen_literal(self, node):
 
