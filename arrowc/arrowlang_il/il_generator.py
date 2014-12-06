@@ -82,6 +82,8 @@ class ILGenerator():
         # add all arrowlang primitive types to program types list
         self.program.types.update((name, ArrowType(val)) for name, val in types.prims.iteritems())
 
+        self.program.add_type(types.Type("label"))
+
         main_func = self.program.add_main()
         main_b0 = main_func.add_block()
         self.current_func = main_func
