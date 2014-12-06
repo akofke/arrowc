@@ -99,6 +99,7 @@ class ILGenerator():
             self.write_instr(instr)
 
             self.reg_table[-1].update({func_name: r})
+            self.program.add_type(func_type)
 
     def gen_il(self):
         print self.ast
