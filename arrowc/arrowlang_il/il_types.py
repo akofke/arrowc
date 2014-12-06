@@ -38,7 +38,7 @@ class Program(ILType):
         return f
 
     def add_type(self, arrow_type):
-        self.types.update({str(arrow_type): arrow_type})
+        self.types.update({str(arrow_type): ArrowType(arrow_type)})
 
 
 
