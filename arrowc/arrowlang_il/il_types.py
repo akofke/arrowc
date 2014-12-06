@@ -25,7 +25,7 @@ class Program(ILType):
         self.types = dict()
 
     def add_main(self):
-        m = Function("main", str(al_types.FuncType([], al_types.prims["unit"])), 0)
+        m = Function("main", al_types.FuncType([], al_types.prims["unit"]), 0)
         self.functions.update({m.name: m})
         return m
 
@@ -46,7 +46,7 @@ class Function(ILType):
     def __init__(self, func_name, func_type, scope_level, static_scope=list()):
         super(Function, self).__init__("function")
         self.name = func_name
-        self.func_type = func_type
+        self.func_type = str(func_type)
         self.scope_level = scope_level
         self.static_scope = static_scope
         self.blocks = list()

@@ -6,28 +6,17 @@ import re
 import json
 
 
-def node_info(node):
-    """
-    0: Node label (e.g. Stmts, For, Decl, +, etc)
-    1: Value if node has a value, otherwise type
-    2: Type if node has a value
-
-    :param node:
-    :return: list of node components
-    """
-    return re.split(r",|:", node.children[0].label)
-
 def node_label(node):
     """
     Gets the type of the node itself, i.e. "Stmts", "If", "Int", "Symbol", etc
     """
     return re.split(",|:", node.label)[0]
 
-def node_name(node):
+def node_data(node):
     return re.split(",|:", node.label)[1]
 
-def node_value(node):
-    return node_name(node)
+# def node_value(node):
+#     return node_data(node)
 
 
 arith_ops = {
@@ -118,14 +107,21 @@ class ILGenerator():
 
         if re.match("Decl|ShortDecl", stmt_kind):
             self.gen_decl(node)
+        if stmt_kind == "Call":
+            self.gen_call_stmt(node)
 
     def gen_funcdef(self, node):
-        func_name, func_type = node_info(node.children[0])[1:]
+        func_name = node_data(node.children[0])
+        func_type = node.children[0].arrowtype
+        scope_level = self.current_func.scope_level + 1
+        static_scope = self.current_func.static_scope + self.current_func.name
 
 
 
-    def gen_call_stmt(self, node):
-        sym_name = node_info(node.children[0])[1]
+
+
+    def gen_call(self, node):
+        sym_name = node_data(node.children[0])
         func_op = self.get_symbol_operand(sym_name)
 
         param_registers = list()
@@ -141,17 +137,19 @@ class ILGenerator():
 
         params_op = Operand(
             op_type="({})".format(", ".join(op.operand_type for op in param_registers)),
-            op_val="({})".format(", ".join(op.operand_value for op in param_registers))
+            op_val=[op.operand_value for op in param_registers]
         )
 
-        call_instr = Instruction("CALL", a=func_op, b=params_op)
+        return Instruction("CALL", a=func_op, b=params_op)
+
+    def gen_call_stmt(self, node):
+        call_instr = self.gen_call(node)
         self.write_instr(call_instr)
 
 
 
-
     def gen_decl(self, node):
-        var_name = node_name(node.children[0])
+        var_name = node_data(node.children[0])
         var_type = node.children[0].arrowtype
 
         result_reg = self.get_register()
@@ -176,7 +174,7 @@ class ILGenerator():
         elif expr_kind == "Symbol":
             return self.gen_symbol(node)
         elif expr_kind == "Call":
-            pass
+            return self.gen_call(node)
         elif expr_kind == "Cast":
             pass
         elif expr_kind == "Negate":
@@ -186,7 +184,7 @@ class ILGenerator():
 
     def gen_literal(self, node):
 
-        lit_val = node_value(node)
+        lit_val = node_data(node)
         lit_type = node.arrowtype
 
         instr = Instruction(
@@ -228,7 +226,7 @@ class ILGenerator():
         return Instruction("SUB", a=Operand(expr_type, zero_reg), b=Operand(expr_type, reg))
 
     def gen_symbol(self, node):
-        a = self.get_symbol_operand(node_name(node))
+        a = self.get_symbol_operand(node_data(node))
         return Instruction("MV", a=a)
 
 
