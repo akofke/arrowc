@@ -140,11 +140,11 @@ class Value(ILType):
 
     @staticmethod
     def int_const(value):
-        return Value("int-constant", value=value)
+        return Value("int-constant", value=int(value))
 
     @staticmethod
     def float_const(value):
-        return Value("float-constant", value=value)
+        return Value("float-constant", value=float(value))
 
     @staticmethod
     def register(id_, scope):
