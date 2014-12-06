@@ -4,6 +4,7 @@ from il_types import *
 import arrowc.arrowlang_types as types
 import re
 import json
+import betterast
 
 
 def node_label(node):
@@ -30,11 +31,15 @@ arith_ops = {
 
 class ILGenerator():
     def __init__(self, typed_ast):
+        """
+        :type typed_ast: betterast.Node
+        :param typed_ast: the typechecked abstract syntax tree
+        """
         self.ast = typed_ast
 
         # maps symbols to Operands, i.e. the register and the type, in each scope
         self.reg_table = [dict()]
-        self.func_param_table = dict()
+        self.func_param_table = [dict()]
         self.reg_counter = [0]
 
         self.program = Program()
@@ -107,14 +112,67 @@ class ILGenerator():
 
         if re.match("Decl|ShortDecl", stmt_kind):
             self.gen_decl(node)
-        if stmt_kind == "Call":
+        elif stmt_kind == "AssignStmt":
+            self.gen_asn_stmt(node)
+        elif stmt_kind == "Call":
             self.gen_call_stmt(node)
+        elif stmt_kind == "If":
+            pass
+        elif stmt_kind == "For":
+            pass
+        elif stmt_kind == "FuncDef":
+            pass
+        else:
+            return None
+
+    def gen_asn_stmt(self, node):
+        var_oprnd = self.get_symbol_operand(node_data(node.children[0]))
+        expr_oprnd = self.gen_expr(node.children[1])
+
+        instr = Instruction("IMM", a=expr_oprnd, r=var_oprnd)
+        self.write_instr(instr)
+
+    def gen_block_stmt(self, node):
+        if not self.gen_stmt(node):
+            if node_label(node) == "Return":
+                pass
+            if node_label(node) == "Continue":
+                pass
+            if node_label(node) == "Break":
+                pass
 
     def gen_funcdef(self, node):
         func_name = node_data(node.children[0])
         func_type = node.children[0].arrowtype
         scope_level = self.current_func.scope_level + 1
         static_scope = self.current_func.static_scope + self.current_func.name
+
+        func = self.program.add_func(func_name, func_type, scope_level, static_scope)
+        func_block = func.add_block()
+
+        instr = Instruction(
+            "IMM",
+            a=Operand("label", Value.jmp_label(func_block, func)),
+            r=Operand(func_type, self.get_register())
+        )
+
+        self.write_instr(instr)
+
+        self.func_param_table.append(dict())
+        for i, prm_decl in enumerate(node.children[1]):
+            prm_name = node_data(prm_decl.children[0])
+            prm_type = prm_decl.children[0].arrowtype
+            self.func_param_table[-1].update({prm_name: (i, prm_type)})
+
+        for block_stmt in node.children[3].children:
+            self.gen_block_stmt(block_stmt)
+
+
+
+
+
+
+
 
 
 
@@ -163,6 +221,12 @@ class ILGenerator():
 
 
     def gen_expr(self, node):
+        """
+        :type node: betterast.Node
+        :param node:
+        :return:
+        :rtype Instruction
+        """
         expr_kind = node_label(node)
 
         # +, -, *, /, or % operators
@@ -180,7 +244,7 @@ class ILGenerator():
         elif expr_kind == "Negate":
             return self.gen_negate(node)
         else:
-            print node
+            print node  # DEBUG
 
     def gen_literal(self, node):
 

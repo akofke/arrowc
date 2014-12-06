@@ -25,14 +25,20 @@ class Program(ILType):
         self.types = dict()
 
     def add_main(self):
-        m = Function("main", al_types.FuncType([], al_types.prims["unit"]), 0)
+        main_type = al_types.FuncType([], al_types.prims["unit"])
+        m = Function("main", main_type, 0)
         self.functions.update({m.name: m})
+        self.add_type(main_type)
         return m
 
     def add_func(self, func_name, func_type, scope_level, static_scope):
         f = Function("fn-{}-{}".format(len(self.functions) - 1, func_name), func_type, scope_level, static_scope)
         self.functions.update({f.name: f})
+        self.add_type(func_type)
         return f
+
+    def add_type(self, arrow_type):
+        self.types.update({str(arrow_type): arrow_type})
 
 
 
