@@ -18,6 +18,9 @@ def node_info(node):
     return re.split(r",|:", node.children[0].label)
 
 def node_label(node):
+    """
+    Gets the type of the node itself, i.e. "Stmts", "If", "Int", "Symbol", etc
+    """
     return re.split(",|:", node.label)[0]
 
 def node_name(node):
@@ -121,19 +124,28 @@ class ILGenerator():
 
 
 
-    def gen_call(self, node):
+    def gen_call_stmt(self, node):
         sym_name = node_info(node.children[0])[1]
+        func_op = self.get_symbol_operand(sym_name)
 
-
+        param_registers = list()
         for expr in node.children[1].children:
-            instr = self.gen_expr(expr)
-            expr_type = node_info(expr)[-1]
-            instr.set_r(Operand(
-                expr_type,
-                self.get_register()
-            ))
+            param_instr = self.gen_expr(expr)
+            expr_type = expr.arrowtype
 
+            param_op = Operand(expr_type, self.get_register())
+            param_instr.set_r(param_op)
+            param_registers.append(param_op)
 
+            self.write_instr(param_instr)
+
+        params_op = Operand(
+            op_type="({})".format(", ".join(op.operand_type for op in param_registers)),
+            op_val="({})".format(", ".join(op.operand_value for op in param_registers))
+        )
+
+        call_instr = Instruction("CALL", a=func_op, b=params_op)
+        self.write_instr(call_instr)
 
 
 
@@ -162,7 +174,7 @@ class ILGenerator():
         elif re.match("Int|Float|String", expr_kind):
             return self.gen_literal(node)
         elif expr_kind == "Symbol":
-            pass
+            return self.gen_symbol(node)
         elif expr_kind == "Call":
             pass
         elif expr_kind == "Cast":
