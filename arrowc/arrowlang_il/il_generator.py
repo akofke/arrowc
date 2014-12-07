@@ -196,7 +196,7 @@ class ILGenerator():
 
             self.write_instr(param_instr)
 
-        params_tuple = types.TupleType(op.operand_type for op in param_registers)
+        params_tuple = types.TupleType([op.operand_type for op in param_registers])
         params_op = Operand(
             op_type=params_tuple,
             op_val=[op.operand_value for op in param_registers]
