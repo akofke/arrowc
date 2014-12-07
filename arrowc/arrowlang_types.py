@@ -71,6 +71,17 @@ class FuncType(Type):
         else:
             return False
 
+class TupleType(Type):
+    def __init__(self, *args):
+        Type.__init__(self, tuple)
+        self.components = args
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.components == other.components
+        else:
+            return False
+
 
 prims = {
     "unit": Type("unit"),
@@ -78,7 +89,7 @@ prims = {
     "int32": IntType("int32", 32, True),
     "uint32": IntType("uint32", 32, False),
     "int8": IntType("int8", 8, True),
-    "uint8": IntType("uint32", 8, False),
+    "uint8": IntType("uint8", 8, False),
     "float32": SizedType("float32", 32),
     "string": Type("string")
 }

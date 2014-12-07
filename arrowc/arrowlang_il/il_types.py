@@ -162,9 +162,9 @@ class Value(ILType):
     @staticmethod
     def const(const_type, value):
         if const_type.name.startswith("int"):
-            return Value("int-constant", value=value)
+            return Value("int-constant", value=int(value))
         elif const_type.name.startswith("float"):
-            return Value("float-constant", value=value)
+            return Value("float-constant", value=float(value))
         elif const_type.name == "string":
             return Value("string", value=value)
 
