@@ -124,7 +124,7 @@ class ILGenerator():
         elif stmt_kind == "For":
             pass
         elif stmt_kind == "FuncDef":
-            pass
+            self.gen_funcdef(node)
         else:
             return None
 
@@ -148,9 +148,10 @@ class ILGenerator():
         func_name = node_data(node.children[0])
         func_type = node.children[0].arrowtype
         scope_level = self.current_func.scope_level + 1
-        static_scope = self.current_func.static_scope + self.current_func.name
+        # static_scope = list(self.current_func.static_scope).append(self.current_func.name)
+        static_scope = ["main"]
 
-        func = self.program.add_func(func_name, func_type, scope_level, static_scope)
+        func = self.program.add_func(func_name, func_type, scope_level, static_scope=static_scope)
         func_block = func.add_block()
 
         instr = Instruction(
@@ -162,7 +163,7 @@ class ILGenerator():
         self.write_instr(instr)
 
         self.func_param_table.append(dict())
-        for i, prm_decl in enumerate(node.children[1]):
+        for i, prm_decl in enumerate(node.children[1].children):
             prm_name = node_data(prm_decl.children[0])
             prm_type = prm_decl.children[0].arrowtype
             self.func_param_table[-1].update({prm_name: (i, prm_type)})
@@ -233,14 +234,19 @@ class ILGenerator():
 
         elif re.match("Int|Float|String", expr_kind):
             return self.gen_literal(node)
+
         elif expr_kind == "Symbol":
             return self.gen_symbol(node)
+
         elif expr_kind == "Call":
             return self.gen_call(node)
+
         elif expr_kind == "Cast":
-            pass
+            return self.gen_cast(node)
+
         elif expr_kind == "Negate":
             return self.gen_negate(node)
+
         else:
             print node  # DEBUG
 
@@ -251,7 +257,7 @@ class ILGenerator():
 
         instr = Instruction(
             "IMM",
-            a=Operand(str(lit_type), Value.const(lit_type, lit_val)),
+            a=Operand(str(lit_type), Value.const(lit_type, lit_val))
         )
 
         return instr
@@ -291,6 +297,17 @@ class ILGenerator():
         a = self.get_symbol_operand(node_data(node))
         return Instruction("MV", a=a)
 
+    def gen_cast(self, node):
+        from_type = node.children[1].arrowtype
+
+        param_instr = self.gen_expr(node.children[1].children[0])
+        param_oprnd = Operand(from_type, self.get_register())
+
+        param_instr.set_r(param_oprnd)
+
+        self.write_instr(param_instr)
+
+        return Instruction("CAST", a=param_oprnd)
 
 
 
@@ -300,10 +317,7 @@ class ILGenerator():
 
 
 def main():
-    il = ILGenerator()
-    prog = il.program
-
-    print json.dumps(prog, indent=4, default=json_convert)
+    print str(types.prims["int32"])
 
 if __name__ == '__main__':
     main()

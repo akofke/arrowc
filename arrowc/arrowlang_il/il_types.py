@@ -40,6 +40,9 @@ class Program(ILType):
     def add_type(self, arrow_type):
         self.types.update({str(arrow_type): ArrowType(arrow_type)})
 
+    def __str__(self):
+        return "\n".join(map(str, self.functions))
+
 
 
 
@@ -62,6 +65,9 @@ class Function(ILType):
         self.blocks.append(block)
         return block
 
+    def __str__(self):
+        return "{} {} \n\t {}".format(self.name, self.func_type, "\n\t".join(map(str, self.blocks)))
+
 
 
 
@@ -79,6 +85,14 @@ class BasicBlock(ILType):
 
     def add_instr(self, op, **kwargs):
         self.instructions.append(Instruction(op, **kwargs))
+
+    def __str__(self):
+        return "{} next:{{{}}} prev:{{{}}} \n\t\t {}".format(
+            self.name,
+            ", ".join(b.name for b in self.next),
+            ", ".join(b.name for b in self.prev),
+            "\n\t\t".join(map(str, self.instructions))
+        )
 
 
 
@@ -104,6 +118,9 @@ class Operand(ILType):
         self.operand_type = str(op_type)
         self.operand_value = op_val
 
+    def __str__(self):
+        return "{}:{}".format(self.operand_value, self.operand_type)
+
 
 class Instruction(ILType):
     """
@@ -126,6 +143,12 @@ class Instruction(ILType):
 
     def set_r(self, operand):
         self.R = operand
+
+    def __str__(self):
+        return "{} \t {}".format(
+            self.op,
+            "\t".join(map(lambda x: x if x.operand_type is not "unit" else "", (self.A, self.B, self.R)))
+        )
 
 
 class Value(ILType):
@@ -167,6 +190,17 @@ class Value(ILType):
             return Value("float-constant", value=float(value))
         elif const_type.name == "string":
             return Value("string", value=value)
+
+    def __str__(self):
+        if "constant" in self.type:
+            return "{}".format(self.value)
+        elif "target" in self.type:
+            return "{}".format(self.func)
+        elif self.type == "register":
+            return "R({},{})".format(self.id, self.scope)
+        else:
+            print "ERROR BAD VALUE!!!!"
+
 
 
 class ArrowType(ILType):
