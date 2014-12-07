@@ -41,7 +41,7 @@ class Program(ILType):
         self.types.update({str(arrow_type): ArrowType(arrow_type)})
 
     def __str__(self):
-        return "\n".join(map(str, self.functions.itervalues()))
+        return "\n".join(map(str, self.functions.itervalues())) + "\n"
 
 
 
@@ -87,7 +87,7 @@ class BasicBlock(ILType):
         self.instructions.append(Instruction(op, **kwargs))
 
     def __str__(self):
-        return "{} next:{{{}}} prev:{{{}}} \n\t\t {}".format(
+        return "{} next:{{{}}} prev:{{{}}} \n\t\t{}".format(
             self.name,
             ", ".join(b.name for b in self.next),
             ", ".join(b.name for b in self.prev),

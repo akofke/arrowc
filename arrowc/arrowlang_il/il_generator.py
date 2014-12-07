@@ -28,6 +28,15 @@ arith_ops = {
     "%": "MOD"
 }
 
+cmp_ops = {
+    "==": "IFEQ",
+    "!=": "IFNE",
+    "<": "IFLT",
+    ">": "IFGT",
+    "<=": "IFLE",
+    ">=": "IFGE"
+}
+
 
 class ILGenerator():
     def __init__(self, typed_ast):
@@ -43,8 +52,8 @@ class ILGenerator():
         self.reg_counter = [0]
 
         self.program = Program()
-        self.current_func = None
-        self.current_block = None
+        self.func_stack = []
+        self.block_stack = []
         self.init_program()
 
     def get_json(self):
@@ -62,8 +71,11 @@ class ILGenerator():
         self.reg_counter[-1] += 1
         return reg
 
-    def get_param(self, func, param_num):
-        pass
+    def get_param(self, sym_name):
+        if sym_name in self.func_param_table[-1]:
+            return self.func_param_table[-1][sym_name]
+        else:
+            return None
 
     def get_symbol_operand(self, sym):
         for d in self.reg_table:
@@ -75,7 +87,7 @@ class ILGenerator():
     #     self.current_block.add_instr(op, **operands)
 
     def write_instr(self, instr):
-        self.current_block.instructions.append(instr)
+        self.block_stack[-1].instructions.append(instr)
 
     def init_program(self):
 
@@ -86,8 +98,8 @@ class ILGenerator():
 
         main_func = self.program.add_main()
         main_b0 = main_func.add_block()
-        self.current_func = main_func
-        self.current_block = main_b0
+        self.func_stack.append(main_func)
+        self.block_stack.append(main_b0)
 
         for func_name, func_type in types.library_funcs.iteritems():
             a = Operand("label", Value.native_label(func_name))
@@ -138,7 +150,7 @@ class ILGenerator():
     def gen_block_stmt(self, node):
         if not self.gen_stmt(node):
             if node_label(node) == "Return":
-                pass
+                self.gen_return(node)
             if node_label(node) == "Continue":
                 pass
             if node_label(node) == "Break":
@@ -147,7 +159,7 @@ class ILGenerator():
     def gen_funcdef(self, node):
         func_name = node_data(node.children[0])
         func_type = node.children[0].arrowtype
-        scope_level = self.current_func.scope_level + 1
+        scope_level = self.func_stack[-1].scope_level + 1
         # static_scope = list(self.current_func.static_scope).append(self.current_func.name)
         static_scope = ["main"]
 
@@ -156,7 +168,7 @@ class ILGenerator():
 
         instr = Instruction(
             "IMM",
-            a=Operand("label", Value.jmp_label(func_block, func)),
+            a=Operand("label", Value.jmp_label(func_block.name, func.name)),
             r=Operand(func_type, self.get_register())
         )
 
@@ -165,11 +177,36 @@ class ILGenerator():
         self.func_param_table.append(dict())
         for i, prm_decl in enumerate(node.children[1].children):
             prm_name = node_data(prm_decl.children[0])
-            prm_type = prm_decl.children[0].arrowtype
-            self.func_param_table[-1].update({prm_name: (i, prm_type)})
+            self.func_param_table[-1].update({prm_name: i})
+
+        self.reg_counter.append(0)
+        self.reg_table.append(dict())
+        self.func_stack.append(func)
+        self.block_stack.append(func_block)
 
         for block_stmt in node.children[3].children:
             self.gen_block_stmt(block_stmt)
+
+        self.block_stack.pop()
+        self.func_stack.pop()
+        self.reg_table.pop()
+        self.reg_counter.pop()
+
+    def gen_return(self, node):
+        instr = Instruction("RTRN")
+
+        a = Operand()
+
+        if len(node.children) != 0:
+            expr_instr = self.gen_expr(node.children[0])
+            expr_instr.set_r(Operand(node.children[0].arrowtype, self.get_register()))
+            self.write_instr(expr_instr)
+            a = expr_instr.R
+
+        instr.set_a(a)
+        self.write_instr(instr)
+
+
 
 
 
@@ -294,8 +331,13 @@ class ILGenerator():
         return Instruction("SUB", a=Operand(expr_type, zero_reg), b=Operand(expr_type, reg))
 
     def gen_symbol(self, node):
-        a = self.get_symbol_operand(node_data(node))
-        return Instruction("MV", a=a)
+        sym = node_data(node)
+        prm = self.get_param(sym)
+        if prm is not None:
+            return Instruction("PRM", a=Operand("int32", Value.int_const(prm)))
+        else:
+            a = self.get_symbol_operand(node_data(node))
+            return Instruction("MV", a=a)
 
     def gen_cast(self, node):
         from_type = node.children[1].arrowtype[0]
