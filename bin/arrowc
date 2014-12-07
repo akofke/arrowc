@@ -155,6 +155,7 @@ def print_json(inp):
             prog = il_generator.ILGenerator(typed_ast).gen_il()
 
             sys.stdout.write(json.dumps(prog, indent=4, default=json_convert))
+            # sys.stdout.write(str(prog))
 
     except IOError:
         log()

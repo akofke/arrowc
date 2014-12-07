@@ -298,7 +298,9 @@ class ILGenerator():
         return Instruction("MV", a=a)
 
     def gen_cast(self, node):
-        from_type = node.children[1].arrowtype
+        from_type = node.children[1].arrowtype[0]
+
+        print from_type
 
         param_instr = self.gen_expr(node.children[1].children[0])
         param_oprnd = Operand(from_type, self.get_register())

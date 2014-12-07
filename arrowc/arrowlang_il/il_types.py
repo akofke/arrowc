@@ -41,7 +41,7 @@ class Program(ILType):
         self.types.update({str(arrow_type): ArrowType(arrow_type)})
 
     def __str__(self):
-        return "\n".join(map(str, self.functions))
+        return "\n".join(map(str, self.functions.itervalues()))
 
 
 
@@ -147,7 +147,7 @@ class Instruction(ILType):
     def __str__(self):
         return "{} \t {}".format(
             self.op,
-            "\t".join(map(lambda x: x if x.operand_type is not "unit" else "", (self.A, self.B, self.R)))
+            "\t".join(map(lambda x: str(x) if x.operand_type is not "unit" else "", (self.A, self.B, self.R)))
         )
 
 
