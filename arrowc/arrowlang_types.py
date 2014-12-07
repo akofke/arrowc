@@ -82,6 +82,9 @@ class TupleType(Type):
         else:
             return False
 
+    def __str__(self):
+        return ", ".join(map(str, self.components))
+
 
 prims = {
     "unit": Type("unit"),
