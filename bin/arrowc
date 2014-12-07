@@ -94,7 +94,7 @@ def main(argv):
     elif typecheck:
         print_typed_ast(inputs, output)
     elif json_:
-        print_json(inputs[0])
+        print_json(inputs, output)
 
 def print_ast(inputs, output):
     ast = ""
@@ -145,20 +145,32 @@ def print_typed_ast(inputs, output):
     else:
         sys.stdout.write(typed_ast)
 
-def print_json(inp):
-    try:
-        with open(inp, 'r') as in_file:
-            program = in_file.read()
+def print_json(inp, outp):
+    json_str = ""
+    for input_name in inp:
+        try:
+            with open(input_name, 'r') as input_file:
+                program = input_file.read()
+                try:
+                    ast = ArrowParser().parse(program)
+                    typed_ast = ArrowTypechecker(ast).typecheck()
+                    prog = il_generator.ILGenerator(typed_ast).gen_il()
+                    json_str += json.dumps(prog, default=json_convert) + "\n"
+                except SyntaxError, e:
+                    log("Error in %s: %s" % (input_name, e))
+                    sys.exit(1)
+                except TypecheckError, e:
+                    log("Error typing %s: \n%s" % (input_name, e))
+                    sys.exit(1)
+        except IOError:
+            log("Error reading file: " + input_name)
+            sys.exit(1)
 
-            ast = ArrowParser().parse(program)
-            typed_ast = ArrowTypechecker(ast).typecheck()
-            prog = il_generator.ILGenerator(typed_ast).gen_il()
-
-            # sys.stdout.write(json.dumps(prog, indent=4, default=json_convert))
-            sys.stdout.write(str(prog))
-
-    except IOError:
-        log()
+    if outp and outp != "":
+        with open(outp, 'w') as out:
+            out.write(json_str)
+    else:
+        sys.stdout.write(json_str)
 
 
 
