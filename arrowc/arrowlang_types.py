@@ -72,9 +72,9 @@ class FuncType(Type):
             return False
 
 class TupleType(Type):
-    def __init__(self, *args):
+    def __init__(self, comps):
         Type.__init__(self, tuple)
-        self.components = args
+        self.components = tuple(ar_type for ar_type in comps)
 
     def __eq__(self, other):
         if type(other) is type(self):
@@ -105,3 +105,6 @@ library_funcs = {
     "print_float32": FuncType((prims["float32"],), prims["unit"]),
     "print": FuncType((prims["string"],), prims["unit"])
 }
+
+if __name__ == '__main__':
+    print TupleType([prim for prim in prims.itervalues()])

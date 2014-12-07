@@ -183,6 +183,10 @@ class ArrowType(ILType):
             self.__setattr__("returns", ArrowType(func_dict["returns"]))
             self.__setattr__("name", "function")
 
+        elif isinstance(arrow_type, al_types.TupleType):
+            self.components = [ArrowType(comp) for comp in arrow_type.components]
+            self.name = "tuple"
+
         elif isinstance(arrow_type, al_types.Type):
             for attr, value in arrow_type.__dict__.iteritems():
                 self.__setattr__(attr, value)

@@ -102,7 +102,7 @@ class ILGenerator():
             self.program.add_type(func_type)
 
     def gen_il(self):
-        print self.ast
+        # print self.ast
         for stmt in self.ast.children:
             self.gen_stmt(stmt)
 
@@ -173,14 +173,6 @@ class ILGenerator():
 
 
 
-
-
-
-
-
-
-
-
     def gen_call(self, node):
         sym_name = node_data(node.children[0])
         func_op = self.get_symbol_operand(sym_name)
@@ -196,7 +188,7 @@ class ILGenerator():
 
             self.write_instr(param_instr)
 
-        params_tuple = types.TupleType([op.operand_type for op in param_registers])
+        params_tuple = types.TupleType([types.prims[op.operand_type] for op in param_registers])
         params_op = Operand(
             op_type=params_tuple,
             op_val=[op.operand_value for op in param_registers]
