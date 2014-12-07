@@ -212,7 +212,7 @@ class ILGenerator():
         r = Operand(var_type, result_reg)
 
         instr = self.gen_expr(node.children[-1])
-        instr.R = r
+        instr.set_r(r)
 
         self.reg_table[-1][var_name] = r
         self.write_instr(instr)
@@ -261,8 +261,8 @@ class ILGenerator():
         left_instr = self.gen_expr(node.children[0])
         right_instr = self.gen_expr(node.children[1])
 
-        left_instr.set_r(self.get_register())
-        right_instr.set_r(self.get_register())
+        left_instr.set_r(Operand(node.arrowtype, self.get_register()))
+        right_instr.set_r(Operand(node.arrowtype, self.get_register()))
 
         self.write_instr(left_instr)
         self.write_instr(right_instr)
