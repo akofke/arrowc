@@ -95,6 +95,8 @@ def main(argv):
         print_typed_ast(inputs, output)
     elif json_:
         print_json(inputs, output)
+    elif il:
+        print_il(inputs, output)
 
 def print_ast(inputs, output):
     ast = ""
@@ -171,6 +173,33 @@ def print_json(inp, outp):
             out.write(json_str)
     else:
         sys.stdout.write(json_str)
+
+def print_il(inp, outp):
+    il_str = ""
+    for input_name in inp:
+        try:
+            with open(input_name, 'r') as input_file:
+                program = input_file.read()
+                try:
+                    ast = ArrowParser().parse(program)
+                    typed_ast = ArrowTypechecker(ast).typecheck()
+                    prog = il_generator.ILGenerator(typed_ast).gen_il()
+                    il_str = str(prog) + "\n"
+                except SyntaxError, e:
+                    log("Error in %s: %s" % (input_name, e))
+                    sys.exit(1)
+                except TypecheckError, e:
+                    log("Error typing %s: \n%s" % (input_name, e))
+                    sys.exit(1)
+        except IOError:
+            log("Error reading file: " + input_name)
+            sys.exit(1)
+
+    if outp and outp != "":
+        with open(outp, 'w') as out:
+            out.write(il_str)
+    else:
+        sys.stdout.write(il_str)
 
 
 
