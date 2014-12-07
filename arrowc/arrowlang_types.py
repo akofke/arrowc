@@ -83,7 +83,7 @@ class TupleType(Type):
             return False
 
     def __str__(self):
-        return ", ".join(map(str, self.components))
+        return "({})".format(", ".join(map(str, self.components)))
 
 
 prims = {
