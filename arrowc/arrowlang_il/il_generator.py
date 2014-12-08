@@ -190,6 +190,7 @@ class ILGenerator():
         )
 
         self.write_instr(instr)
+        self.reg_table[-1].update({func_name: instr.R})
 
         self.func_param_table.append(dict())
         for i, prm_decl in enumerate(node.children[1].children):
