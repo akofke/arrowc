@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from arrowc.arrowlang_il import il_generator
+from arrowc.arrowlang_il.il_generator import ILGenerator
 from arrowc.arrowlang_il.il_types import json_convert
 
 import os
@@ -156,7 +156,7 @@ def print_json(inp, outp):
                 try:
                     ast = ArrowParser().parse(program)
                     typed_ast = ArrowTypechecker(ast).typecheck()
-                    prog = il_generator.ILGenerator(typed_ast).gen_il()
+                    prog = ILGenerator(typed_ast).gen_il()
                     json_str += json.dumps(prog, default=json_convert) + "\n"
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))
@@ -183,7 +183,7 @@ def print_il(inp, outp):
                 try:
                     ast = ArrowParser().parse(program)
                     typed_ast = ArrowTypechecker(ast).typecheck()
-                    prog = il_generator.ILGenerator(typed_ast).gen_il()
+                    prog = ILGenerator(typed_ast).gen_il()
                     il_str = str(prog) + "\n"
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))

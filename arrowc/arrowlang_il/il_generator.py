@@ -83,6 +83,13 @@ class ILGenerator():
                 return d[sym]
 
 
+    def get_current_func(self):
+        """
+        :rtype Function
+        :return:
+        """
+        return self.func_stack[-1]
+
     # def write_instr(self, op, **operands):
     #     self.current_block.add_instr(op, **operands)
 
@@ -139,6 +146,16 @@ class ILGenerator():
             self.gen_funcdef(node)
         else:
             return None
+
+    def gen_if(self, node):
+        then_block = self.func_stack[-1].add_block()
+        else_block = self.func_stack[-1].add_block()
+        final_block = self.func_stack[-1].add_block()
+
+    def gen_bool_expr(self, node, then_blk, else_blk):
+        pass
+
+
 
     def gen_asn_stmt(self, node):
         var_oprnd = self.get_symbol_operand(node_data(node.children[0]))
