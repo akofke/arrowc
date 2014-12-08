@@ -1,0 +1,116 @@
+Grading Comments for Project 005
+
+Graded Revision: 63544feae711088074b5c7ccd11e901035c08d08
+Revision Date: 2014-12-07
+Due Date: 2014-11-20
+Lateness Discount: Forgiven
+
+Partner Id's: adk62, cym8
+
+----------------------------------------
+
+testing results: 48/108
+
+You seem to support the full expression portion of arrowlang. However you do not
+seem to support any of the control flow constructions (if-statements, for-loops,
+function-calls)
+
+      "if 1 == 1 {
+          print_int32(1)
+      } else {
+          print_int32(2)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpB65VQi /tmp/tmp9nnlsR
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "1"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmpyzpm2e /tmp/tmpuEuE_K
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmptF4bDi /tmp/tmpZTMJ3Y
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "1"
+                                     got      ""
+
+      "if 1 == 2 {
+          print_int32(1)
+      } else {
+          print_int32(2)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpuxo4Gy /tmp/tmpsX1cuY
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "2"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmpuZxuHE /tmp/tmp8PC_Tm
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmpFETOEv /tmp/tmp0H0r0j
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "2"
+                                     got      ""
+
+
+
+      "for var i = 0; i < 12; i = i + 1 {
+          print_int32(i)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpccWJfC /tmp/tmpBXl54_
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "0
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+      11"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowl
+ang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/
+bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmplrVFBd /tmp/tmpn3sGRr
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowl
+ang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/
+bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmp7EawE9 /tmp/tmpLYUkO3
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "0
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+      11"
+                                     got      ""
+
+
+
+      "func f(i int32, j int32) int32 {
+          return 5*j*j + - 3*j + 2*j*i + i + 7
+      }
+      print_int32(f(2, 3))"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmp2MAAkc /tmp/tmpia0oPJ
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "57"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmprd241r /tmp/tmpTZs5YG
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmpcqXPM1 /tmp/tmputW_Xc
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     artemis failed to run on your output
+                                       ["Unknown value type in operand, <nil>", "Call args and return, fn(int32,int32)->int32, do not agree with called function, <nil>"]
+
+
+-20
+
+---------------------------------
+
+No tests. -5
+
+---------------------------------
+
+Final Score: 75
+Grader: Tim Henderson
+
