@@ -119,7 +119,15 @@ class Operand(ILType):
         self.operand_value = op_val
 
     def __str__(self):
-        return "{}:{}".format(self.operand_value, self.operand_type)
+
+        # Messy but will work for now
+        return "{}:{}".format(
+            str(self.operand_value) if isinstance(self.operand_value, Value) else "({})".format(
+                ", ".join(str(val) for val in self.operand_value)
+            ),
+
+            self.operand_type
+        )
 
 
 class Instruction(ILType):
@@ -145,9 +153,12 @@ class Instruction(ILType):
         self.R = operand
 
     def __str__(self):
-        return "{} \t {}".format(
+        return "{} \t {:<30} \t {:<30} \t {:<30}".format(
             self.op,
-            "\t".join(map(lambda x: str(x) if x.operand_type is not "unit" else "", (self.A, self.B, self.R)))
+            str(self.A) if self.A.operand_type is not "unit" else "",
+            str(self.B) if self.B.operand_type is not "unit" else "",
+            str(self.R) if self.R.operand_type is not "unit" else ""
+            # "\t".join(map(lambda x: str(x) if x.operand_type is not "unit" else "", (self.A, self.B, self.R)))
         )
 
 
