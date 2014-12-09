@@ -176,7 +176,7 @@ class ILGenerator():
 
             final_block = self.current_func().add_block()
             else_block.add_jump(final_block)
-            
+
         then_block.add_jump(final_block)
         self.block_stack.append(final_block)
 
@@ -226,10 +226,6 @@ class ILGenerator():
         self.write_instr(then_instr)
 
         self.current_block().add_jump(else_blk)
-        else_instr = Instruction("J", r=Operand("label", else_blk.name))
-
-
-
 
 
     def gen_asn_stmt(self, node):
@@ -357,6 +353,7 @@ class ILGenerator():
         :rtype Instruction
         """
         expr_kind = node_label(node)
+        expr_type = node.arrowtype
 
         # +, -, *, /, or % operators
         if re.match("[+\-*/%]", expr_kind):
