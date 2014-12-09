@@ -86,11 +86,17 @@ class BasicBlock(ILType):
     def add_instr(self, op, **kwargs):
         self.instructions.append(Instruction(op, **kwargs))
 
+    def add_jump(self, other_blk):
+        self.instructions.append(Instruction("J", a=Operand("label", other_blk.name)))
+        self.next.append(other_blk.name)
+        other_blk.prev.append(self.name)
+
+
     def __str__(self):
         return "{} next:{{{}}} prev:{{{}}} \n\t\t{}".format(
             self.name,
-            ", ".join(b.name for b in self.next),
-            ", ".join(b.name for b in self.prev),
+            ", ".join(self.next),
+            ", ".join(self.prev),
             "\n\t\t".join(map(str, self.instructions))
         )
 
@@ -122,7 +128,7 @@ class Operand(ILType):
 
         # Messy but will work for now
         return "{}:{}".format(
-            str(self.operand_value) if isinstance(self.operand_value, Value) else "({})".format(
+            str(self.operand_value) if isinstance(self.operand_value, (Value, basestring)) else "({})".format(
                 ", ".join(str(val) for val in self.operand_value)
             ),
 

@@ -83,12 +83,19 @@ class ILGenerator():
                 return d[sym]
 
 
-    def get_current_func(self):
+    def current_func(self):
         """
-        :rtype Function
+        :rtype: Function
         :return:
         """
         return self.func_stack[-1]
+
+    def current_block(self):
+        """
+        :rtype: BasicBlock
+        :return:
+        """
+        return self.block_stack[-1]
 
     # def write_instr(self, op, **operands):
     #     self.current_block.add_instr(op, **operands)
@@ -139,7 +146,7 @@ class ILGenerator():
         elif stmt_kind == "Call":
             self.gen_call_stmt(node)
         elif stmt_kind == "If":
-            pass
+            self.gen_if(node)
         elif stmt_kind == "For":
             pass
         elif stmt_kind == "FuncDef":
@@ -148,12 +155,80 @@ class ILGenerator():
             return None
 
     def gen_if(self, node):
-        then_block = self.func_stack[-1].add_block()
-        else_block = self.func_stack[-1].add_block()
-        final_block = self.func_stack[-1].add_block()
+        then_block = self.current_func().add_block()
+        else_block = self.current_func().add_block()
+        final_block = else_block
+
+        self.gen_bool_expr(node.children[0].children[0], then_block, else_block)
+
+        self.block_stack.append(then_block)
+        for stmt in node.children[1].children:
+            self.gen_block_stmt(stmt)
+        self.block_stack.pop()
+
+        if len(node.children[2].children) != 0:
+            self.block_stack.append(else_block)
+            if node_label(node.children[2].children[0]) == "If":
+                self.gen_if(node.children[2].children[0])
+            else:
+                for stmt in node.children[2].children[0].children:
+                    self.gen_block_stmt(stmt)
+
+            final_block = self.current_func().add_block()
+            else_block.add_jump(final_block)
+            
+        then_block.add_jump(final_block)
+        self.block_stack.append(final_block)
+
 
     def gen_bool_expr(self, node, then_blk, else_blk):
-        pass
+        expr_kind = node_label(node)
+
+        if node_data(node) == "true":
+            self.current_block().add_jump(then_blk)
+
+        elif node_data(node) == "false":
+            self.current_block().add_jump(else_blk)
+
+        elif expr_kind in cmp_ops:
+            self.gen_cmp_op(node, then_blk, else_blk)
+
+        elif expr_kind == "And":
+            pass
+
+        elif expr_kind == "Or":
+            pass
+
+        elif expr_kind == "Not":
+            pass
+
+        else:
+            print "DEBUG: bool expr fell through @ " + str(node)
+
+
+    def gen_cmp_op(self, node, then_blk, else_blk):
+        left_expr = self.gen_expr(node.children[0])
+        right_expr = self.gen_expr(node.children[1])
+
+        left_reg = self.get_register()
+        right_reg = self.get_register()
+
+        left_expr.set_r(Operand(node.children[0].arrowtype, left_reg))
+        right_expr.set_r(Operand(node.children[1].arrowtype, right_reg))
+
+        self.write_instr(left_expr)
+        self.write_instr(right_expr)
+
+        cmp_op = node_label(node)
+        then_instr = Instruction(cmp_ops[cmp_op], a=left_expr.R, b=right_expr.R, r=Operand("label", then_blk.name))
+        self.block_stack[-1].next.append(then_blk.name)
+        then_blk.prev.append(self.block_stack[-1].name)
+        self.write_instr(then_instr)
+
+        self.current_block().add_jump(else_blk)
+        else_instr = Instruction("J", r=Operand("label", else_blk.name))
+
+
 
 
 
