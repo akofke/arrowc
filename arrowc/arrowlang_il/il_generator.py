@@ -154,7 +154,7 @@ class ILGenerator():
             return self.gen_if(node, curr_blk)
 
         elif stmt_kind == "For":
-            pass
+            return self.gen_for(node, curr_blk)
 
         elif stmt_kind == "FuncDef":
             return self.gen_funcdef(node, curr_blk)
@@ -192,7 +192,29 @@ class ILGenerator():
         return curr_blk
 
     def gen_for(self, node, curr_blk):
-        pass
+        has_decl = len(node.children[0].children) != 0
+        has_update = len(node.children[2].children) != 0
+
+        condition_blk = self.current_func().add_block()
+        loop_blk = self.current_func().add_block()
+        end_blk = self.current_func().add_block()
+
+        if has_decl:
+            curr_blk = self.gen_decl(node.children[0].children[0], curr_blk)
+
+        curr_blk.add_jump(condition_blk)
+
+        if has_update:
+            update_blk = self.current_func().add_block()
+            self.gen_bool_expr(node.children[1].children[0], condition_blk, update_blk, end_blk)
+            self.gen_asn_stmt(node.children[2].children[0], update_blk)
+            update_blk.add_jump(loop_blk)
+        else:
+            self.gen_bool_expr(node.children[1].children[0], condition_blk, loop_blk, end_blk)
+
+        last_loop_blk = self.gen_block_stmts(node.children[3], loop_blk)
+        last_loop_blk.add_jump(end_blk)
+        return end_blk
 
     def gen_if(self, node, curr_blk):
         then_block = self.current_func().add_block()
