@@ -170,9 +170,8 @@ class ILGenerator():
         elif stmt_kind == "Break":
                 pass
 
-        else:
-            print "DEBUG: stmt fell thru  @ " + str(node)
-            return None
+
+        print "DEBUG: stmt fell thru  @ " + str(node)
 
     def gen_block_stmts(self, node, curr_blk):
         """
@@ -190,6 +189,9 @@ class ILGenerator():
             curr_blk = self.gen_stmt(stmt, curr_blk)
 
         return curr_blk
+
+    def gen_continue(self, curr_blk):
+        pass
 
     def gen_for(self, node, curr_blk):
         has_decl = len(node.children[0].children) != 0
@@ -213,7 +215,7 @@ class ILGenerator():
             self.gen_bool_expr(node.children[1].children[0], condition_blk, loop_blk, end_blk)
 
         last_loop_blk = self.gen_block_stmts(node.children[3], loop_blk)
-        last_loop_blk.add_jump(end_blk)
+        last_loop_blk.add_jump(condition_blk)
         return end_blk
 
     def gen_if(self, node, curr_blk):
