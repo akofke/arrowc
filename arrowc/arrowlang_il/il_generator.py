@@ -279,7 +279,7 @@ class ILGenerator():
         expr_instr.set_r(Operand(node.children[1].arrowtype, self.get_register()))
         self.write_instr(curr_blk, expr_instr)
 
-        instr = Instruction("IMM", a=expr_instr.R, r=var_oprnd)
+        instr = Instruction("MV", a=expr_instr.R, r=var_oprnd)
         self.write_instr(curr_blk, instr)
         return curr_blk
 
