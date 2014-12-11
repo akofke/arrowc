@@ -164,11 +164,11 @@ class ILGenerator():
         elif stmt_kind == "Return":
                 return self.gen_return(node, curr_blk)
 
-        elif stmt_kind == "Continue":
-                pass
-
-        elif stmt_kind == "Break":
-                pass
+        # elif stmt_kind == "Continue":
+        #         pass
+        #
+        # elif stmt_kind == "Break":
+        #         pass
 
 
         print "DEBUG: stmt fell thru  @ " + str(node)
@@ -190,8 +190,18 @@ class ILGenerator():
 
         return curr_blk
 
-    def gen_continue(self, curr_blk):
-        pass
+    def gen_loop_stmts(self, node, loop_blk, restart_blk, end_blk):
+        for stmt in node.children:
+            if node_label(stmt) == "Continue":
+                loop_blk.add_jump(restart_blk)
+                return loop_blk
+            elif node_label(stmt) == "Break":
+                loop_blk.add_jump(end_blk)
+                return loop_blk
+            else:
+                loop_blk = self.gen_stmt(stmt, loop_blk)
+
+        return loop_blk
 
     def gen_for(self, node, curr_blk):
         has_decl = len(node.children[0].children) != 0
@@ -200,6 +210,7 @@ class ILGenerator():
         condition_blk = self.current_func().add_block()
         loop_blk = self.current_func().add_block()
         end_blk = self.current_func().add_block()
+        restart_blk = condition_blk
 
         if has_decl:
             curr_blk = self.gen_decl(node.children[0].children[0], curr_blk)
@@ -208,13 +219,15 @@ class ILGenerator():
 
         if has_update:
             update_blk = self.current_func().add_block()
+            restart_blk = update_blk
+
             self.gen_bool_expr(node.children[1].children[0], condition_blk, update_blk, end_blk)
             self.gen_asn_stmt(node.children[2].children[0], update_blk)
             update_blk.add_jump(loop_blk)
         else:
             self.gen_bool_expr(node.children[1].children[0], condition_blk, loop_blk, end_blk)
 
-        last_loop_blk = self.gen_block_stmts(node.children[3], loop_blk)
+        last_loop_blk = self.gen_loop_stmts(node.children[3], loop_blk, restart_blk, end_blk)
         last_loop_blk.add_jump(condition_blk)
         return end_blk
 

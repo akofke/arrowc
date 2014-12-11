@@ -404,6 +404,12 @@ class ArrowTypechecker:
         self.pop_scope()
         return append_type(self.prims["unit"], node)
 
+    def tc_Continue(self, node):
+        return append_type(self.prims["unit"], node)
+
+    def tc_Break(self, node):
+        return append_type(self.prims["unit"], node)
+
     # Call, Cast and helper typecheck
     ######################################################################
 
