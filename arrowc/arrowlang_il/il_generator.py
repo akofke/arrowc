@@ -183,13 +183,16 @@ class ILGenerator():
         :param curr_blk:
         :return: the block we end up in
         """
-        if(node_label(node) != "Block"):
+        if node_label(node) != "Block":
             print "DEBUG: expected Block got " + str(node)
 
         for stmt in node.children:
             curr_blk = self.gen_stmt(stmt, curr_blk)
 
         return curr_blk
+
+    def gen_for(self, node, curr_blk):
+        pass
 
     def gen_if(self, node, curr_blk):
         then_block = self.current_func().add_block()
