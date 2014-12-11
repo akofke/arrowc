@@ -229,8 +229,10 @@ class Value(ILType):
     def __str__(self):
         if "constant" in self.type:
             return "{}".format(self.value)
-        elif "target" in self.type:
+        elif self.type == "native-target":
             return "{}".format(self.func)
+        elif self.type == "jump-target":
+            return "{}".format(self.block)
         elif self.type == "register":
             return "R({},{})".format(self.id, self.scope)
         else:
