@@ -221,21 +221,23 @@ class ILGenerator():
 
         if node_data(node) == "true":
             curr_blk.add_jump(then_blk)
+            return curr_blk
 
         elif node_data(node) == "false":
             curr_blk.add_jump(then_blk)
+            return curr_blk
 
         elif expr_kind in cmp_ops:
-            self.gen_cmp_op(node, curr_blk, then_blk, else_blk)
+            return self.gen_cmp_op(node, curr_blk, then_blk, else_blk)
 
         elif expr_kind == "And":
-            pass
+            return self.gen_and(node, curr_blk, then_blk, else_blk)
 
         elif expr_kind == "Or":
-            pass
+            return self.gen_or(node, curr_blk, then_blk, else_blk)
 
         elif expr_kind == "Not":
-            pass
+            return self.gen_not(node, curr_blk, then_blk, else_blk)
 
         else:
             print "DEBUG: bool expr fell through @ " + str(node)
@@ -256,6 +258,17 @@ class ILGenerator():
         curr_blk.add_jump(else_blk)
 
         return curr_blk
+
+    def gen_and(self, node, curr_blk, then_blk, else_blk):
+        passable_blk = self.gen_bool_expr(node.children[1], self.current_func().add_block(), then_blk, else_blk)
+        return self.gen_bool_expr(node.children[0], curr_blk, passable_blk, else_blk)
+
+    def gen_or(self, node, curr_blk, then_blk, else_blk):
+        passable_blk = self.gen_bool_expr(node.children[1], self.current_func().add_block(), then_blk, else_blk)
+        return self.gen_bool_expr(node.children[0], curr_blk, then_blk, passable_blk)
+
+    def gen_not(self, node, curr_blk, then_blk, else_blk):
+        return self.gen_bool_expr(node.children[0], curr_blk, then_blk=else_blk, else_blk=then_blk)
 
     def gen_asn_stmt(self, node, curr_blk):
         var_oprnd = self.get_symbol_operand(node_data(node.children[0]))
