@@ -3,7 +3,6 @@
 from il_types import *
 import arrowc.arrowlang_types as types
 import re
-import json
 import betterast
 
 
@@ -13,9 +12,9 @@ def node_label(node):
     """
     return re.split(",|:", node.label)[0]
 
+
 def node_data(node):
     return re.split(",|:", node.label)[1]
-
 
 
 arith_ops = {
@@ -53,10 +52,8 @@ class ILGenerator():
 
         self.program = Program()
         self.func_stack = []
-        # self.block_stack_ = []  # to remove
 
-        self.gen_il()
-        # self.init_program()
+        # self.gen_il()
 
     def get_json(self):
         pass
@@ -84,7 +81,6 @@ class ILGenerator():
             if sym in d:
                 return d[sym]
 
-
     def current_func(self):
         """
         :rtype: Function
@@ -92,29 +88,7 @@ class ILGenerator():
         """
         return self.func_stack[-1]
 
-
-    def current_block_(self): #remove
-        """
-        :rtype: BasicBlock
-        :return:
-        """
-        return self.block_stack[-1]
-
-    # def write_instr(self, op, **operands):
-    #     self.current_block.add_instr(op, **operands)
-
     def init_program(self, main_blk0):
-
-        # delete
-        # self.program.types.update((name, ArrowType(val)) for name, val in types.prims.iteritems())
-
-
-        # delete
-        # main_func = self.program.add_main()
-        # main_b0 = main_func.add_block()
-        # self.func_stack.append(main_func)
-        # self.block_stack.append(main_b0)
-
 
         # possibly change this to only add types when used
         # add all arrowlang primitive types to program types list
@@ -122,8 +96,7 @@ class ILGenerator():
             self.program.add_type(arr_type)
         self.program.add_type(types.Type("label"))
 
-        # move all standard library functions into registers,
-        # and add their types
+        # move all standard library functions into registers, and add their types
         for func_name, func_type in types.library_funcs.iteritems():
 
             instr = Instruction(
@@ -139,11 +112,17 @@ class ILGenerator():
 
     # change to either a function or method of block
     def write_instr(self, block, instr):
+        """
+
+        :type block: BasicBlock
+        :type instr: Instruction
+        """
         block.instructions.append(instr)
         # self.block_stack[-1].instructions.append(instr)
 
     def gen_il(self):
         main_func = self.program.add_main()
+        self.func_stack.append(main_func)
 
         # main-b-0
         curr_blk = main_func.add_block()
@@ -158,7 +137,6 @@ class ILGenerator():
 
         # probably change this
         return self.program
-
 
     def gen_stmt(self, node, curr_blk):
         stmt_kind = node_label(node)
@@ -193,10 +171,21 @@ class ILGenerator():
                 pass
 
         else:
-            print "DEBUG: stmt fell thru  @ " + node
+            print "DEBUG: stmt fell thru  @ " + str(node)
             return None
 
     def gen_block_stmts(self, node, curr_blk):
+        """
+        Generates IL for all block statement children of node (which is a "Block" node) and returns
+        the final current block
+
+        :param node: a "Block" node
+        :param curr_blk:
+        :return: the block we end up in
+        """
+        if(node_label(node) != "Block"):
+            print "DEBUG: expected Block got " + str(node)
+
         for stmt in node.children:
             curr_blk = self.gen_stmt(stmt, curr_blk)
 
@@ -219,7 +208,7 @@ class ILGenerator():
             if node_label(node.children[2].children[0]) == "If":
                 last_else_blk = self.gen_if(node.children[2].children[0], else_block)
             else:
-                last_else_blk = self.gen_block_stmts(node.children[0].children[0], else_block)
+                last_else_blk = self.gen_block_stmts(node.children[2].children[0], else_block)
 
             final_block = self.current_func().add_block()
             last_else_blk.add_jump(final_block)
@@ -232,11 +221,9 @@ class ILGenerator():
 
         if node_data(node) == "true":
             curr_blk.add_jump(then_blk)
-            # self.current_block().add_jump(then_blk)
 
         elif node_data(node) == "false":
             curr_blk.add_jump(then_blk)
-            # self.current_block().add_jump(else_blk)
 
         elif expr_kind in cmp_ops:
             self.gen_cmp_op(node, curr_blk, then_blk, else_blk)
@@ -254,44 +241,39 @@ class ILGenerator():
             print "DEBUG: bool expr fell through @ " + str(node)
 
     def gen_cmp_op(self, node, curr_blk, then_blk, else_blk):
-        left_expr = self.gen_expr(node.children[0])
-        right_expr = self.gen_expr(node.children[1])
+        left_expr = self.gen_expr(node.children[0], curr_blk)
+        right_expr = self.gen_expr(node.children[1], curr_blk)
 
-        left_reg = self.get_register()
-        right_reg = self.get_register()
+        left_expr.set_r(Operand(node.children[0].arrowtype, self.get_register()))
+        right_expr.set_r(Operand(node.children[1].arrowtype, self.get_register()))
 
-        left_expr.set_r(Operand(node.children[0].arrowtype, left_reg))
-        right_expr.set_r(Operand(node.children[1].arrowtype, right_reg))
-
-        self.write_instr(curr_blk, left_expr)  # fix to take block
+        self.write_instr(curr_blk, left_expr)
         self.write_instr(curr_blk, right_expr)
 
         cmp_op = node_label(node)
-        then_instr = Instruction(cmp_ops[cmp_op], a=left_expr.R, b=right_expr.R, r=Operand("label", then_blk.name))
-        self.block_stack[-1].next.append(then_blk.name)
-        then_blk.prev.append(self.block_stack[-1].name)
-        self.write_instr(curr_blk, then_instr)
 
+        curr_blk.add_cmp_jump(cmp_ops[cmp_op], left_expr.R, right_expr.R, then_blk)
         curr_blk.add_jump(else_blk)
+
         return curr_blk
 
     def gen_asn_stmt(self, node, curr_blk):
         var_oprnd = self.get_symbol_operand(node_data(node.children[0]))
-        expr_oprnd = self.gen_expr(node.children[1])
+        expr_instr = self.gen_expr(node.children[1], curr_blk)
+        expr_instr.set_r(Operand(node.children[1].arrowtype, self.get_register()))
+        self.write_instr(curr_blk, expr_instr)
 
-        instr = Instruction("IMM", a=expr_oprnd, r=var_oprnd)
+        instr = Instruction("IMM", a=expr_instr.R, r=var_oprnd)
         self.write_instr(curr_blk, instr)
-
-
+        return curr_blk
 
     def gen_funcdef(self, node, curr_blk):
         func_name = node_data(node.children[0])
         func_type = node.children[0].arrowtype
         scope_level = self.func_stack[-1].scope_level + 1
-        # static_scope = list(self.current_func.static_scope).append(self.current_func.name)
         static_scope = self.current_func().static_scope[:] + [self.current_func().name]
 
-        func = self.program.add_func(func_name, func_type, scope_level, static_scope=static_scope)
+        func = self.program.add_func(func_name, func_type, scope_level, static_scope)
         func_block = func.add_block()
 
         instr = Instruction(
@@ -311,12 +293,11 @@ class ILGenerator():
         self.reg_counter.append(0)
         self.reg_table.append(dict())
         self.func_stack.append(func)
-        # self.block_stack.append(func_block)
 
-        for block_stmt in node.children[3].children:
-            self.gen_block_stmt(block_stmt, func_block)
+        self.gen_block_stmts(node.children[3], func_block)
+        # for block_stmt in node.children[3].children:
+        #     self.gen_block_stmt(block_stmt, func_block)
 
-        # self.block_stack.pop()
         self.func_stack.pop()
         self.reg_table.pop()
         self.reg_counter.pop()
@@ -337,11 +318,6 @@ class ILGenerator():
         instr.set_a(a)
         self.write_instr(curr_blk, instr)
         return curr_blk
-
-
-
-
-
 
     def gen_call(self, node, curr_blk):
         sym_name = node_data(node.children[0])
@@ -369,7 +345,7 @@ class ILGenerator():
         return Instruction("CALL", a=func_op, b=params_op)
 
     def gen_call_stmt(self, node, curr_blk):
-        call_instr = self.gen_call(node)
+        call_instr = self.gen_call(node, curr_blk)
         self.write_instr(curr_blk, call_instr)
         return curr_blk
 
@@ -386,7 +362,7 @@ class ILGenerator():
         instr.set_r(r)
 
         self.reg_table[-1][var_name] = r
-        self.write_instr(instr, curr_blk)
+        self.write_instr(curr_blk, instr)
         return curr_blk
 
 

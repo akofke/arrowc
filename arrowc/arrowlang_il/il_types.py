@@ -91,6 +91,11 @@ class BasicBlock(ILType):
         self.next.append(other_blk.name)
         other_blk.prev.append(self.name)
 
+    def add_cmp_jump(self, cmp_op, a, b, then_blk):
+        self.instructions.append(Instruction(cmp_op, a, b, Operand("label", then_blk.name)))
+        self.next.append(then_blk.name)
+        then_blk.prev.append(self.name)
+
 
     def __str__(self):
         return "{} next:{{{}}} prev:{{{}}} \n\t\t{}".format(
