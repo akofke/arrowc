@@ -227,7 +227,7 @@ class ILGenerator():
             return curr_blk
 
         elif node_data(node) == "false":
-            curr_blk.add_jump(then_blk)
+            curr_blk.add_jump(else_blk)
             return curr_blk
 
         elif expr_kind in cmp_ops:
