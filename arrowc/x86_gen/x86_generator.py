@@ -28,6 +28,13 @@ class X86Generator():
         self.data = list()
         self.program = list()
 
+        self.init_program()
+
+    def init_program(self):
+        self.rodata.append("\t.section\t.rodata")
+        self.data.append("\t.section\t.data")
+        self.program.append("\t.section\t.text")
+
     def get_program(self):
         native_code = read_native()
         return "\n\n".join((
@@ -37,6 +44,5 @@ class X86Generator():
             "\n".join(line for line in self.program)
         ))
 
-    def init_program(self):
-        pass
+
 
