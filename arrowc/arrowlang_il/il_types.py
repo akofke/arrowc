@@ -111,10 +111,10 @@ class BasicBlock(ILType):
 
 
     def __str__(self):
-        return "{} next:{{{}}} prev:{{{}}} \n\t\t{}".format(
+        return "{} prev:{{{}}} next:{{{}}}  \n\t\t{}".format(
             self.name,
-            ", ".join(self.next),
             ", ".join(self.prev),
+            ", ".join(self.next),
             "\n\t\t".join(map(str, self.instructions))
         )
 
