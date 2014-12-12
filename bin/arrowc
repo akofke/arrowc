@@ -156,8 +156,8 @@ def print_json(inp, outp):
                 try:
                     ast = ArrowParser().parse(program)
                     typed_ast = ArrowTypechecker(ast).typecheck()
-                    prog = ILGenerator(typed_ast).gen_il()
-                    json_str += json.dumps(prog, default=json_convert) + "\n"
+                    json_str += ILGenerator(typed_ast).get_json() + "\n"
+                    # json_str += json.dumps(prog, default=json_convert) + "\n"
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))
                     sys.exit(1)
@@ -183,8 +183,7 @@ def print_il(inp, outp):
                 try:
                     ast = ArrowParser().parse(program)
                     typed_ast = ArrowTypechecker(ast).typecheck()
-                    prog = ILGenerator(typed_ast).gen_il()
-                    il_str = str(prog) + "\n"
+                    il_str += ILGenerator(typed_ast).get_prettyprint() + "\n"
                 except SyntaxError, e:
                     log("Error in %s: %s" % (input_name, e))
                     sys.exit(1)

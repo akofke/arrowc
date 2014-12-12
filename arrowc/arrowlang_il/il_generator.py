@@ -45,21 +45,24 @@ class ILGenerator():
 
         # maps symbols to Operands, i.e. the register and the type, in each scope
         self.reg_table = [dict()]
+        self.reg_counter = [0]
 
         # maps a symbol to its parameter position number (1, 2, etc.) for the current funcdef
         self.func_param_table = [dict()]
-        self.reg_counter = [0]
+
+        # stack containing a tuple of the enclosing loop's "continue to" and "break to" blocks
+        self.loop_control_blks = []
 
         self.program = Program()
         self.func_stack = []
 
-        # self.gen_il()
+        self.gen_il()
 
     def get_json(self):
-        pass
+        return json.dumps(self.program, default=json_convert)
 
     def get_prettyprint(self):
-        pass
+        return str(self.program)
 
     def get_register(self):
         """
@@ -136,7 +139,7 @@ class ILGenerator():
         self.write_instr(curr_blk, Instruction("EXIT"))
 
         # probably change this
-        return self.program
+        # return self.program
 
     def gen_stmt(self, node, curr_blk):
         stmt_kind = node_label(node)
@@ -159,17 +162,16 @@ class ILGenerator():
         elif stmt_kind == "FuncDef":
             return self.gen_funcdef(node, curr_blk)
 
-        # these are included in normal stmts since they could not get through the parser
-        # if they weren't correctly block stmts
         elif stmt_kind == "Return":
-                return self.gen_return(node, curr_blk)
+            return self.gen_return(node, curr_blk)
 
-        # elif stmt_kind == "Continue":
-        #         pass
-        #
-        # elif stmt_kind == "Break":
-        #         pass
+        elif stmt_kind == "Continue":
+            curr_blk.add_jump(self.loop_control_blks[-1][0])
+            return curr_blk
 
+        elif stmt_kind == "Break":
+            curr_blk.add_jump(self.loop_control_blks[-1][1])
+            return curr_blk
 
         print "DEBUG: stmt fell thru  @ " + str(node)
 
@@ -190,18 +192,18 @@ class ILGenerator():
 
         return curr_blk
 
-    def gen_loop_stmts(self, node, loop_blk, restart_blk, end_blk):
-        for stmt in node.children:
-            if node_label(stmt) == "Continue":
-                loop_blk.add_jump(restart_blk)
-                return loop_blk
-            elif node_label(stmt) == "Break":
-                loop_blk.add_jump(end_blk)
-                return loop_blk
-            else:
-                loop_blk = self.gen_stmt(stmt, loop_blk)
-
-        return loop_blk
+    # def gen_loop_stmts(self, node, loop_blk, restart_blk, end_blk):
+    #     for stmt in node.children:
+    #         if node_label(stmt) == "Continue":
+    #             loop_blk.add_jump(restart_blk)
+    #             return loop_blk
+    #         elif node_label(stmt) == "Break":
+    #             loop_blk.add_jump(end_blk)
+    #             return loop_blk
+    #         else:
+    #             loop_blk = self.gen_stmt(stmt, loop_blk)
+    #
+    #     return loop_blk
 
     def gen_for(self, node, curr_blk):
         has_decl = len(node.children[0].children) != 0
@@ -217,18 +219,20 @@ class ILGenerator():
 
         curr_blk.add_jump(condition_blk)
 
+        self.gen_bool_expr(node.children[1].children[0], condition_blk, loop_blk, end_blk)
+
         if has_update:
             update_blk = self.current_func().add_block()
             restart_blk = update_blk
 
-            self.gen_bool_expr(node.children[1].children[0], condition_blk, update_blk, end_blk)
             self.gen_asn_stmt(node.children[2].children[0], update_blk)
-            update_blk.add_jump(loop_blk)
-        else:
-            self.gen_bool_expr(node.children[1].children[0], condition_blk, loop_blk, end_blk)
+            update_blk.add_jump(condition_blk)
 
-        last_loop_blk = self.gen_loop_stmts(node.children[3], loop_blk, restart_blk, end_blk)
-        last_loop_blk.add_jump(condition_blk)
+        self.loop_control_blks.append((restart_blk, end_blk))
+        last_loop_blk = self.gen_block_stmts(node.children[3], loop_blk)
+        self.loop_control_blks.pop()
+
+        last_loop_blk.add_jump(restart_blk)
         return end_blk
 
     def gen_if(self, node, curr_blk):

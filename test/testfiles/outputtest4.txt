@@ -1,0 +1,24 @@
+main fn()->unit
+  main-b-0 prev:{} next:{}
+    IMM  print_int32:label               R{0,0}:fn(int32)->unit
+    IMM  print_uint32:label              R{1,0}:fn(uint32)->unit
+    IMM  print_int8:label                R{2,0}:fn(int8)->unit
+    IMM  print_uint8:label               R{3,0}:fn(uint8)->unit
+    IMM  print_float32:label             R{4,0}:fn(float32)->unit
+    IMM  print:label                     R{5,0}:fn(string)->unit
+    IMM  1:int32                         R{8,0}:int32
+    IMM  2:int32                         R{9,0}:int32
+    MUL  R{8,0}:int32    R{9,0}:int32    R{7,0}:int32
+    IMM  3:int32                         R{12,0}:int32
+    IMM  1:int32                         R{15,0}:int32
+    IMM  0:int32                         R{16,0}:int32
+    SUB  R{16,0}:int32   R{15,0}:int32   R{14,0}:int32
+    IMM  7:int32                         R{17,0}:int32
+    ADD  R{14,0}:int32   R{17,0}:int32   R{13,0}:int32
+    MUL  R{12,0}:int32   R{13,0}:int32   R{11,0}:int32
+    IMM  2:int32                         R{18,0}:int32
+    DIV  R{11,0}:int32   R{18,0}:int32   R{10,0}:int32
+    ADD  R{7,0}:int32    R{10,0}:int32   R{6,0}:int32
+    EXIT
+
+
