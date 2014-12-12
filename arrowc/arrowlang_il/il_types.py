@@ -1,5 +1,6 @@
 #!usr/bin/env python
 
+import struct
 import json
 import arrowc.arrowlang_types as al_types
 
@@ -226,17 +227,22 @@ class Value(ILType):
         elif const_type.name == "string":
             return Value("string", value=value)
 
+    @staticmethod
+    def _float_to_hex(fl):
+        return hex(struct.unpack('<I', struct.pack('<f', fl))[0])
+
     def __str__(self):
+        if self.type == "float-constant":
+            return "{}".format(Value._float_to_hex(self.value))
         if "constant" in self.type:
             return "{}".format(self.value)
         elif self.type == "native-target":
             return "{}".format(self.func)
         elif self.type == "jump-target":
-            return "{}".format(self.func)
+            return "{}".format(self.block)
         elif self.type == "register":
             return "R{{{},{}}}".format(self.id, self.scope)
-        else:
-            print "ERROR BAD VALUE!!!!"
+        
 
 
 
