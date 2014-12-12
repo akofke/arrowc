@@ -1,11 +1,11 @@
 
 
 	.section	.rodata
-.main_b_0_6:
-	.string "hello"
 
 	.section	.data
 display_0: 
+	.long 0
+display_1: 
 	.long 0
 
 	.file	"native.c"
@@ -184,7 +184,7 @@ print:
 main:
 	pushl	%ebp
 	movl	%esp, %ebp
-	subl	$36, %esp
+	subl	$40, %esp
 	movl	display_0, %ebx
 	movl	%ebx, -4(%ebp)
 	movl	%ebp, display_0
@@ -194,43 +194,82 @@ main:
 	movl	$0, -20(%ebp)	# R{3,0}:fn(uint8)->unit
 	movl	$0, -24(%ebp)	# R{4,0}:fn(float32)->unit
 	movl	$0, -28(%ebp)	# R{5,0}:fn(string)->unit
-	movl	$0, -32(%ebp)	# R{6,0}:string
+	movl	$0, -32(%ebp)	# R{6,0}:int32
+	movl	$0, -36(%ebp)	# R{7,0}:fn()->int32
 
 
 main_b_0:
 
 	# IMM  print_int32:label               R{0,0}:fn(int32)->unit
 	#						-8(%ebp)
-	leal	print_int32, %eax
+	leal	print_int32, %ebx
 
 	# IMM  print_uint32:label              R{1,0}:fn(uint32)->unit
 	#						-12(%ebp)
-	leal	print_uint32, %ebx
+	leal	print_uint32, %ecx
 
 	# IMM  print_int8:label                R{2,0}:fn(int8)->unit
 	#						-16(%ebp)
-	leal	print_int8, %ecx
+	leal	print_int8, %esi
 
 	# IMM  print_uint8:label               R{3,0}:fn(uint8)->unit
 	#						-20(%ebp)
-	leal	print_uint8, %edx
+	leal	print_uint8, %eax
 
 	# IMM  print_float32:label             R{4,0}:fn(float32)->unit
 	#						-24(%ebp)
-	leal	print_float32, %esi
+	leal	print_float32, %edx
 
 	# IMM  print:label                     R{5,0}:fn(string)->unit
 	#						-28(%ebp)
 	leal	print, %edi
 
-	# IMM  "hello":string                  R{6,0}:string
+	# IMM  1:int32                         R{6,0}:int32
 	#						-32(%ebp)
-	movl	%eax, -8(%ebp)
-	leal	.main_b_0_6, %eax
-	movl	%eax, -32(%ebp)
+	movl	%ecx, -12(%ebp)
+	movl	$1, %ecx
+
+	# IMM  fn-0-f:label                    R{7,0}:fn()->int32
+	#						-36(%ebp)
+	movl	%edi, -28(%ebp)
+	leal	fn_0_f, %edi
 
 	# EXIT
 	#							
 	pushw	$0
 	call	exit
+
+	.global	fn_0_f
+	.type	fn_0_f	@function
+fn_0_f:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$20, %esp
+	movl	display_1, %ebx
+	movl	%ebx, -4(%ebp)
+	movl	%ebp, display_1
+	movl	$0, -8(%ebp)	# R{0,1}:int32
+	movl	$0, -12(%ebp)	# R{1,1}:int32
+	movl	$0, -16(%ebp)	# R{2,1}:int32
+
+
+fn_0_f_b_0:
+
+	# IMM  1:int32                         R{2,1}:int32
+	#						-16(%ebp)
+	movl	$1, %edx
+
+	# ADD  R{6,0}:int32    R{2,1}:int32    R{0,1}:int32
+	#	-20(%ebp)	-16(%ebp)		-8(%ebp)
+	movl	display_0, %edi
+	movl	-32(%edi), %ebx
+	addl	%edx, %ebx
+
+	# RTRN R{0,1}:int32
+	#	-8(%ebp)					
+	movl	%edx, -16(%ebp)
+	movl	%ebx, -8(%ebp)
+	movl	-8(%ebp), %eax
+	leave
+	ret
 
