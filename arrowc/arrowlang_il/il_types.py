@@ -234,7 +234,7 @@ class Value(ILType):
         elif self.type == "jump-target":
             return "{}".format(self.block)
         elif self.type == "register":
-            return "R({},{})".format(self.id, self.scope)
+            return "R{{{},{}}}".format(self.id, self.scope)
         else:
             print "ERROR BAD VALUE!!!!"
 
