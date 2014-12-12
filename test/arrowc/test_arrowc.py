@@ -6,7 +6,7 @@ from arrowc.arrowlang_typechecker import ArrowTypechecker
 from arrowc.arrowlang_il.il_generator import ILGenerator
 from nose.tools import raises
 import re, string
-
+import StringIO
 
 def test_lexer_comments():
     assert str(ArrowParser().parse('''
@@ -643,3 +643,218 @@ def test_ilgenerator14():
         if sanitize_il(line) not in outputstr:
             booltester = False
     assert booltester
+
+#Only allows for the operations to be tested
+def prep_file(x86):
+        startReading = False
+        str = ""
+
+        for line in x86:
+            line = re.sub(" +", " ", line).strip()
+            if startReading == True:
+                if line.startswith('#') == False:
+                    str = str + "\n" + line
+            elif "main:" in line:
+                startReading = True
+                str = str+line
+        return str
+
+#Only allows for the operations to be tested
+def prep_output_file(inputstr):
+     buf = StringIO.StringIO(inputstr)
+     num = inputstr.count('\n')
+     startReading = False
+     str = ""
+     while  num > 0:
+         line = re.sub(" +", " ", buf.readline()).strip
+         if startReading == True:
+             if line.startswith('#') == False:
+                str = str + "\n" + line
+         elif "main:" in line:
+                startReading = True
+                str = str+line
+         num = num-1
+     return str
+
+
+def x86_test_1():
+    file = open('test/testfiles/x86_test1.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("print_int32(0)")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_2():
+    file = open('test/testfiles/x86_test2.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("for var i = 0; i < 10; i = i + 1 { print_int32(i) }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_3():
+    file = open('test/testfiles/x86_test3.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("func f(i int32, j int32) int32 { return 5*j*j + - 3*j + 2*j*i + i + 7 } print_int32(f(2, 3))")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_4():
+    file = open('test/testfiles/x86_test4.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 1 * 2 + 3 * (-1 + 7) / 2")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_5():
+    file = open('test/testfiles/x86_test5.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_6():
+    file = open('test/testfiles/x86_test6.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 0 if true { x = 1 } else { x = 2 }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_7():
+    file = open('test/testfiles/x86_test7.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 0 if false { x = 1 } else { x = 2 }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_8():
+    file = open('test/testfiles/x86_test8.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 0 if x == 0 { x = 1 } else { x = 2 }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_9():
+    file = open('test/testfiles/x86_test9.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_10():
+    file = open('test/testfiles/x86_test10.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x float32 = float32(1)")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_11():
+    file = open('test/testfiles/x86_test11.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 5 % 2")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_12():
+    file = open('test/testfiles/x86_test12.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("for var i = 0; i < 10; i = i + 1 { print_int32(i) }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_13():
+    file = open('test/testfiles/x86_test13.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 0 if x >= 0 && x < 5 { x = 1 } else { x = 2 }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
+
+def x86_test_14():
+    file = open('test/testfiles/x86_test14.txt', 'r')
+    testStr = prep_file(file)
+    outputStr = prep_output_file("var x = 0 if x >= 0 || x < 5 { x = 1 } else { x = 2 }")
+    buf = StringIO.StringIO(outputStr)
+    num = outputStr.count('\n')
+    boolTester = True
+    while  num > 0:
+        if buf.readline() not in testStr:
+            boolTester = False
+        num = num - 1
+    assert boolTester
