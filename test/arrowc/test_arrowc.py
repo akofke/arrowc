@@ -489,255 +489,157 @@ def get_il(src):
     ).get_prettyprint()
 
 def sanitize_il(il):
-    no_whitespace = re.sub("\s+", " ", il)
+    no_whitespace = re.sub("\s*", "", il)
     no_reg_numbers = re.sub("{\d+,\d+}", ",", no_whitespace)
-    no_blk_numbers = re.sub("b-\d+-", "b--", no_reg_numbers)
+    no_blk_numbers = re.sub("b-\d+", "b-", no_reg_numbers)
     return no_blk_numbers
 
 #tests IL "CALL" function
 #tests "IMM", "CALL", and "EXIT" operations
 def test_ilgenerator1():
-    file = open('outputtest1.txt', 'r')
+    file = open('test/testfiles/outputtest1.txt', 'r')
     outputstr = sanitize_il(get_il("print_int32(0)"))
     booltester = True
-
     for line in file:
         if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester
+    assert booltester 
 
         
 #tests IL "FOR", "Call", "AssignStmt", "LITERAL" "ArithOp" and "BOOLEANEXPR" functions
 #Tests "J", "IFLT", "ADD" operations
 def test_ilgenerator2():
-    file2 = open('outputtest2.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("for var i = 0; i < 10; i = i + 1 { print_int32(i) }")))
+    file = open('test/testfiles/outputtest2.txt', 'r')
+    outputstr = sanitize_il(get_il("for var i = 0; i < 10; i = i + 1 { print_int32(i) }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file2:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
   
 #tests IL "FUNCDEF", both "CALL" functions, and the creation of a new block with "FUNCDEF"
 #Tests "PRM", "MUL", "SUB", "RTRN" operations
 def test_ilgenerator3():
-    file3 = open('outputtest3.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("func f(i int32, j int32) int32 { return 5*j*j + - 3*j + 2*j*i + i + 7 } print_int32(f(2, 3))")))
+    file = open('test/testfiles/outputtest3.txt', 'r')
+    outputstr = sanitize_il(get_il("func f(i int32, j int32) int32 { return 5*j*j + - 3*j + 2*j*i + i + 7 } print_int32(f(2, 3))"))
+    outputstr = re.sub("f-b-:label", "f:label", outputstr)
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file3:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    print outputstr
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+            print line
+    assert booltester 
     
 #tests the basic IL "ADDITION", "MULTIPLICATION", "DIVISION" function and the "NEGATING", "DECL", "EXPR" functions. 
 #Tests "DIV" operation
 def test_ilgenerator4():
-    file4 = open('outputtest4.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 1 * 2 + 3 * (-1 + 7) / 2")))
+    file = open('test/testfiles/outputtest4.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 1 * 2 + 3 * (-1 + 7) / 2"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file4:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
 
 #tests the use of parens to signify order
 def test_ilgenerator5():
-    file5 = open('outputtest5.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")))
+    file = open('test/testfiles/outputtest5.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file5:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
 
 #tests if statement with else block, using true
 def test_ilgenerator6():
-    file6 = open('outputtest6.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 0 if true { x = 1 } else { x = 2 }")))
+    file = open('test/testfiles/outputtest6.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 0 if true { x = 1 } else { x = 2 }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file6:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester
 
 #tests if statement with else block, using false
 def test_ilgenerator7():
-    file7 = open('outputtest7.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 0 if false { x = 1 } else { x = 2 }")))
+    file = open('test/testfiles/outputtest7.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 0 if false { x = 1 } else { x = 2 }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file7:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
 
 #tests if statement and the cmp function
 #Tests "IFEQ"
 def test_ilgenerator8():
-    file8 = open('outputtest8.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 0 if x == 0 { x = 1 } else { x = 2 }")))
+    file = open('test/testfiles/outputtest8.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 0 if x == 0 { x = 1 } else { x = 2 }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file8:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
 
 #tests the use of different type float32
 def test_ilgenerator9():
-    file9 = open('outputtest9.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0")))
+    file = open('test/testfiles/outputtest9.txt', 'r')
+    outputstr = sanitize_il(get_il("var x float32 = 1.0 * 2.0 + 3.0 * (-1.0 + 7.0) / 2.0"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file9:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
-
-#tests the use of while and break 
-def test_ilgenerator10():
-    file10 = open('outputtest10.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("while(true){break}")))
-    booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file10:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
-            booltester = False
-    assert booltester == True
-
-#tests the use of while and continue 
-def test_ilgenerator11():
-    file11 = open('outputtest11.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("while(true){continue}")))
-    booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file11:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
-            booltester = False
-    assert booltester == True
+    assert booltester
 
 #tests the use casting
 #Tests "CAST" op
-def test_ilgenerator12():
-    file12 = open('outputtest12.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x float32 = float32(1)")))
+def test_ilgenerator10():
+    file = open('test/testfiles/outputtest12.txt', 'r')
+    outputstr = sanitize_il(get_il("var x float32 = float32(1)"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file12:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester
 
 #Tests "MOD" op
-def test_ilgenerator13():
-    file13 = open('outputtest13.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 5 % 2")))
+def test_ilgenerator11():
+    file = open('test/testfiles/outputtest13.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 5 % 2"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file13:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
-    
-#tests returning no value
-def test_ilgenerator14():
-    file14 = open('outputtest14.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("func f(i int32) unit { return }")))
-    booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file14:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
-            booltester = False
-    assert booltester == True
+    assert booltester
     
 #Tests for stmts
-def test_ilgenerator15():
-    file15 = open('outputtest15.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("for var i = 0; i < 10; i = i + 1 { print_int32(i) }")))
+def test_ilgenerator12():
+    file = open('test/testfiles/outputtest15.txt', 'r')
+    outputstr = sanitize_il(get_il("for var i = 0; i < 10; i = i + 1 { print_int32(i) }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    for line in file15:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
     
 #Tests for And logic
-def test_ilgenerator16():
-    file16 = open('outputtest16.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 0 if x >= 0 && x < 5 { x = 1 } else { x = 2 }")))
+def test_ilgenerator13():
+    file = open('test/testfiles/outputtest16.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 0 if x >= 0 && x < 5 { x = 1 } else { x = 2 }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    outputstr = re.sub('b-\d', 'b-', outputstr)
-    for line in file16:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        line = re.sub('b-\d', 'b-', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
+    assert booltester 
     
 #Tests Or logic
-def test_ilgenerator17():
-    file17 = open('outputtest17.txt', 'r')
-    outputstr = (ArrowTypechecker(ArrowParser().parse("var x = 0 if x >= 0 || x < 5 { x = 1 } else { x = 2 }")))
+def test_ilgenerator14():
+    file = open('test/testfiles/outputtest17.txt', 'r')
+    outputstr = sanitize_il(get_il("var x = 0 if x >= 0 || x < 5 { x = 1 } else { x = 2 }"))
     booltester = True
-    outputstr = re.sub(' +', ' ', outputstr)
-    outputstr = re.sub('{\d\d*,\d\d*}', ',', outputstr)
-    outputstr = re.sub('b-\d', 'b-', outputstr)
-    for line in file17:
-        line = re.sub(' +', ' ', line)
-        line = re.sub('{\d\d*,\d\d*}', ',', line)
-        line = re.sub('b-\d', 'b-', line)
-        if  line not in outputstr:
+    for line in file:
+        if sanitize_il(line) not in outputstr:
             booltester = False
-    assert booltester == True
-
-
+    assert booltester
