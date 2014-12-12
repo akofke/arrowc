@@ -1,0 +1,1 @@
+func f(x int32) int32 { return x } var x = f(2)
