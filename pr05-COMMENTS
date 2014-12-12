@@ -1,0 +1,218 @@
+Grading Comments for Project 005
+
+Graded Revision: 63544feae711088074b5c7ccd11e901035c08d08
+Revision Date: 2014-12-07
+Due Date: 2014-11-20
+Lateness Discount: Forgiven
+
+Partner Id's: adk62, cym8
+
+----------------------------------------
+
+REGRADE
+
+testing results: 106/108
+
+      "print("done")"
+      > /home/hendersont/stuff/school/compilers/support/pr05/arrowc -J -o /tmp/tmpzjlyQD /tmp/tmpuDUK5A
+      > /home/hendersont/stuff/school/compilers/support/pr05/artemis
+      result = "done"
+      > export PS1="$ " && export PATH=/tmp/tmpgYz0TQ/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmpgYz0TQ/arrowc/bin/arrowc -I -o /tmp/tmpxme62h /tmp/tmpxiZBqa
+      > export PS1="$ " && export PATH=/tmp/tmpgYz0TQ/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmpgYz0TQ/arrowc/bin/arrowc -J -o /tmp/tmpbLXbkS /tmp/tmpiqLT3W
+                                     recieved non-zero exit code for ilret
+                                       Traceback (most recent call last):
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 209, in <module>
+                                           main(sys.argv[1:])
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 99, in main
+                                           print_il(inputs, output)
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 186, in print_il
+                                           il_str += ILGenerator(typed_ast).get_prettyprint() + "\n"
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_generator.py", line 65, in get_prettyprint
+                                           return str(self.program)
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 45, in __str__
+                                           return "\n".join(map(str, self.functions.itervalues())) + "\n"
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 70, in __str__
+                                           return "{} {} \n\t {}".format(self.name, self.func_type, "\n\t".join(map(str, self.blocks)))
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 119, in __str__
+                                           "\n\t\t".join(map(str, self.instructions))
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 183, in __str__
+                                           str(self.A) if self.A.operand_type is not "unit" else "",
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 150, in __str__
+                                           str(self.operand_value) if isinstance(self.operand_value, (Value, basestring)) else "({})".format(
+                                       TypeError: __str__ returned non-string (type NoneType)
+      > /home/hendersont/stuff/school/compilers/support/pr05/artemis
+                                failed -- good test
+                                     artemis failed to run on your output
+                                       unexpected operand_value type: string. should be one of: int-constant, float-constant, boolean-constant, string-constant, unit, register, native-target, jump-target OR as list of operand_values.
+      
+
+ 
+      "func reverse(n int32) int32 {
+          var rev = 0
+          while n > 0 {
+              var dig = n % 10
+              rev = rev * 10 + dig
+              n = n / 10
+          }
+          return rev
+      }
+      var max = 0
+      for var a = 100; a < 1000; a = a + 1 {
+          for var b = a; b < 1000; b = b + 1 {
+              var p = b * a
+              if reverse(p) == p && max < p {
+                  max = p
+              }
+          }
+      }
+      print_int32(max)"
+      > /home/hendersont/stuff/school/compilers/support/pr05/arrowc -J -o /tmp/tmp4PBgeV /tmp/tmp0imOug
+      > /home/hendersont/stuff/school/compilers/support/pr05/artemis
+      result = "906609"
+      > export PS1="$ " && export PATH=/tmp/tmpgYz0TQ/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/
+tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/
+usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmpgYz0TQ/arrowc/bin/arrowc -I -o /tmp/tmp
+HSWqaR /tmp/tmpNHhIxn
+      > export PS1="$ " && export PATH=/tmp/tmpgYz0TQ/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/
+tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/
+usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmpgYz0TQ/arrowc/bin/arrowc -J -o /tmp/tmp
+RTqZrq /tmp/tmpHTGlqP
+                                     recieved non-zero exit code for ilret
+                                       Traceback (most recent call last):
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 209, in <module>
+                                           main(sys.argv[1:])
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 99, in main
+                                           print_il(inputs, output)
+                                         File "/tmp/tmpgYz0TQ/arrowc/bin/arrowc", line 186, in print_il
+                                           il_str += ILGenerator(typed_ast).get_prettyprint() + "\n"
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_generator.py", line 65, in get_prettyprint
+                                           return str(self.program)
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 45, in __str__
+                                           return "\n".join(map(str, self.functions.itervalues())) + "\n"
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 70, in __str__
+                                           return "{} {} \n\t {}".format(self.name, self.func_type, "\n\t".join(map(str, self.blocks)))
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 119, in __str__
+                                           "\n\t\t".join(map(str, self.instructions))
+                                         File "/tmp/tmpgYz0TQ/arrowc/arrowc/arrowlang_il/il_types.py", line 185, in __str__
+                                           str(self.R) if self.R.operand_type is not "unit" else ""
+                                       AttributeError: 'NoneType' object has no attribute 'operand_type'
+      > /home/hendersont/stuff/school/compilers/support/pr05/artemis
+                                failed -- good test
+                                     artemis failed to run on your output
+                                       ["Unknown value type in operand, <nil>", "<nil>:<nil> did not have type int32"]
+
+
+Final Score: 98
+Grader: Tim Henderson
+
+
+
+
+
+--------------------------------------------------------------------------
+
+testing results: 48/108
+
+You seem to support the full expression portion of arrowlang. However you do not
+seem to support any of the control flow constructions (if-statements, for-loops,
+function-calls)
+
+      "if 1 == 1 {
+          print_int32(1)
+      } else {
+          print_int32(2)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpB65VQi /tmp/tmp9nnlsR
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "1"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmpyzpm2e /tmp/tmpuEuE_K
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmptF4bDi /tmp/tmpZTMJ3Y
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "1"
+                                     got      ""
+
+      "if 1 == 2 {
+          print_int32(1)
+      } else {
+          print_int32(2)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpuxo4Gy /tmp/tmpsX1cuY
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "2"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmpuZxuHE /tmp/tmp8PC_Tm
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmpFETOEv /tmp/tmp0H0r0j
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "2"
+                                     got      ""
+
+
+
+      "for var i = 0; i < 12; i = i + 1 {
+          print_int32(i)
+      }"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmpccWJfC /tmp/tmpBXl54_
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "0
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+      11"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowl
+ang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/
+bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmplrVFBd /tmp/tmpn3sGRr
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowl
+ang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/
+bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmp7EawE9 /tmp/tmpLYUkO3
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     expected "0
+      1
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      9
+      10
+      11"
+                                     got      ""
+
+
+
+      "func f(i int32, j int32) int32 {
+          return 5*j*j + - 3*j + 2*j*i + i + 7
+      }
+      print_int32(f(2, 3))"
+      > /home/tester/compilers/support/pr05/arrowc -J -o /tmp/tmp2MAAkc /tmp/tmpia0oPJ
+      > /home/tester/compilers/support/tester/../pr05/artemis
+      result = "57"
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -I -o /tmp/tmprd241r /tmp/tmpTZs5YG
+      > export PS1="$ " && export PATH=/tmp/tmp2tMrKn/arrowc/bin:/home/tester/compilers/support/tester/bin:/home/tester/compilers/support/tester/env/bin:/home/tester/arrowlang/bin:/home/tester/gopath/bin:/home/tester/go/bin:/home/tester/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2tMrKn/arrowc/bin/arrowc -J -o /tmp/tmpcqXPM1 /tmp/tmputW_Xc
+      > /home/tester/compilers/support/tester/../pr05/artemis
+                                failed -- good test
+                                     artemis failed to run on your output
+                                       ["Unknown value type in operand, <nil>", "Call args and return, fn(int32,int32)->int32, do not agree with called function, <nil>"]
+
+
+-20
+
+---------------------------------
+
+No tests. -5
+
+---------------------------------
+
+Final Score: 75
+Grader: Tim Henderson
+
