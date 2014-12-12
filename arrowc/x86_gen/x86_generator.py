@@ -1,6 +1,20 @@
 #!usr/bin/env python
 
 import arrowc.arrowlang_il.il_types
+import os
+
+
+def gen_x86(il_program):
+    generator = X86Generator(il_program)
+    return generator.get_program()
+
+
+def read_native():
+    try:
+        with open(os.path.join("arrowc", "x86_gen", "native", "native.s")) as native:
+            return native.readlines()
+    except IOError, e:
+        raise e
 
 
 class X86Generator():
@@ -10,8 +24,19 @@ class X86Generator():
         :param il_program: the generated IL program
         """
 
-        """:type: list[string]"""
+        self.rodata = list()
+        self.data = list()
         self.program = list()
 
+    def get_program(self):
+        native_code = read_native()
+        return "\n\n".join((
+            "".join(line for line in native_code),
+            "\n".join(line for line in self.rodata),
+            "\n".join(line for line in self.data),
+            "\n".join(line for line in self.program)
+        ))
 
-    pass
+    def init_program(self):
+        pass
+

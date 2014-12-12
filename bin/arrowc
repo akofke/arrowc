@@ -11,6 +11,8 @@ import json
 from arrowc.arrowlang_parser import ArrowParser
 from arrowc.arrowlang_typechecker import ArrowTypechecker, TypecheckError
 
+from arrowc.x86_gen.x86_generator import gen_x86
+
 usage_message = 'Usage: arrowc [option] -o [output] [input...]'
 
 extended_message = '''
@@ -48,9 +50,9 @@ def usage(code=None):
 
 def main(argv):
 
-    short_opts = 'ho:ATIJ'
+    short_opts = 'ho:ATIJS'
     long_opts = [
-        'help', 'output=', 'ast', 'typed-ast', 'intermediate', 'json-il'
+        'help', 'output=', 'ast', 'typed-ast', 'intermediate', 'json-il', "assembly"
     ]
 
     try:
@@ -64,6 +66,7 @@ def main(argv):
     typecheck = False
     il = False
     json_ = False
+    asm = False
     inputs = args
     if not inputs:
         log("You must supply some inputs")
@@ -82,9 +85,10 @@ def main(argv):
             # print_typed_ast(inputs, output)
         elif opt in ("-I", '--intermediate'):
             il = True
-        elif opt in ("-J", 'json-il'):
+        elif opt in ("-J", '--json-il'):
             json_ = True
-
+        elif opt in ("-S", "--assembly"):
+            asm = True
         else:
             log("Unkown option", opt)
             usage(1)
@@ -97,6 +101,10 @@ def main(argv):
         print_json(inputs, output)
     elif il:
         print_il(inputs, output)
+    elif asm:
+        print_x86(inputs, output)
+
+# yes these are all very duplicated, I haven't had the chance to fix them yet
 
 def print_ast(inputs, output):
     ast = ""
@@ -199,6 +207,37 @@ def print_il(inp, outp):
             out.write(il_str)
     else:
         sys.stdout.write(il_str)
+
+def print_x86(inp, outp):
+    asm_str = ""
+    for input_name in inp:
+        try:
+            with open(input_name, "r") as input_file:
+                src = input_file.read()
+                try:
+                    ast = ArrowParser().parse(src)
+                    typed_ast = ArrowTypechecker(ast).typecheck()
+                    il_prog = ILGenerator(typed_ast).program
+                    asm_str += gen_x86(il_prog)
+                except SyntaxError, e:
+                    log("Error in %s: %s" % (input_name, e))
+                    sys.exit(1)
+                except TypecheckError, e:
+                    log("Error typing %s: \n%s" % (input_name, e))
+                    sys.exit(1)
+                except IOError, e:
+                    log("Problem reading std lib file: {}".format(e.message))
+        except IOError:
+            log("Error reading file: {}".format(input_name))
+            sys.exit(1)
+
+    if outp and outp != "":
+        with open(outp, 'w') as out:
+            out.write(asm_str)
+    else:
+        sys.stdout.write(asm_str)
+
+
 
 
 

@@ -1,11 +1,11 @@
 
 
 	.section	.rodata
+.main_b_0_6:
+	.string "hello"
 
 	.section	.data
 display_0: 
-	.long 0
-display_1: 
 	.long 0
 
 	.file	"native.c"
@@ -184,7 +184,7 @@ print:
 main:
 	pushl	%ebp
 	movl	%esp, %ebp
-	subl	$44, %esp
+	subl	$36, %esp
 	movl	display_0, %ebx
 	movl	%ebx, -4(%ebp)
 	movl	%ebp, display_0
@@ -194,9 +194,7 @@ main:
 	movl	$0, -20(%ebp)	# R{3,0}:fn(uint8)->unit
 	movl	$0, -24(%ebp)	# R{4,0}:fn(float32)->unit
 	movl	$0, -28(%ebp)	# R{5,0}:fn(string)->unit
-	movl	$0, -32(%ebp)	# R{6,0}:fn(int32)->int32
-	movl	$0, -36(%ebp)	# R{7,0}:int32
-	movl	$0, -40(%ebp)	# R{8,0}:int32
+	movl	$0, -32(%ebp)	# R{6,0}:string
 
 
 main_b_0:
@@ -225,60 +223,14 @@ main_b_0:
 	#						-28(%ebp)
 	leal	print, %edi
 
-	# IMM  fn-0-f:label                    R{6,0}:fn(int32)->int32
+	# IMM  "hello":string                  R{6,0}:string
 	#						-32(%ebp)
-	movl	%edi, -28(%ebp)
-	leal	fn_0_f, %edi
-
-	# IMM  2:int32                         R{8,0}:int32
-	#						-40(%ebp)
-	movl	%edi, -32(%ebp)
-	movl	$2, %edi
-
-	# CALL R{6,0}:fn(int32)->int32 (R{8,0}):(int32) R{7,0}:int32
-	#	-32(%ebp)				-36(%ebp)
-	movl	%ebx, -12(%ebp)
-	movl	%ecx, -16(%ebp)
-	movl	%edx, -20(%ebp)
-	movl	%esi, -24(%ebp)
-	movl	%edi, -40(%ebp)
 	movl	%eax, -8(%ebp)
-	pushl	-40(%ebp)
-	call	*-32(%ebp)
-	addl	$4, %esp
+	leal	.main_b_0_6, %eax
+	movl	%eax, -32(%ebp)
 
 	# EXIT
 	#							
 	pushw	$0
 	call	exit
-
-	.global	fn_0_f
-	.type	fn_0_f	@function
-fn_0_f:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$16, %esp
-	movl	display_1, %ebx
-	movl	%ebx, -4(%ebp)
-	movl	%ebp, display_1
-	movl	$0, -8(%ebp)	# R{0,1}:int32
-	movl	$0, -12(%ebp)	# R{1,1}:int32
-
-
-fn_0_f_b_0:
-
-	# PRM  0:int32                         R{0,1}:int32
-	#						-8(%ebp)
-	movl	8(%ebp), %edx
-
-	# MV   R{0,1}:int32                    R{1,1}:int32
-	#	-8(%ebp)				-12(%ebp)
-	movl	%edx, -12(%ebp)
-
-	# RTRN R{1,1}:int32
-	#	-12(%ebp)					
-	movl	%edx, -8(%ebp)
-	movl	-12(%ebp), %eax
-	leave
-	ret
 
