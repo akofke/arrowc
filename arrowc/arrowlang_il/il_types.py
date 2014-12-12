@@ -232,7 +232,7 @@ class Value(ILType):
         elif self.type == "native-target":
             return "{}".format(self.func)
         elif self.type == "jump-target":
-            return "{}".format(self.block)
+            return "{}".format(self.func)
         elif self.type == "register":
             return "R{{{},{}}}".format(self.id, self.scope)
         else:
