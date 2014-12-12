@@ -1,6 +1,6 @@
 #!usr/bin/env python
 
-import arrowc.arrowlang_il.il_types
+import arrowc.arrowlang_il.il_types as il
 import os
 
 
@@ -17,12 +17,21 @@ def read_native():
         raise e
 
 
+def _get_max_scope(prog):
+    """
+    :type prog: il.Program
+    """
+
+    return max(function.scope_level for function in prog.functions.itervalues())
+
+
 class X86Generator():
     def __init__(self, il_program):
         """
-        :type il_program: il_types.Program
+        :type il_program: il.Program
         :param il_program: the generated IL program
         """
+        self.il_prog = il_program
 
         self.rodata = list()
         self.data = list()
@@ -35,6 +44,14 @@ class X86Generator():
         self.data.append("\t.section\t.data")
         self.program.append("\t.section\t.text")
 
+        for i in range(_get_max_scope(self.il_prog) + 1):
+            self.data.append("display_{}".format(i))
+            self.data.append("\t.long 0")
+
+
+
+
+
     def get_program(self):
         native_code = read_native()
         return "\n\n".join((
@@ -43,6 +60,9 @@ class X86Generator():
             "\n".join(line for line in self.data),
             "\n".join(line for line in self.program)
         ))
+
+    def add_instr(self, instr):
+        self.program.append("\t{}".format(instr))
 
 
 
