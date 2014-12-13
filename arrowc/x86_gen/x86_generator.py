@@ -282,7 +282,23 @@ class X86Generator():
         self.store("%eax", instr.R)
 
     def asm_call(self, instr):
-        pass
+        for arg_reg in reversed(instr.B.operand_value):
+            reg_id, reg_scope = arg_reg.id, arg_reg.scope
+
+            if reg_scope < self.frame_funcs[-1].scope_level:
+                self.add_instr("movl display_{}, %esi".format(self.frame_funcs[-1].scope_level))
+                loc = "{}(%esi)".format(_stack_offset(reg_id))
+            else:
+                loc = "{}(%ebp)".format(_stack_offset(reg_id))
+            self.add_instr("pushl {}".format(loc))
+
+        self.add_instr("call *{}".format(self.access_location(instr.A)))
+
+        if instr.R.operand_type != "unit":
+            self.store("%eax", instr.R)
+
+        if len(instr.B.operand_value) > 0:
+            self.add_instr("addl ${}, %esp".format(4*len(instr.B.operand_value)))
 
     def asm_rtrn(self, instr):
         self.load(instr.A, "%eax")
