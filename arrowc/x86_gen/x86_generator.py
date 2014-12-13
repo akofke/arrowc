@@ -25,7 +25,6 @@ def _get_max_scope(prog):
 
     return max(function.scope_level for function in prog.functions.itervalues())
 
-
 def _convert_name_str(name):
     """
     :type name: str
@@ -79,6 +78,11 @@ class X86Generator():
         self.program.append("\t.global {}".format(converted_name))
         self.program.append("\t.type {} @function".format(converted_name))
         self.program.append("{}:".format(converted_name))
+
+    def push_stack_frame(self, func):
+
+        self.add_instr("pushl %ebp")
+        self.add_instr("movl %esp, %ebp")
 
 
 

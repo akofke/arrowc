@@ -69,8 +69,12 @@ class ILGenerator():
         Gets the next free register in the current scope, and increments the register counter.
         :return: The next available register as a Value register object
         """
-        reg = Value.register(self.reg_counter[-1], len(self.reg_counter) - 1)
-        self.reg_counter[-1] += 1
+        # reg = Value.register(self.reg_counter[-1], len(self.reg_counter) - 1)
+        # self.reg_counter[-1] += 1
+        # return reg
+
+        reg = Value.register(self.func_stack[-1]._reg_count + 1, len(self.func_stack) - 1)
+        self.func_stack[-1]._reg_count += 1
         return reg
 
     def get_param(self, sym_name):
