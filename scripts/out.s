@@ -5,8 +5,6 @@
 	.section	.data
 display_0: 
 	.long 0
-display_1: 
-	.long 0
 
 	.file	"native.c"
 	.section	.rodata
@@ -179,38 +177,12 @@ print:
 
 	.section	.text
 
-	.global	fn_0_f
-	.type	fn_0_f	@function
-fn_0_f:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$12, %esp
-	movl	display_1, %ebx
-	movl	%ebx, -4(%ebp)
-	movl	%ebp, display_1
-	movl	$0, -8(%ebp)	# R{0,1}:int32
-
-
-fn_0_f_b_0:
-
-	# MV   R{6,0}:int32                    R{0,1}:int32
-	#	-12(%ebp)				-8(%ebp)
-	movl	display_0, %edx
-	movl	-32(%edx), %ecx
-	movl	%ecx, -8(%ebp)
-
-	# RTRN R{0,1}:int32
-	#	-8(%ebp)					
-	movl	-8(%ebp), %eax
-	leave
-	ret
-
 	.global	main
 	.type	main	@function
 main:
 	pushl	%ebp
 	movl	%esp, %ebp
-	subl	$40, %esp
+	subl	$36, %esp
 	movl	display_0, %ebx
 	movl	%ebx, -4(%ebp)
 	movl	%ebp, display_0
@@ -221,44 +193,50 @@ main:
 	movl	$0, -24(%ebp)	# R{4,0}:fn(float32)->unit
 	movl	$0, -28(%ebp)	# R{5,0}:fn(string)->unit
 	movl	$0, -32(%ebp)	# R{6,0}:int32
-	movl	$0, -36(%ebp)	# R{7,0}:fn()->int32
 
 
 main_b_0:
 
 	# IMM  print_int32:label               R{0,0}:fn(int32)->unit
 	#						-8(%ebp)
-	leal	print_int32, %esi
+	leal	print_int32, %ebx
 
 	# IMM  print_uint32:label              R{1,0}:fn(uint32)->unit
 	#						-12(%ebp)
-	leal	print_uint32, %eax
+	leal	print_uint32, %ecx
 
 	# IMM  print_int8:label                R{2,0}:fn(int8)->unit
 	#						-16(%ebp)
-	leal	print_int8, %ebx
+	leal	print_int8, %edx
 
 	# IMM  print_uint8:label               R{3,0}:fn(uint8)->unit
 	#						-20(%ebp)
-	leal	print_uint8, %ecx
+	leal	print_uint8, %esi
 
 	# IMM  print_float32:label             R{4,0}:fn(float32)->unit
 	#						-24(%ebp)
-	leal	print_float32, %edx
+	leal	print_float32, %edi
 
 	# IMM  print:label                     R{5,0}:fn(string)->unit
 	#						-28(%ebp)
-	leal	print, %edi
+	leal	print, %eax
 
-	# IMM  5:int32                         R{6,0}:int32
+	# IMM  1:int32                         R{6,0}:int32
 	#						-32(%ebp)
-	movl	%esi, -8(%ebp)
-	movl	$5, %esi
+	movl	%edx, -16(%ebp)
+	movl	$1, %edx
 
-	# IMM  fn-0-f:label                    R{7,0}:fn()->int32
-	#						-36(%ebp)
-	movl	%edx, -24(%ebp)
-	leal	fn_0_f, %edx
+	# CALL R{0,0}:fn(int32)->unit (R{6,0}):(int32)
+	#	-8(%ebp)					
+	movl	%ebx, -8(%ebp)
+	movl	%ecx, -12(%ebp)
+	movl	%edx, -32(%ebp)
+	movl	%esi, -20(%ebp)
+	movl	%edi, -24(%ebp)
+	movl	%eax, -28(%ebp)
+	pushl	-32(%ebp)
+	call	*-8(%ebp)
+	addl	$4, %esp
 
 	# EXIT
 	#							

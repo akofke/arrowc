@@ -173,6 +173,7 @@ class X86Generator():
         :return:
         """
 
+        self.program.append(_convert_name_str(block.name))
         for instr in block.instructions:
             self.asm_instruction(instr)
 
