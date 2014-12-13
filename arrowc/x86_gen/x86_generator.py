@@ -112,7 +112,7 @@ class X86Generator():
     def operand_value(self, operand):
         val_type = operand.operand_value.type
 
-        if re.match("constant|string", val_type):
+        if re.match("int-constant|float-constant|string", val_type):
             return self.const_value(operand)
         elif val_type == "jump-target":
             return "{}".format(_convert_name_str(operand.operand_value.block))
@@ -237,11 +237,9 @@ class X86Generator():
         self.add_instr("nop")
 
     def asm_imm(self, instr):
-        sys.stderr.write(instr.A.operand_value.type + "\n")
-        if re.match("target|string", instr.A.operand_value.type):
+        if re.match("native-target|jump-target|string", instr.A.operand_value.type):
             self.add_instr("leal {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
         else:
-            print "blah"
             self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 
     def asm_mv(self, instr):
