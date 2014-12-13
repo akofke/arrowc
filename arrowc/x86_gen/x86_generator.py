@@ -132,7 +132,7 @@ class X86Generator():
         self.rodata.append('\t.string \"{}\"'.format(str_val))
 
     def asm_program(self, prog):
-        for func in prog.functions:
+        for func in prog.functions.itervalues():
             self.asm_function(func)
 
     def asm_function(self, func):
