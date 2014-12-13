@@ -265,7 +265,7 @@ def output_binary(inp, outp):
             sys.exit(1)
 
     if outp and outp != "":
-        p = Popen(["gcc", "-m32", "-x", "assembly", "-o", outp, "-"], stdin=PIPE)
+        p = Popen(["gcc", "-m32", "-x", "assembler", "-o", outp, "-"], stdin=PIPE)
         p.communicate(input=asm_str)
     else:
         log("Must supply an output file")
