@@ -26,6 +26,13 @@ def _get_max_scope(prog):
     return max(function.scope_level for function in prog.functions.itervalues())
 
 
+def _convert_name_str(name):
+    """
+    :type name: str
+    """
+    return name.replace("-", "_")
+
+
 class X86Generator():
     def __init__(self, il_program):
         """
@@ -61,77 +68,94 @@ class X86Generator():
     def add_instr(self, instr):
         self.program.append("\t{}".format(instr))
 
-    def instructions(self, inst):
-        if inst == "NOP":
-            return self.asm_nop()
-        elif inst == "IMM":
-            return self.asm_imm()
-        elif inst == "MV":
-            return self.asm_mv()
-        elif inst == "ADD":
-            return self.asm_add()
-        elif inst == "SUB":
-            return self.asm_sub()
-        elif inst == "MUL":
-            return self.asm_mul()
-        elif inst == "DIV":
-            return self.asm_div()
-        elif inst == "MOD":
-            return self.asm_mod()
-        elif inst == "J":
-            return self.asm_jmp()
-        elif re.match("IFEQ|IFNE|IFLT|IFLE|IFGT|IFGE", inst):
-            return self.asm_if()
-        elif inst == "PRM":
-            return self.asm_prm()
-        elif inst == "CALL":
-            return self.asm_call()
-        elif inst == "RTRN":
-            return self.asm_rtrn()
-        elif inst == "EXIT":
-            return self.asm_exit()
+    def asm_program(self, prog):
+        for func in prog.functions:
+            self.asm_function(func)
+
+    def asm_function(self, func):
+        converted_name = _convert_name_str(func.name)
+
+        self.program.append("")
+        self.program.append("\t.global {}".format(converted_name))
+        self.program.append("\t.type {} @function".format(converted_name))
+        self.program.append("{}:".format(converted_name))
 
 
-    def asm_nop(self):
+
+    def instructions(self, instr):
+        """
+        :type instr: il.Instruction
+        """
+
+        if instr.op == "NOP":
+            return self.asm_nop(instr)
+        elif instr.op == "IMM":
+            return self.asm_imm(instr)
+        elif instr.op == "MV":
+            return self.asm_mv(instr)
+        elif instr.op == "ADD":
+            return self.asm_add(instr)
+        elif instr.op == "SUB":
+            return self.asm_sub(instr)
+        elif instr.op == "MUL":
+            return self.asm_mul(instr)
+        elif instr.op == "DIV":
+            return self.asm_div(instr)
+        elif instr.op == "MOD":
+            return self.asm_mod(instr)
+        elif instr.op == "J":
+            return self.asm_jmp(instr)
+        elif re.match("IFEQ|IFNE|IFLT|IFLE|IFGT|IFGE", instr.op):
+            return self.asm_if(instr)
+        elif instr.op == "PRM":
+            return self.asm_prm(instr)
+        elif instr.op == "CALL":
+            return self.asm_call(instr)
+        elif instr.op == "RTRN":
+            return self.asm_rtrn(instr)
+        elif instr.op == "EXIT":
+            return self.asm_exit(instr)
+
+    def asm_nop(self, instr):
         pass
 
-    def asm_imm(self):
+    def asm_imm(self, instr):
+        self.program.append("movl ${}, ")
+
+    def asm_mv(self, instr):
         pass
 
-    def asm_mv(self):
+    def asm_add(self, instr):
         pass
 
-    def asm_add(self):
+    def asm_sub(self, instr):
         pass
 
-    def asm_sub(self):
+    def asm_mul(self, instr):
         pass
 
-    def asm_mul(self):
+    def asm_div(self, instr):
         pass
 
-    def asm_div(self):
+    def asm_mod(self, instr):
         pass
 
-    def asm_mod(self):
+    def asm_jmp(self, instr):
         pass
 
-    def asm_jmp(self):
+    def asm_if(self, instr):
         pass
 
-    def asm_if(self):
+    def asm_prm(self, instr):
         pass
 
-    def asm_prm(self):
+    def asm_call(self, instr):
         pass
 
-    def asm_call(self):
+    def asm_rtrn(self, instr):
         pass
 
-    def asm_rtrn(self):
-        pass
-
-    def asm_exit(self):
+    def asm_exit(self, instr):
         pass
 
 
