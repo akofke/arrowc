@@ -290,7 +290,7 @@ class X86Generator():
 
         self.load(instr.A, "%eax")
         self.load(instr.B, "%ebx")
-        self.add_instr("cmpl %ebx %eax")
+        self.add_instr("cmpl %ebx, %eax")
         self.add_instr("{} {}".format(opcode, self.operand_value(instr.R)))
 
     def asm_prm(self, instr):

@@ -266,6 +266,9 @@ def output_binary(inp, outp):
     #         sys.exit(1)
     #
     # if outp and outp != "":
+    #     with open("COMPILER_TEMP.s", 'w'):
+
+
 
 
 
