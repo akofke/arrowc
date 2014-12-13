@@ -25,11 +25,13 @@ def _get_max_scope(prog):
 
     return max(function.scope_level for function in prog.functions.itervalues())
 
+
 def _convert_name_str(name):
     """
     :type name: str
     """
     return name.replace("-", "_")
+
 
 def _stack_offset(i):
     """
@@ -55,7 +57,7 @@ class X86Generator():
         :type il_program: il.Program
         :param il_program: the generated IL program
         """
-        self.il_prog = il_program
+        # self.il_prog = il_program
 
         self.rodata = list()
         self.data = list()
@@ -67,14 +69,16 @@ class X86Generator():
         # list of corresponding Functions
         self.frame_funcs = []
 
-        self.init_program()
+        self.init_program(il_program)
 
-    def init_program(self):
+        self.asm_program(il_program)
+
+    def init_program(self, il_prog):
         self.rodata.append("\t.section\t.rodata")
         self.data.append("\t.section\t.data")
         self.program.append("\t.section\t.text")
 
-        for i in range(_get_max_scope(self.il_prog) + 1):
+        for i in range(_get_max_scope(il_prog) + 1):
             self.data.append("display_{}:".format(i))
             self.data.append("\t.long 0")
 
@@ -195,7 +199,7 @@ class X86Generator():
         """
 
         if instr.op == "NOP":
-            return self.asm_nop(instr)
+            return self.asm_nop()
         elif instr.op == "IMM":
             return self.asm_imm(instr)
         elif instr.op == "MV":
@@ -221,9 +225,9 @@ class X86Generator():
         elif instr.op == "RTRN":
             return self.asm_rtrn(instr)
         elif instr.op == "EXIT":
-            return self.asm_exit(instr)
+            return self.asm_exit()
 
-    def asm_nop(self, instr):
+    def asm_nop(self):
         self.add_instr("nop")
 
     def asm_imm(self, instr):
@@ -309,7 +313,7 @@ class X86Generator():
         self.load(instr.A, "%eax")
         self.pop_stack_frame(self.frame_funcs[-1])
 
-    def asm_exit(self, instr):
+    def asm_exit(self):
         self.add_instr("pushl $0")
         self.add_instr("call exit")
 
