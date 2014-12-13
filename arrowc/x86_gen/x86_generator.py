@@ -238,7 +238,8 @@ class X86Generator():
 
     def asm_imm(self, instr):
         if re.match("native-target|jump-target|string", instr.A.operand_value.type):
-            self.add_instr("leal {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
+            self.add_instr("leal {}, {}".format(self.operand_value(instr.A), "%eax"))
+            self.add_instr("movl %eax, {}".format(self.access_location(instr.R)))
         else:
             self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 

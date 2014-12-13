@@ -237,6 +237,9 @@ def print_x86(inp, outp):
     else:
         sys.stdout.write(asm_str)
 
+def output_binary(inp, outp):
+    pass
+
 
 
 
