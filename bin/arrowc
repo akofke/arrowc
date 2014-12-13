@@ -7,6 +7,7 @@ import os
 import sys
 import getopt
 import json
+from subprocess import call
 
 from arrowc.arrowlang_parser import ArrowParser
 from arrowc.arrowlang_typechecker import ArrowTypechecker, TypecheckError
@@ -241,15 +242,31 @@ def print_x86(inp, outp):
 
 def output_binary(inp, outp):
     pass
-    # coming soon
-    # try:
-    #     with open(inp[0], 'r') as input_file:
-    #         src = input_file.read()
-    #         try:
-    #             ast = ArrowParser().parse(src)
-    #             typed_ast = ArrowTypechecker(ast).typecheck()
-    #             il_prog = ILGenerator(typed_ast).program
-    #             asm_str = gen_x86(il_prog)
+    # asm_str = ""
+    # for input_name in inp:
+    #     try:
+    #         with open(input_name, "r") as input_file:
+    #             src = input_file.read()
+    #             try:
+    #                 ast = ArrowParser().parse(src)
+    #                 typed_ast = ArrowTypechecker(ast).typecheck()
+    #                 il_prog = ILGenerator(typed_ast).program
+    #                 asm_str += gen_x86(il_prog)
+    #
+    #             except SyntaxError, e:
+    #                 log("Error in %s: %s" % (input_name, e))
+    #                 sys.exit(1)
+    #             except TypecheckError, e:
+    #                 log("Error typing %s: \n%s" % (input_name, e))
+    #                 sys.exit(1)
+    #             except IOError, e:
+    #                 log("Problem reading std lib file: {}".format(e.message))
+    #     except IOError:
+    #         log("Error reading file: {}".format(input_name))
+    #         sys.exit(1)
+    #
+    # if outp and outp != "":
+
 
 
 
