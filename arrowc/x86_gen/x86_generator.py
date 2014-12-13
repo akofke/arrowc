@@ -265,7 +265,7 @@ class X86Generator():
         self.store("%edx", instr.R)
 
     def asm_jmp(self, instr):
-        pass
+        self.add_instr("jmp {}".format(self.operand_value(instr.A)))
 
     def asm_if(self, instr):
         opcode = cmp_opcodes[instr.op]
