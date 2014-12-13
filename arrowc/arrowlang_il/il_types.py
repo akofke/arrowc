@@ -89,9 +89,10 @@ class BasicBlock(ILType):
         self.instructions.append(Instruction(op, **kwargs))
 
     def add_jump(self, other_blk):
-        self.instructions.append(Instruction("J", a=Operand("label", BasicBlock._get_jump_label(other_blk))))
-        self.next.append(other_blk.name)
-        other_blk.prev.append(self.name)
+        if self.instructions[-1].op != "J":
+            self.instructions.append(Instruction("J", a=Operand("label", BasicBlock._get_jump_label(other_blk))))
+            self.next.append(other_blk.name)
+            other_blk.prev.append(self.name)
 
     def add_cmp_jump(self, cmp_op, a, b, then_blk):
         self.instructions.append(Instruction(cmp_op, a, b, Operand("label", BasicBlock._get_jump_label(then_blk))))
