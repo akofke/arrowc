@@ -60,7 +60,7 @@ class Function(ILType):
         self.scope_level = scope_level
         self.static_scope = static_scope
         self.blocks = list()
-        self._reg_count = 0
+        self.reg_count_ = 0
 
     def add_block(self):
         block = BasicBlock("{}-b-{}".format(self.name, len(self.blocks)))
@@ -286,7 +286,7 @@ def json_convert(il_obj):
 
         # remove private fields not used for json
         for key in obj_dict.keys():
-            if key.startswith("_"):
+            if key.endswith("_"):
                 obj_dict.pop(key)
 
         return obj_dict

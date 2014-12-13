@@ -44,7 +44,11 @@ class X86Generator():
         self.data = list()
         self.program = list()
 
-        self.frame_locs = [dict()]
+        # list of dicts (register id -> offset in stack frame). Index in list is scope
+        self.frame_locs = []
+
+        # list of corresponding Functions
+        self.frame_funcs = []
 
         self.init_program()
 
@@ -69,16 +73,18 @@ class X86Generator():
     def add_instr(self, instr):
         self.program.append("\t{}".format(instr))
 
-    def asm_program(self, prog):
-        for func in prog.functions:
-            self.asm_function(func)
-
     def access_location(self, operand):
         """
         :type operand: il.Operand
         """
 
-        reg = operand.operand_value.
+        reg = operand.operand_value
+
+    def asm_program(self, prog):
+        for func in prog.functions:
+            self.asm_function(func)
+
+
 
     def asm_function(self, func):
         converted_name = _convert_name_str(func.name)
@@ -89,9 +95,13 @@ class X86Generator():
         self.program.append("{}:".format(converted_name))
 
     def push_stack_frame(self, func):
+        self.frame_funcs.append(func)
+        self.frame_locs.append(dict())
 
         self.add_instr("pushl %ebp")
         self.add_instr("movl %esp, %ebp")
+        self.add_instr("pushl display_{}".format(func.scope_level))
+        self.add_instr("subl ${}, %esp".format(func.reg_count_ * 4))
 
 
 

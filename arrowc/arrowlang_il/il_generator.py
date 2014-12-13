@@ -73,8 +73,8 @@ class ILGenerator():
         # self.reg_counter[-1] += 1
         # return reg
 
-        reg = Value.register(self.func_stack[-1]._reg_count, len(self.func_stack) - 1)
-        self.func_stack[-1]._reg_count += 1
+        reg = Value.register(self.func_stack[-1].reg_count_, len(self.func_stack) - 1)
+        self.func_stack[-1].reg_count_ += 1
         return reg
 
     def get_param(self, sym_name):
