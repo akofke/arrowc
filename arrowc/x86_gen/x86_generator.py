@@ -237,7 +237,7 @@ class X86Generator():
         self.add_instr("nop")
 
     def asm_imm(self, instr):
-        sys.stderr.write(instr.A.operand_value.type "\n")
+        sys.stderr.write(instr.A.operand_value.type + "\n")
         if re.match("target|string", instr.A.operand_value.type):
             self.add_instr("leal {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
         else:
