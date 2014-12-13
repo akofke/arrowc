@@ -31,6 +31,14 @@ def _convert_name_str(name):
     """
     return name.replace("-", "_")
 
+def _stack_offset(i):
+    """
+    :type i: int
+    :param i: the id of a register
+    :return: the stack offset of a register with id i
+    """
+    return -4 * i - 8
+
 
 class X86Generator():
     def __init__(self, il_program):
@@ -76,15 +84,20 @@ class X86Generator():
     def access_location(self, operand):
         """
         :type operand: il.Operand
+        :rtype: str
         """
 
-        reg = operand.operand_value
+        reg_id, reg_scope = operand.operand_value.id, operand.operand_value.scope
+
+        if reg_scope < self.frame_funcs[-1].scope_level:
+            self.add_instr("movl display_{}, %esi".format(self.frame_funcs[-1].scope_level))
+            return "{}(%esi)".format(_stack_offset(reg_id))
+        else:
+            return "{}(%ebp)".format(_stack_offset(reg_id))
 
     def asm_program(self, prog):
         for func in prog.functions:
             self.asm_function(func)
-
-
 
     def asm_function(self, func):
         converted_name = _convert_name_str(func.name)
@@ -93,6 +106,10 @@ class X86Generator():
         self.program.append("\t.global {}".format(converted_name))
         self.program.append("\t.type {} @function".format(converted_name))
         self.program.append("{}:".format(converted_name))
+
+        self.push_stack_frame(func)
+        for block in func.blocks:
+            self.asm_block(block)
 
     def push_stack_frame(self, func):
         self.frame_funcs.append(func)
@@ -103,9 +120,27 @@ class X86Generator():
         self.add_instr("pushl display_{}".format(func.scope_level))
         self.add_instr("subl ${}, %esp".format(func.reg_count_ * 4))
 
+        for i in range(func.reg_count_):
+            self.frame_locs[-1][i] = _stack_offset(i)
 
+    def pop_stack_frame(self, func):
+        self.add_instr("movl -4(%ebp), %ebx")
+        self.add_instr("movl %ebx, display_{}".format(func.scope_level))
+        self.add_instr("movl %ebp, %esp")
+        self.add_instr("popl %ebp")
+        self.add_instr("ret")
 
-    def instructions(self, instr):
+    def asm_block(self, block):
+        """
+        :type block: il.BasicBlock
+        :param block:
+        :return:
+        """
+
+        for instr in block.instructions:
+            self.asm_instruction(instr)
+
+    def asm_instruction(self, instr):
         """
         :type instr: il.Instruction
         """
