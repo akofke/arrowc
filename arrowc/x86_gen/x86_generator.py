@@ -165,6 +165,16 @@ class X86Generator():
             self.asm_instruction(instr)
 
 
+    def load(self, il_operand, asm_reg):
+        oprnd_type = il_operand.operand_value.type
+
+        if oprnd_type == "register":
+            self.add_instr("movl {}, {}".format(self.access_location(il_operand), asm_reg))
+        else:
+            self.add_instr("movl {}, {}".format(self.operand_value(il_operand), asm_reg))
+
+    def store(self, asm_reg, il_operand):
+        self.add_instr("movl {}, {}".format(asm_reg, il_operand))
 
     def asm_instruction(self, instr):
         """
@@ -204,22 +214,36 @@ class X86Generator():
         pass
 
     def asm_imm(self, instr):
-        self.add_instr("{}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
+        # self.add_instr("{}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
+        pass
 
     def asm_mv(self, instr):
         pass
 
     def asm_add(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("addl %ebx, %eax")
+        self.store("%eax", instr.R)
 
     def asm_sub(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("subl %ebx, %eax")
+        self.store("%eax", instr.R)
 
     def asm_mul(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("imull %ebx")
+        self.store("%eax", instr.R)
 
     def asm_div(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("movl $0, %edx")
+        self.add_instr("idivl %ebx")
+        self.store("%eax", instr.R)
 
     def asm_mod(self, instr):
         pass
