@@ -1,4 +1,5 @@
 #!usr/bin/env python
+import sys
 
 import arrowc.arrowlang_il.il_types as il
 import os
@@ -196,7 +197,7 @@ class X86Generator():
             self.add_instr("movl {}, {}".format(self.operand_value(il_operand), asm_reg))
 
     def store(self, asm_reg, il_operand):
-        self.add_instr("movl {}, {}".format(asm_reg, il_operand))
+        self.add_instr("movl {}, {}".format(self.access_location(asm_reg), il_operand))
 
     def asm_instruction(self, instr):
         """
@@ -236,9 +237,11 @@ class X86Generator():
         self.add_instr("nop")
 
     def asm_imm(self, instr):
+        sys.stderr.write(instr.A.operand_value.type)
         if re.match("target|string", instr.A.operand_value.type):
             self.add_instr("leal {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
         else:
+            print "blah"
             self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 
     def asm_mv(self, instr):
