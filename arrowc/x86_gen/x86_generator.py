@@ -226,11 +226,15 @@ class X86Generator():
         self.add_instr("nop")
 
     def asm_imm(self, instr):
-        # self.add_instr("{}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
+        self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
         pass
 
     def asm_mv(self, instr):
-        pass
+        if instr.A.operand_value.type == "register":
+            self.load(instr.A, "%eax")
+            self.store("%eax", instr.R)
+        else:
+            self.add_instr("movl ${}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 
     def asm_add(self, instr):
         self.load(instr.A, "%eax")
