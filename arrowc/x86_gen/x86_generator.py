@@ -95,6 +95,29 @@ class X86Generator():
         else:
             return "{}(%ebp)".format(_stack_offset(reg_id))
 
+    def operand_value(self, operand):
+        val_type = operand.operand_value.type
+
+        if re.match("constant|string", val_type):
+            return self.const_value(operand)
+
+    def const_value(self, operand):
+        val_type = operand.operand_value.type
+
+        if val_type == "int-constant":
+            return "${}".format(operand.operand_value.value)
+        elif val_type == "float-constant":
+            pass
+        elif val_type == "string":
+            return self.string_value(operand.operand_value.value)
+
+    def string_value(self, str_val):
+
+        # make sure to check if this gives correct numbers
+        name = "string_{}".format(len(self.rodata) / 2)
+        self.rodata.append(name + ":")
+        self.rodata.append('\t.string \"{}\"'.format(str_val))
+
     def asm_program(self, prog):
         for func in prog.functions:
             self.asm_function(func)
@@ -122,6 +145,7 @@ class X86Generator():
 
         for i in range(func.reg_count_):
             self.frame_locs[-1][i] = _stack_offset(i)
+            self.add_instr("movl $0, {}(%ebp)".format(_stack_offset(i)))
 
     def pop_stack_frame(self, func):
         self.add_instr("movl -4(%ebp), %ebx")
@@ -139,6 +163,8 @@ class X86Generator():
 
         for instr in block.instructions:
             self.asm_instruction(instr)
+
+
 
     def asm_instruction(self, instr):
         """
@@ -178,7 +204,7 @@ class X86Generator():
         pass
 
     def asm_imm(self, instr):
-        self.program.append("movl ${}, ")
+        self.add_instr("{}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 
     def asm_mv(self, instr):
         pass

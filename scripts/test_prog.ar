@@ -1,1 +1,1 @@
-var x = 1 func f() int32 {return x + 1}
+var x = 5 func f () int32 { return x }

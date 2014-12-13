@@ -179,6 +179,32 @@ print:
 
 	.section	.text
 
+	.global	fn_0_f
+	.type	fn_0_f	@function
+fn_0_f:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$12, %esp
+	movl	display_1, %ebx
+	movl	%ebx, -4(%ebp)
+	movl	%ebp, display_1
+	movl	$0, -8(%ebp)	# R{0,1}:int32
+
+
+fn_0_f_b_0:
+
+	# MV   R{6,0}:int32                    R{0,1}:int32
+	#	-12(%ebp)				-8(%ebp)
+	movl	display_0, %edx
+	movl	-32(%edx), %ecx
+	movl	%ecx, -8(%ebp)
+
+	# RTRN R{0,1}:int32
+	#	-8(%ebp)					
+	movl	-8(%ebp), %eax
+	leave
+	ret
+
 	.global	main
 	.type	main	@function
 main:
@@ -202,19 +228,19 @@ main_b_0:
 
 	# IMM  print_int32:label               R{0,0}:fn(int32)->unit
 	#						-8(%ebp)
-	leal	print_int32, %ebx
+	leal	print_int32, %esi
 
 	# IMM  print_uint32:label              R{1,0}:fn(uint32)->unit
 	#						-12(%ebp)
-	leal	print_uint32, %ecx
+	leal	print_uint32, %eax
 
 	# IMM  print_int8:label                R{2,0}:fn(int8)->unit
 	#						-16(%ebp)
-	leal	print_int8, %esi
+	leal	print_int8, %ebx
 
 	# IMM  print_uint8:label               R{3,0}:fn(uint8)->unit
 	#						-20(%ebp)
-	leal	print_uint8, %eax
+	leal	print_uint8, %ecx
 
 	# IMM  print_float32:label             R{4,0}:fn(float32)->unit
 	#						-24(%ebp)
@@ -224,52 +250,18 @@ main_b_0:
 	#						-28(%ebp)
 	leal	print, %edi
 
-	# IMM  1:int32                         R{6,0}:int32
+	# IMM  5:int32                         R{6,0}:int32
 	#						-32(%ebp)
-	movl	%ecx, -12(%ebp)
-	movl	$1, %ecx
+	movl	%esi, -8(%ebp)
+	movl	$5, %esi
 
 	# IMM  fn-0-f:label                    R{7,0}:fn()->int32
 	#						-36(%ebp)
-	movl	%edi, -28(%ebp)
-	leal	fn_0_f, %edi
+	movl	%edx, -24(%ebp)
+	leal	fn_0_f, %edx
 
 	# EXIT
 	#							
 	pushw	$0
 	call	exit
-
-	.global	fn_0_f
-	.type	fn_0_f	@function
-fn_0_f:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$20, %esp
-	movl	display_1, %ebx
-	movl	%ebx, -4(%ebp)
-	movl	%ebp, display_1
-	movl	$0, -8(%ebp)	# R{0,1}:int32
-	movl	$0, -12(%ebp)	# R{1,1}:int32
-	movl	$0, -16(%ebp)	# R{2,1}:int32
-
-
-fn_0_f_b_0:
-
-	# IMM  1:int32                         R{2,1}:int32
-	#						-16(%ebp)
-	movl	$1, %edx
-
-	# ADD  R{6,0}:int32    R{2,1}:int32    R{0,1}:int32
-	#	-20(%ebp)	-16(%ebp)		-8(%ebp)
-	movl	display_0, %edi
-	movl	-32(%edi), %ebx
-	addl	%edx, %ebx
-
-	# RTRN R{0,1}:int32
-	#	-8(%ebp)					
-	movl	%edx, -16(%ebp)
-	movl	%ebx, -8(%ebp)
-	movl	-8(%ebp), %eax
-	leave
-	ret
 
