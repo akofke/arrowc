@@ -103,6 +103,8 @@ def main(argv):
         print_il(inputs, output)
     elif asm:
         print_x86(inputs, output)
+    else:
+        output_binary(inputs, output)
 
 # yes these are all very duplicated, I haven't had the chance to fix them yet
 
@@ -239,6 +241,18 @@ def print_x86(inp, outp):
 
 def output_binary(inp, outp):
     pass
+    # coming soon
+    # try:
+    #     with open(inp[0], 'r') as input_file:
+    #         src = input_file.read()
+    #         try:
+    #             ast = ArrowParser().parse(src)
+    #             typed_ast = ArrowTypechecker(ast).typecheck()
+    #             il_prog = ILGenerator(typed_ast).program
+    #             asm_str = gen_x86(il_prog)
+
+
+
 
 
 
