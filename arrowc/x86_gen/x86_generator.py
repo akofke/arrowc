@@ -39,6 +39,15 @@ def _stack_offset(i):
     """
     return -4 * i - 8
 
+cmp_opcodes = {
+    "IFEQ": "je",
+    "IFNE": "jne",
+    "IFLT": "jl",
+    "IFLE": "jle",
+    "IFGT": "jg",
+    "IFGE": "jge"
+}
+
 
 class X86Generator():
     def __init__(self, il_program):
@@ -154,6 +163,9 @@ class X86Generator():
         self.add_instr("popl %ebp")
         self.add_instr("ret")
 
+        self.frame_locs.pop()
+        self.frame_funcs.pop()
+
     def asm_block(self, block):
         """
         :type block: il.BasicBlock
@@ -211,7 +223,7 @@ class X86Generator():
             return self.asm_exit(instr)
 
     def asm_nop(self, instr):
-        pass
+        self.add_instr("nop")
 
     def asm_imm(self, instr):
         # self.add_instr("{}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
@@ -246,25 +258,39 @@ class X86Generator():
         self.store("%eax", instr.R)
 
     def asm_mod(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("movl $0, %edx")
+        self.add_instr("idivl %ebx")
+        self.store("%edx", instr.R)
 
     def asm_jmp(self, instr):
         pass
 
     def asm_if(self, instr):
-        pass
+        opcode = cmp_opcodes[instr.op]
+
+        self.load(instr.A, "%eax")
+        self.load(instr.B, "%ebx")
+        self.add_instr("compl %ebx %eax")
+        self.add_instr("{} {}".format(opcode, self.operand_value(instr.R)))
 
     def asm_prm(self, instr):
-        pass
+        param_num = instr.A.operand_value.value
+        offset = 4 * param_num + 8
+        self.add_instr("movl {}(%ebp), %eax".format(offset))
+        self.store("%eax", instr.R)
 
     def asm_call(self, instr):
         pass
 
     def asm_rtrn(self, instr):
-        pass
+        self.load(instr.A, "%eax")
+        self.pop_stack_frame(self.frame_funcs[-1])
 
     def asm_exit(self, instr):
-        pass
+        self.add_instr("pushl $0")
+        self.add_instr("call exit")
 
 
 
