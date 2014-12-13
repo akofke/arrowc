@@ -113,6 +113,10 @@ class X86Generator():
 
         if re.match("constant|string", val_type):
             return self.const_value(operand)
+        elif val_type == "jump-target":
+            return "{}".format(_convert_name_str(operand.operand_value.block))
+        elif val_type == "native-target":
+            return "{}".format(_convert_name_str(operand.operand_value.func))
 
     def const_value(self, operand):
         val_type = operand.operand_value.type
@@ -127,9 +131,10 @@ class X86Generator():
     def string_value(self, str_val):
 
         # make sure to check if this gives correct numbers
-        name = "string_{}".format(len(self.rodata) / 2)
+        name = ".string_{}".format(len(self.rodata) / 2)
         self.rodata.append(name + ":")
         self.rodata.append('\t.string \"{}\"'.format(str_val))
+        return name
 
     def asm_program(self, prog):
         for func in prog.functions.itervalues():
@@ -177,7 +182,7 @@ class X86Generator():
         :return:
         """
 
-        self.program.append(_convert_name_str(block.name))
+        self.program.append(_convert_name_str(block.name) + ":")
         for instr in block.instructions:
             self.asm_instruction(instr)
 
@@ -231,8 +236,10 @@ class X86Generator():
         self.add_instr("nop")
 
     def asm_imm(self, instr):
-        self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
-        pass
+        if re.match("target|string", instr.A.operand_value.type):
+            self.add_instr("leal {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
+        else:
+            self.add_instr("movl {}, {}".format(self.operand_value(instr.A), self.access_location(instr.R)))
 
     def asm_mv(self, instr):
         if instr.A.operand_value.type == "register":
