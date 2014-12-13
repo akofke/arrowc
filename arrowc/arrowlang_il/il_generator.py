@@ -73,7 +73,7 @@ class ILGenerator():
         # self.reg_counter[-1] += 1
         # return reg
 
-        reg = Value.register(self.func_stack[-1]._reg_count + 1, len(self.func_stack) - 1)
+        reg = Value.register(self.func_stack[-1]._reg_count, len(self.func_stack) - 1)
         self.func_stack[-1]._reg_count += 1
         return reg
 

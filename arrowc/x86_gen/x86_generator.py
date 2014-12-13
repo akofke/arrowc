@@ -44,6 +44,8 @@ class X86Generator():
         self.data = list()
         self.program = list()
 
+        self.frame_locs = [dict()]
+
         self.init_program()
 
     def init_program(self):
@@ -70,6 +72,13 @@ class X86Generator():
     def asm_program(self, prog):
         for func in prog.functions:
             self.asm_function(func)
+
+    def access_location(self, operand):
+        """
+        :type operand: il.Operand
+        """
+
+        reg = operand.operand_value.
 
     def asm_function(self, func):
         converted_name = _convert_name_str(func.name)
