@@ -1,0 +1,148 @@
+Grading Comments for Project 006
+
+Partner Id's: adk62, cym8
+
+
+----------------------------------------
+
+testing harness results: 75/89
+
+
+
+      
+      "if 1 == 1 {
+          print_int32(1)
+      } else if 2 == 2 {
+          print_int32(2)
+      } else if 3 == 3 {
+          print_int32(3)
+      } else {
+          print_int32(4)
+      }"
+      > timeout -k 12s 10s bash -c /home/hendersont/stuff/school/compilers/support/pr06/arrowc -o /tmp/tmpM8WJFp /tmp/tmp_GnIZL
+      > timeout -k 7s 5s /tmp/tmpM8WJFp
+      result = "1"
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -I -o /tmp/tmpl89VEU /tmp/tmpj77iYe
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -J -o /tmp/tmpQD2xct /tmp/tmpZgWEtL
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -o /tmp/tmp67BHDG /tmp/tmpC7C6ZZ
+      ! compiling program failed
+                                       ----------
+                                       Traceback (most recent call last):
+                                         File "/tmp/tmp2wJiij/arrowc/bin/arrowc", line 289, in <module>
+                                           main(sys.argv[1:])
+                                         File "/tmp/tmp2wJiij/arrowc/bin/arrowc", line 108, in main
+                                           output_binary(inputs, output)
+                                         File "/tmp/tmp2wJiij/arrowc/bin/arrowc", line 252, in output_binary
+                                           il_prog = ILGenerator(typed_ast).program
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_generator.py", line 59, in __init__
+                                           self.gen_il()
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_generator.py", line 141, in gen_il
+                                           curr_blk = self.gen_stmt(stmt, curr_blk)
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_generator.py", line 161, in gen_stmt
+                                           return self.gen_if(node, curr_blk)
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_generator.py", line 257, in gen_if
+                                           last_else_blk = self.gen_if(node.children[2].children[0], else_block)
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_generator.py", line 262, in gen_if
+                                           last_else_blk.add_jump(final_block)
+                                         File "/tmp/tmp2wJiij/arrowc/arrowc/arrowlang_il/il_types.py", line 92, in add_jump
+                                           if self.instructions[-1].op != "J":
+                                       IndexError: list index out of range
+
+
+    "for var i = 0; i < 12; i = i + 1 {
+          if i == 6 {
+              continue
+          }
+          print_int32(i)
+      }
+      print_int32(-1)"
+      > timeout -k 12s 10s bash -c /home/hendersont/stuff/school/compilers/support/pr06/arrowc -o /tmp/tmp7I7akp /tmp/tmpzgA6Su
+      > timeout -k 7s 5s /tmp/tmp7I7akp
+      result = "0
+      1
+      2
+      3
+      4
+      5
+      7
+      8
+      9
+      10
+      11
+      -1"
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -I -o /tmp/tmpMzK7PF /tmp/tmpPUabGP
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -J -o /tmp/tmpievMWk /tmp/tmpPq4cgH
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home
+/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/h
+endersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source
+ env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -o /tmp/tmp_JcLNi /tmp/tmpPu0lFc
+      ! compiling program failed
+
+
+      "func f(i int32, j int32) int32 {
+          return 5*j*j + - 3*j + 2*j*i + i + 7
+      
+      }
+      print_int32(f(2, 3))"
+      > timeout -k 12s 10s bash -c /home/hendersont/stuff/school/compilers/support/pr06/arrowc -o /tmp/tmp1hoLz4 /tmp/tmp_0Q6UD
+      > timeout -k 7s 5s /tmp/tmp1hoLz4
+      result = "57"
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -I -o /tmp/tmpf25tvb /tmp/tmp9ulxWf
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -J -o /tmp/tmp2KV6Tc /tmp/tmpGuMZJ_
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -o /tmp/tmp3zgv9G /tmp/tmpjuVKwi
+      > timeout -k 7s 5s /tmp/tmp3zgv9G
+      ! running program failed
+                                       ----------
+                                failed -- good test
+                                     recieved non-zero exit code from the compiled program
+
+
+      "func add(a int32, b int32) int32 {
+          return a + b
+      }
+      func sub(a int32, b int32) int32 {
+          return a - b
+      }
+      func mul(a int32, b int32) int32 {
+          return a * b
+      }
+      func div(a int32, b int32) int32 {
+          return a / b
+      }
+      func f(i int32, j int32) int32 {
+          return div(add(mul(4, mul(j, j)), add(mul(9, j), add(mul(2, mul(j, i)), sub(i, 7)))), 2)
+      }
+      print_int32(f(2, 3))"
+      > timeout -k 12s 10s bash -c /home/hendersont/stuff/school/compilers/support/pr06/arrowc -o /tmp/tmpLGER9r /tmp/tmp6RUiBi
+      > timeout -k 7s 5s /tmp/tmpLGER9r
+      result = "35"
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -I -o /tmp/tmpspqSwd /tmp/tmpx0jkHG
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -J -o /tmp/tmpbACq0u /tmp/tmpuElGeI
+      > timeout -k 12s 10s bash -c export PS1="$ " && export PATH=/tmp/tmp2wJiij/arrowc/bin:/home/hendersont/stuff/school/compilers/support/tester/bin:/home/hendersont/stuff/school/compilers/support/tester/env/bin:/home/hendersont/opt/rust/bin:/home/hendersont/opt/mdp/bin:/home/hendersont/opt/mkproj/bin:/home/hendersont/opt/neovim/bin:/home/hendersont/opt/tarsnap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games && source env/bin/activate && python /tmp/tmp2wJiij/arrowc/bin/arrowc -o /tmp/tmpEUPsG8 /tmp/tmp1yQwCx
+      > timeout -k 7s 5s /tmp/tmpEUPsG8
+      ! running program failed
+                                       ----------
+                                       timeout: the monitored command dumped core
+                                failed -- good test
+
+problems with function calls and loops
+
+Final Score: 91
+Grader: Tim Henderson
+
+
